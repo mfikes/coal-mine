@@ -1,0 +1,17 @@
+#!/usr/bin/env clojure
+(require '[clojure.java.io :as io])
+
+(if-let [target-path (first *command-line-args*)]
+  (let [target-file (io/file target-path "deps.edn")]
+    (io/make-parents target-file)
+    (-> "deps.edn"
+      slurp
+      read-string
+      (update-in [:deps 'org.clojure/clojurescript :mvn/version]
+        #(or (System/getenv "CANARY_CLOJURESCRIPT_VERSION")
+             (System/getenv "CLJS_VERSION")
+             %))
+      (assoc :paths [(.getAbsolutePath (io/file "src"))])
+      pr-str
+      (->> (spit (io/file target-path "deps.edn")))))
+  (throw (ex-info "target path not provided" {})))

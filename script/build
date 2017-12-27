@@ -1,0 +1,17 @@
+#!/usr/bin/env clojure
+(require '[cljs.build.api])
+
+(let [progress-thread (doto
+                       (Thread. #(while (try (Thread/sleep 500000) true
+                                          (catch Throwable _ false))
+                                   (println "Building ...")))
+                        .start)]
+  (try
+    (println "Building...")
+    (cljs.build.api/build (or (first *command-line-args*) "src")
+      {:optimizations  :none
+       :parallel-build true
+       :target         :nodejs
+       :main           'coal-mine.test-runner
+       :output-to      "main.js"})
+    (finally (.interrupt progress-thread))))

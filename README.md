@@ -7,3 +7,9 @@ This is useful for regression testing compiler patches. Since the codebase is la
 it is also useful for testing compiler performance.
 
 The `coal-mine.test-runner` namespace facilitates running all of the tests under ClojureScript.
+
+You can run `script/test` in order to build and run the tests under Node, optionally specifying the ClojureScript build to use:
+
+```
+CLJS_VERSION=1.9.946 script/test
+```
