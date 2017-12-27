@@ -327,7 +327,7 @@
 
 (defmacro defcheck-57 [name & forms]
   `(clojure.test/deftest ~name
-     (clojure.test/is (= ~@forms ((fn foo [x] (when (> x 0) (conj (foo (dec x)) x))) 5)))))
+     (clojure.test/is (= ~@forms ((fn foo# [x#] (when (> x# 0) (conj (foo# (dec x#)) x#))) 5)))))
 
 (defmacro defcheck-58 [name & forms]
   `(clojure.test/deftest ~name
