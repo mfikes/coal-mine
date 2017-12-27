@@ -10,5 +10,9 @@ pom.xml.asc
 /.nrepl-port
 .hgignore
 .hg/
-coal-mine.iml
+planck.iml
 .idea
+/.lumo_cache
+/.planck_cache
+main.js
+/.cljs_node_repl
