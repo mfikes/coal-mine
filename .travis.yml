@@ -5,6 +5,9 @@ language: node_js
 node_js:
   - "6"
 
+before_install:
+  - curl -sSL https://raw.githubusercontent.com/cljs-oss/canary/master/scripts/install-canary.sh | bash
+
 install:
   - curl -O https://download.clojure.org/install/linux-install-1.9.0.273.sh
   - chmod +x linux-install-1.9.0.273.sh
