@@ -17,3 +17,4 @@ planck.iml
 main.js
 /.cljs_node_repl
 /builds
+/.cpcache
