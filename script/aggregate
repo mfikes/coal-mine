@@ -1,0 +1,8 @@
+#!/usr/bin/env clojure
+
+(let [subtotals (->> (slurp "aggregate.txt")
+                     (re-seq #"Ran (\d+) tests containing (\d+) assertions.")
+                     (map rest)
+                     (map #(map (fn [s] (Long/parseLong s)) %)))]
+  (println "Ran a total of" (apply + (map first subtotals))
+     "tests containing" (apply + (map second subtotals)) "assertions."))

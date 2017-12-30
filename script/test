@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
-function fp() {
-    echo `pwd`/"$1"
-}
-
-script/setup-deps-edn builds
-SRC=`fp src`
-cd builds
-clojure -J-Xmx3G ../script/build $SRC
-echo "Testing with Node"
-node -max-old-space-size=3072 main.js
-cd ..
+script/test-pre
+script/test-part 1
+script/test-part 2
+script/test-part 3
+script/test-part 4
+script/test-part 5
+script/test-part 6
+script/test-part 7
+script/test-part 8
+script/test-part 9
+script/test-part 10
+script/test-post

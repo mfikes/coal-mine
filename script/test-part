@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+function fp() {
+    echo `pwd`/"$1"
+}
+
+checkBuildSucceeded() {
+    CMD_RESULT=$?
+    if [ $CMD_RESULT != 0 ]; then
+        echo "Build failed!"
+        exit $CMD_RESULT
+    fi
+}
+
+checkTestsSucceeded() {
+    CMD_RESULT=$?
+    if [ $CMD_RESULT != 0 ]; then
+        echo "Tests failed!"
+        exit $CMD_RESULT
+    fi
+}
+
+SRC=`fp src`
+cd builds
+
+clojure -J-Xmx3G ../script/build $SRC/coal_mine/test_runner_$1.cljs coal-mine.test-runner-$1
+checkBuildSucceeded
+echo "Running coal-mine.test-runner-$1 in Node ..."
+node -max-old-space-size=3072 main.js | tee test-out.txt
+grep '0 failures, 0 errors.' test-out.txt > /dev/null
+checkTestsSucceeded
+grep 'tests containing' test-out.txt >> aggregate.txt
+
+cd ..
