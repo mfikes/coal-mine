@@ -734,9 +734,9 @@
   `(clojure.test/deftest ~name
      (clojure.test/is (== (~@forms 2 3) 6))
      (clojure.test/is (== (~@forms 5 3 7) 105))
-     #_(clojure.test/is (== (__ 1/3 2/5) 2))
-     #_(clojure.test/is (== (__ 3/4 1/6) 3/2))
-     #_(clojure.test/is (== (__ 7 5/7 2 3/5) 210))))
+     (clojure.test/is (== (~@forms 5 6) 30))
+     (clojure.test/is (== (~@forms 9 2) 18))
+     (clojure.test/is (== (~@forms 5 21 2) 210))))
 
 (defmacro defcheck-101 [name & forms]
   `(clojure.test/deftest ~name
