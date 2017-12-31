@@ -398,11 +398,11 @@
 (defmacro defcheck-68 [name & forms]
   `(clojure.test/deftest ~name
      (clojure.test/is (= ~@forms
-                        (loop [x      5
-                               result []]
-                          (if (> x 0)
-                            (recur (dec x) (conj result (+ 2 x)))
-                            result))))))
+                        (loop [x#      5
+                               result# []]
+                          (if (> x# 0)
+                            (recur (dec x#) (conj result# (+ 2 x#)))
+                            result#))))))
 
 (defmacro defcheck-69 [name & forms]
   `(clojure.test/deftest ~name
