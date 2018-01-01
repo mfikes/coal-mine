@@ -488,8 +488,7 @@
      xs [] [h])
     ))
 
-;; See CLJS-2452
-#_(defcheck solution-1b32e5fe
+(defcheck solution-1b32e5fe
   (fn [nn]
     (let [state [0 [] 0 []]
           step (fn [[l0 ns0 l ns] n]
@@ -555,8 +554,7 @@
                  (first l)
                  []))))
 
-;; See CLJS-2452
-#_(defcheck solution-1c4d16fe
+(defcheck solution-1c4d16fe
   (fn [[x & xs]]
     (->> xs
       (reduce
@@ -1008,8 +1006,7 @@
       '() (mapcat #(take (count %1) (iterate butlast %1))
             (take (count coll) (iterate rest coll))))))
 
-;; See CLJS-2452
-#_(defcheck solution-25a07257
+(defcheck solution-25a07257
   #(last (sort-by count ((fn p60
                            [coll]
                            (if (seq coll)
@@ -1218,8 +1215,7 @@
           (if (seq rs)
             (conj (vec (map first rs)) (last (last rs)) )
             []))))))
-;; See CLJS-2452
-#_(defcheck solution-2a3dcfd4
+(defcheck solution-2a3dcfd4
   (fn solve [a]
     (let [max-subseq (fn [a]
                        (reduce (fn [res el]
@@ -1410,8 +1406,7 @@
           x
           [])))))
 
-;; See CLJS-2452
-#_(defcheck solution-2dc29bfe
+(defcheck solution-2dc29bfe
   (fn [ls]
     (loop [ls ls
            part (list (first ls))
@@ -5639,8 +5634,7 @@
         (if (> (count sq) 1) sq [])
         ))))
 
-;; See CLJS-2452
-#_(defcheck solution-85451e8b
+(defcheck solution-85451e8b
   (fn [s] (reverse (apply max-key count (map #(if (< (count %) 2) [] %) (reduce (fn [[[x :as t] :as s] y] (if (and x (= 1 (- y x))) (cons (cons y t) (rest s)) (cons (list y) s))) [[]] s))))))
 
 (defcheck solution-8585996b
@@ -5998,8 +5992,7 @@
         (first a)
         [] ))))
 
-;; See CLJS-2452
-#_(defcheck solution-8d1cc57e
+(defcheck solution-8d1cc57e
   #(reverse
      (nth
        (reduce
@@ -10139,8 +10132,7 @@
          (if (= start end) []
                            (range start (inc end)))))))
 
-;; See CLJS-2452
-#_(defcheck solution-e66be384
+(defcheck solution-e66be384
   (fn [s]
     (reverse (apply max-key count (cons [] (remove #(= 1 (count %)) ((fn seq-crescente [[[primeiro-elemento-resp-corrente
                                                                                           & _

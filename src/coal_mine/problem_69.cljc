@@ -713,8 +713,7 @@
             (fmerge [mx my] (reduce fassoc mx (seq my)))]
       (reduce fmerge maps))))
 
-;; See CLJS-1743
-#_(defcheck solution-1ed05bfd
+(defcheck solution-1ed05bfd
   (fn my-merge-with [op & maps]
     (loop [f-map (transient (first maps)) r-maps (rest maps)]
       (if (empty? r-maps)
@@ -6353,8 +6352,7 @@
             (if (nil? (find p k)) (assoc {} k (get a k))
                                   (assoc {} k (f (get p k) (get a k))))))))))
 
-;; See CLJS-1743
-#_(defcheck solution-a7a5d7f7
+(defcheck solution-a7a5d7f7
   (fn merge-with-function [f m & ms]
     (let [tm (transient m)]
       (doseq [x ms]

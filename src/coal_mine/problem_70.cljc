@@ -38,8 +38,7 @@
     (let [words (clojure.string/split sent #"[^A-Za-z]")]
       (sort-by #(.toLowerCase %) words))))
 
-;; See CLJS-2453
-#_(defcheck solution-13ee288a
+(defcheck solution-13ee288a
     (fn [s]
       (mapv
         (fn [token] (re-find #"[a-zA-Z]*" token))
@@ -1396,33 +1395,17 @@
     (sort-by #(clojure.string/lower-case %)
       (clojure.string/split s #"[ .!,]"))))
 
-;; See CLJS-2453
-#_(defcheck solution-88c6513d
-    (fn [k]
-      (sort
-        (fn [a b]
-          (let [d #(->> %1 (.toUpperCase) (map int)) f (d a) l (d b)]
-            (loop [[fl & fs] f [ll & ls] l]
-              (cond
-                (= fl ll) (recur fs ls)
-                (> fl ll) false
-                (< fl ll) true)))) (re-seq #"(?i)\w+" k))))
-
-;; See CLJS-2453
-#_(defcheck solution-88f7bec9
+(defcheck solution-88f7bec9
     (fn [s] (sort-by str #(compare (.toLowerCase %1) (.toLowerCase %2)) (re-seq #"\w+" s))))
 
-;; See CLJS-2453
-#_(defcheck solution-891356ed
+(defcheck solution-891356ed
     (fn my-split [s]
       (sort-by #(.toUpperCase %) (re-seq #"\w+" s))))
 
-;; See CLJS-2453
-#_(defcheck solution-895213b4
+(defcheck solution-895213b4
     (fn [s] (->> s (re-seq #"\w+") (sort-by clojure.string/lower-case))))
 
-;; See CLJS-2453
-#_(defcheck solution-89dca6c3
+(defcheck solution-89dca6c3
     (fn word-sort [s]
       (->> (re-seq #"\w+" s)
         (sort-by clojure.string/lower-case))
@@ -1438,8 +1421,7 @@
              (clojure.string/lower-case %2))
       (clojure.string/split s #"\W"))))
 
-;; See CLJS-2453
-#_(defcheck solution-8a1e573e
+(defcheck solution-8a1e573e
     #(sort-by
        (fn [w] (clojure.string/lower-case w))
        (re-seq #"\w+" %)))
@@ -1448,12 +1430,10 @@
   (fn [x] (sort-by #(.toLowerCase %)
             (clojure.string/split x #"[\s\.!]+"))))
 
-;; See CLJS-2453
-#_(defcheck solution-8c643c5e
+(defcheck solution-8c643c5e
     (fn [s] (sort-by #(.toLowerCase %) (re-seq #"\w+" s))))
 
-;; See CLJS-2453
-#_(defcheck solution-8c9c5e65
+(defcheck solution-8c9c5e65
     (comp
      (partial sort-by clojure.string/lower-case)
      #(clojure.string/split (clojure.string/replace % #"[!.?]" "") #"\s+")))
@@ -1483,14 +1463,12 @@
       )
     ))
 
-;; See CLJS-2453
-#_(defcheck solution-8e33d616
+(defcheck solution-8e33d616
     (fn [astr]
       (sort #(compare (clojure.string/lower-case %1) (clojure.string/lower-case %2))
         (clojure.string/split astr #"\W+"))))
 
-;; See CLJS-2453
-#_(defcheck solution-8e6eede7
+(defcheck solution-8e6eede7
     (fn [s]
       (sort-by clojure.string/lower-case
         (re-seq #"[A-Za-z]+" s))))
@@ -1500,26 +1478,22 @@
     (let [x (clojure.string/split string #"\W")]
       (sort-by #(clojure.string/lower-case %) x))))
 
-;; See CLJS-2453
-#_(defcheck solution-8f74f239
+(defcheck solution-8f74f239
     (fn [str]
       (->> str
         (re-seq #"\w+")
         (sort-by #(.toLowerCase %)))))
 
-;; See CLJS-2453
-#_(defcheck solution-8f7bc522
+(defcheck solution-8f7bc522
   (fn [s]
     (sort #(compare (clojure.string/lower-case %1)
              (clojure.string/lower-case %2))
       (re-seq #"\w+" s))))
 
-;; See CLJS-2453
-#_(defcheck solution-8fb93b14
+(defcheck solution-8fb93b14
   #(sort-by (comp str clojure.string/lower-case) (re-seq #"\w+" %)))
 
-;; See CLJS-2453
-#_(defcheck solution-8fbe713c
+(defcheck solution-8fbe713c
   (fn words [s]
     (let [lower clojure.string/lower-case]
       (->> s (re-seq #"\w+") (sort-by lower)))))
@@ -1533,22 +1507,19 @@
       (sort-by clojure.string/lower-case)
       vec)))
 
-;; See CLJS-2453
-#_(defcheck solution-9065a64d
+(defcheck solution-9065a64d
   (fn [sentence]
     (sort
       #(compare (clojure.string/lower-case %1) (clojure.string/lower-case %2))
       (re-seq #"[A-z]+" sentence))
     ))
 
-;; See CLJS-2453
-#_(defcheck solution-9066fa89
+(defcheck solution-9066fa89
   (fn [s]
     (sort-by clojure.string/lower-case
       (re-seq #"\w+" s))))
 
-;; See CLJS-2453
-#_(defcheck solution-9086e27e
+(defcheck solution-9086e27e
   (fn ws [string]
     (let [words (re-seq #"[A-Za-z]+" string)]
       (sort #(compare (clojure.string/upper-case %1)
@@ -1560,8 +1531,7 @@
     (sort-by clojure.string/upper-case (clojure.string/split astr #"[\s\.\!]"))
     ))
 
-;; See CLJS-2453
-#_(defcheck solution-91abf5fa
+(defcheck solution-91abf5fa
   #(->> % (re-seq #"\w+") (sort-by clojure.string/lower-case)))
 
 (defcheck solution-91c9acb6
@@ -1573,8 +1543,7 @@
 (defcheck solution-922e6949
   (fn [s] (sort-by clojure.string/lower-case (clojure.string/split s #"[\!\.\s]+"))))
 
-;; See CLJS-2453
-#_(defcheck solution-92f9139a
+(defcheck solution-92f9139a
   (fn [sentence]
     (let [sorter #(compare (.toUpperCase %1)
                     (.toUpperCase %2))]
@@ -1615,27 +1584,23 @@
       (clojure.string/split #"\s")
       (->> (sort-by #(.toLowerCase %))))))
 
-;; See CLJS-2453
-#_(defcheck solution-9537dd2
+(defcheck solution-9537dd2
   (fn [in] (sort-by #(.toUpperCase %) (re-seq #"\w+" in))))
 
-;; See CLJS-2453
-#_(defcheck solution-95a2531e
+(defcheck solution-95a2531e
   #(->> % (re-seq #"\w+") (sort-by (memfn toLowerCase))))
 
 (defcheck solution-95ad481c
   (fn [s]
     (sort-by clojure.string/upper-case (clojure.string/split (clojure.string/replace s #"[.!]" "")
                                          #" "))))
-;; See CLJS-2453
-#_(defcheck solution-95cbc018
+(defcheck solution-95cbc018
   #(vec
      (sort
        (fn [x y] (compare (.toLowerCase x) (.toLowerCase y)))
        (re-seq #"\w+" %))))
 
-;; See CLJS-2453
-#_(defcheck solution-96ccfc
+(defcheck solution-96ccfc
   (fn [s]
     (sort-by clojure.string/upper-case (re-seq #"[A-Za-z]+" s))))
 
@@ -1649,14 +1614,12 @@
       (sort #(compare (clojure.string/lower-case %1)
                (clojure.string/lower-case %2))))))
 
-;; See CLJS-2453
-#_(defcheck solution-970e0ff7
+(defcheck solution-970e0ff7
   (fn __ [s]
     (->> (clojure.string/split s #"[^A-Za-z]+")
       (sort-by clojure.string/lower-case))))
 
-;; See CLJS-2453
-#_(defcheck solution-9810a795
+(defcheck solution-9810a795
   (fn [s]
     (sort #(compare (.toLowerCase %) (.toLowerCase %2)) (re-seq #"[a-zA-Z]+" s))))
 
@@ -1666,13 +1629,11 @@
           compare-words (fn [a b] (compare (clojure.string/lower-case a) (clojure.string/lower-case b)))]
       (map #(clojure.string/replace % #"[^\w]" "") (sort compare-words words)))))
 
-;; See CLJS-2453
-#_(defcheck solution-987b94d
+(defcheck solution-987b94d
   (comp (partial sort-by #(.toLowerCase %))
         (partial re-seq #"\w+")))
 
-;; See CLJS-2453
-#_(defcheck solution-9967e2cd
+(defcheck solution-9967e2cd
   (fn [str] (->> str
               (re-seq #"\w+")
               (sort-by clojure.string/upper-case))))
@@ -1687,12 +1648,10 @@
 (defcheck solution-99b8798c
   (fn [s] (sort (fn [x y] (compare (.toLowerCase x) (.toLowerCase y))) (clojure.string/split s #"\W"))))
 
-;; See CLJS-2453
-#_(defcheck solution-99df7b18
+(defcheck solution-99df7b18
   (fn [in] (sort-by #(.toLowerCase %) (re-seq #"\w+" in))))
 
-;; See CLJS-2453
-#_(defcheck solution-9a1ec1ff
+(defcheck solution-9a1ec1ff
   (fn [s]
     (->>
       s
@@ -1702,13 +1661,11 @@
       (map #(second %))
       )))
 
-;; See CLJS-2453
-#_(defcheck solution-9ab6d0a0
+(defcheck solution-9ab6d0a0
   #(sort-by clojure.string/lower-case
      (re-seq #"\w+" %)))
 
-;; See CLJS-2453
-#_(defcheck solution-9b728dd9
+(defcheck solution-9b728dd9
   (fn srt [s]
     (sort-by clojure.string/lower-case (re-seq #"\w+" s))))
 
@@ -2161,8 +2118,7 @@
     (->> (clojure.string/split (clojure.string/replace s #"[.,!]" "") #" ")
       (sort-by #(.toUpperCase %)))))
 
-;; See CLJS-2453
-#_(defcheck solution-b956db0d
+(defcheck solution-b956db0d
     (fn [s]
       (let [words (filter not-empty (re-seq #"\w*" s))]
         (sort (fn [s1 s2] (compare (.toLowerCase s1) (.toLowerCase s2))) words))))
@@ -2745,8 +2701,7 @@
     (let [coll (re-seq #"\w+" s)]
       (sort-by #(clojure.string/lower-case %) coll))))
 
-;; See CLJS-2453
-#_(defcheck solution-e9dd5b19
+(defcheck solution-e9dd5b19
     #(->> (re-seq #"[a-zA-Z]*" %)
        (remove (partial = ""))
        (sort-by clojure.string/upper-case)))
@@ -2773,8 +2728,7 @@
        (.toLowerCase d))
      (re-seq #"[A-Za-z]+" %)))
 
-;; See CLJS-2453
-#_(defcheck solution-ec1afeb6
+(defcheck solution-ec1afeb6
     (fn [t] (sort-by #(.toLowerCase %) (remove #(= % "") (re-seq #"\w*" t)))))
 
 (defcheck solution-ec8ceff2
