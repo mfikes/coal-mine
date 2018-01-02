@@ -3,5 +3,5 @@
 script/setup-deps-edn builds
 
 cd builds
-rm aggregate.txt
+rm -f aggregate.txt
 cd ..
