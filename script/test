@@ -19,14 +19,4 @@ script/test-part 4
 checkSucceeded
 script/test-part 5
 checkSucceeded
-script/test-part 6
-checkSucceeded
-script/test-part 7
-checkSucceeded
-script/test-part 8
-checkSucceeded
-script/test-part 9
-checkSucceeded
-script/test-part 10
-checkSucceeded
 script/test-post

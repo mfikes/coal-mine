@@ -20,9 +20,4 @@ script:
   - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "3" ]; then script/test-part 3; fi
   - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "4" ]; then script/test-part 4; fi
   - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "5" ]; then script/test-part 5; fi
-  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "6" ]; then script/test-part 6; fi
-  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "7" ]; then script/test-part 7; fi
-  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "8" ]; then script/test-part 8; fi
-  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "9" ]; then script/test-part 9; fi
-  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "10" ]; then script/test-part 10; fi
   - script/test-post

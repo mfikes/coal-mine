@@ -2,43 +2,73 @@
   (:require
    [clojure.test]
    [cljs.nodejs :as nodejs]
-   coal-mine.problem-33
-   coal-mine.problem-34
-   coal-mine.problem-35
-   coal-mine.problem-36
-   coal-mine.problem-37
-   coal-mine.problem-38
-   coal-mine.problem-39
-   coal-mine.problem-40
-   coal-mine.problem-41
-   coal-mine.problem-42
-   coal-mine.problem-43
-   coal-mine.problem-44
-   coal-mine.problem-45
-   coal-mine.problem-46
-   coal-mine.problem-47
-   coal-mine.problem-48))
+   coal-mine.problem-65
+   coal-mine.problem-66
+   coal-mine.problem-67
+   coal-mine.problem-68
+   coal-mine.problem-69
+   coal-mine.problem-70
+   coal-mine.problem-71
+   coal-mine.problem-72
+   coal-mine.problem-73
+   coal-mine.problem-74
+   coal-mine.problem-75
+   coal-mine.problem-76
+   coal-mine.problem-77
+   coal-mine.problem-78
+   coal-mine.problem-79
+   coal-mine.problem-80
+   coal-mine.problem-81
+   coal-mine.problem-82
+   coal-mine.problem-83
+   coal-mine.problem-84
+   coal-mine.problem-85
+   coal-mine.problem-86
+   coal-mine.problem-88
+   coal-mine.problem-89
+   coal-mine.problem-90
+   coal-mine.problem-91
+   coal-mine.problem-92
+   coal-mine.problem-93
+   coal-mine.problem-94
+   coal-mine.problem-95
+   coal-mine.problem-96))
 
 (nodejs/enable-util-print!)
 
 (defn run-tests []
   (clojure.test/run-tests
-    'coal-mine.problem-33
-    'coal-mine.problem-34
-    'coal-mine.problem-35
-    'coal-mine.problem-36
-    'coal-mine.problem-37
-    'coal-mine.problem-38
-    'coal-mine.problem-39
-    'coal-mine.problem-40
-    'coal-mine.problem-41
-    'coal-mine.problem-42
-    'coal-mine.problem-43
-    'coal-mine.problem-44
-    'coal-mine.problem-45
-    'coal-mine.problem-46
-    'coal-mine.problem-47
-    'coal-mine.problem-48))
+    'coal-mine.problem-65
+    'coal-mine.problem-66
+    'coal-mine.problem-67
+    'coal-mine.problem-68
+    'coal-mine.problem-69
+    'coal-mine.problem-70
+    'coal-mine.problem-71
+    'coal-mine.problem-72
+    'coal-mine.problem-73
+    'coal-mine.problem-74
+    'coal-mine.problem-75
+    'coal-mine.problem-76
+    'coal-mine.problem-77
+    'coal-mine.problem-78
+    'coal-mine.problem-79
+    'coal-mine.problem-80
+    'coal-mine.problem-81
+    'coal-mine.problem-82
+    'coal-mine.problem-83
+    'coal-mine.problem-84
+    'coal-mine.problem-85
+    'coal-mine.problem-86
+    'coal-mine.problem-88
+    'coal-mine.problem-89
+    'coal-mine.problem-90
+    'coal-mine.problem-91
+    'coal-mine.problem-92
+    'coal-mine.problem-93
+    'coal-mine.problem-94
+    'coal-mine.problem-95
+    'coal-mine.problem-96))
 
 (defn -main []
   (run-tests))
