@@ -1,14 +1,22 @@
 #!/usr/bin/env bash
 
+checkSucceeded() {
+    CMD_RESULT=$?
+    if [ $CMD_RESULT != 0 ]; then
+        exit $CMD_RESULT
+    fi
+}
+
 script/test-pre
+checkSucceeded
 script/test-part 1
+checkSucceeded
 script/test-part 2
+checkSucceeded
 script/test-part 3
+checkSucceeded
 script/test-part 4
+checkSucceeded
 script/test-part 5
-script/test-part 6
-script/test-part 7
-script/test-part 8
-script/test-part 9
-script/test-part 10
+checkSucceeded
 script/test-post
