@@ -196,9 +196,9 @@
 
 (defmacro defcheck-35 [name & forms]
   `(clojure.test/deftest ~name
-     (clojure.test/is (= ~@forms (let [x 5] (+ 2 x))))
-     (clojure.test/is (= ~@forms (let [x 3, y 10] (- y x))))
-     (clojure.test/is (= ~@forms (let [x 21] (let [y 3] (/ x y)))))))
+     (clojure.test/is (= ~@forms (let [x# 5] (+ 2 x#))))
+     (clojure.test/is (= ~@forms (let [x# 3, y# 10] (- y# x#))))
+     (clojure.test/is (= ~@forms (let [x# 21] (let [y# 3] (/ x# y#)))))))
 
 (defmacro defcheck-36 [name & forms]
   `(clojure.test/deftest ~name
