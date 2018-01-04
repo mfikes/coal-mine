@@ -202,9 +202,9 @@
 
 (defmacro defcheck-36 [name & forms]
   `(clojure.test/deftest ~name
-     (clojure.test/is (= 10 (let ~@forms (+ x y))))
-     (clojure.test/is (= 4 (let ~@forms (+ y z))))
-     (clojure.test/is (= 1 (let ~@forms z)))))
+     (clojure.test/is (= 10 (let ~@forms (+ ~'x ~'y))))
+     (clojure.test/is (= 4 (let ~@forms (+ ~'y ~'z))))
+     (clojure.test/is (= 1 (let ~@forms ~'z)))))
 
 (defmacro defcheck-37 [name & forms]
   `(clojure.test/deftest ~name
