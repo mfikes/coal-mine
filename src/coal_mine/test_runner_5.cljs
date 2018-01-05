@@ -23,7 +23,6 @@
    coal-mine.problem-156
    coal-mine.problem-157
    coal-mine.problem-158
-   coal-mine.problem-160
    coal-mine.problem-161
    coal-mine.problem-162
    coal-mine.problem-164
@@ -56,7 +55,6 @@
     'coal-mine.problem-156
     'coal-mine.problem-157
     'coal-mine.problem-158
-    'coal-mine.problem-160
     'coal-mine.problem-161
     'coal-mine.problem-162
     'coal-mine.problem-164
