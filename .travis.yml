@@ -3,7 +3,7 @@ dist: trusty
 language: node_js
 
 node_js:
-  - "6"
+  - "9"
 
 before_install:
   - curl -sSL https://raw.githubusercontent.com/cljs-oss/canary/master/scripts/install-canary.sh | bash
