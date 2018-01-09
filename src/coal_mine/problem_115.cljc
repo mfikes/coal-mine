@@ -3994,8 +3994,7 @@
           s2 (apply + (map int (take-last half v)))]
       (= s1 s2))))
 
-;; See CLJS-2462
-#_(defcheck solution-85050599
+(defcheck solution-85050599
   (fn [x]
     (let [v (loop [n x o []] (if (zero? n) o (recur (int (/ n 10)) (conj o (mod n 10)))))
           m (/ (count v) 2)]
@@ -6809,8 +6808,8 @@
                  ((juxt take take-last)
                   (/ (count digits) 2)
                   digits))))))
-;; See CLJS-2462
-#_(defcheck solution-d327efca
+
+(defcheck solution-d327efca
   (fn [n]
     (letfn [(digits [x] (mapv #(- (parse-char %) (parse-char \0)) (str x)))
             (sum-of-sq [items] (reduce + (map #(* % %) items)))]
