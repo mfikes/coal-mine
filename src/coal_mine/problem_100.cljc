@@ -1475,14 +1475,6 @@
             )
           )))))
 
-(defcheck solution-3f70d6aa
-  (fn [& args]
-    (let [lsts (map (fn [i] (iterate (fn [x] (+ x i)) i)) args)
-          lst (apply interleave lsts)
-          sample (take 10000 lst)
-          eligible (filter #(= (count args) (second %)) (frequencies sample))]
-      (first (sort (map first eligible))))))
-
 (defcheck solution-3fc77782
   (fn [& args]
     (letfn [(gcd [x y]
