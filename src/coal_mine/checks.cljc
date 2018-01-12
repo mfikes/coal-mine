@@ -193,7 +193,7 @@
      (clojure.test/is (= (~@forms [[1 2] [3 4]]) '([1 2] [1 2] [3 4] [3 4])))))
 
 (defmacro defcheck-33 [name & forms]
-  `(deftimedtest ~name 16
+  `(deftimedtest ~name 32
      (clojure.test/is (= (~@forms [1 2 3] 2) '(1 1 2 2 3 3)))
      (clojure.test/is (= (~@forms [:a :b] 4) '(:a :a :a :a :b :b :b :b)))
      (clojure.test/is (= (~@forms [4 5 6] 1) '(4 5 6)))
@@ -201,7 +201,7 @@
      (clojure.test/is (= (~@forms [44 33] 2) [44 44 33 33]))))
 
 (defmacro defcheck-34 [name & forms]
-  `(deftimedtest ~name 16
+  `(deftimedtest ~name 32
      (clojure.test/is (= (~@forms 1 4) '(1 2 3)))
      (clojure.test/is (= (~@forms -2 2) '(-2 -1 0 1)))
      (clojure.test/is (= (~@forms 5 8) '(5 6 7)))))
@@ -312,7 +312,7 @@
      (clojure.test/is (= [2 4] (let [[a b c d e] [0 1 2 3 4]] ~@forms)))))
 
 (defmacro defcheck-53 [name & forms]
-  `(deftimedtest ~name 16
+  `(deftimedtest ~name 32
      (clojure.test/is (= (~@forms [1 0 1 2 3 0 4 5]) [0 1 2 3]))
      (clojure.test/is (= (~@forms [5 6 1 3 2 7]) [5 6]))
      (clojure.test/is (= (~@forms [2 3 3 4 5]) [3 4 5]))
@@ -342,38 +342,38 @@
      (clojure.test/is (= ~@forms ((fn foo# [x#] (when (> x# 0) (conj (foo# (dec x#)) x#))) 5)))))
 
 (defmacro defcheck-58 [name & forms]
-  `(deftimedtest ~name 16
+  `(deftimedtest ~name 32
      (clojure.test/is (= [3 2 1] ((~@forms rest reverse) [1 2 3 4])))
      (clojure.test/is (= 5 ((~@forms (partial + 3) second) [1 2 3 4])))
      (clojure.test/is (= true ((~@forms zero? #(mod % 8) +) 3 5 7 9)))
      (clojure.test/is (= "HELLO" ((~@forms #(.toUpperCase %) #(apply str %) take) 5 "hello world")))))
 
 (defmacro defcheck-59 [name & forms]
-  `(deftimedtest ~name 16
+  `(deftimedtest ~name 32
      (clojure.test/is (= [21 6 1] ((~@forms + max min) 2 3 5 1 6 4)))
      (clojure.test/is (= ["HELLO" 5] ((~@forms #(.toUpperCase %) count) "hello")))
      (clojure.test/is (= [2 6 4] ((~@forms :a :c :b) {:a 2, :b 4, :c 6, :d 8 :e 10})))))
 
 (defmacro defcheck-60 [name & forms]
-  `(deftimedtest ~name 16
+  `(deftimedtest ~name 32
      (clojure.test/is (= (take 5 (~@forms + (range))) [0 1 3 6 10]))
      (clojure.test/is (= (~@forms conj [1] [2 3 4]) [[1] [1 2] [1 2 3] [1 2 3 4]]))
      (clojure.test/is (= (last (~@forms * 2 [3 4 5])) (reduce * 2 [3 4 5]) 120))))
 
 (defmacro defcheck-61 [name & forms]
-  `(deftimedtest ~name 16
+  `(deftimedtest ~name 32
      (clojure.test/is (= (~@forms [:a :b :c] [1 2 3]) {:a 1, :b 2, :c 3}))
      (clojure.test/is (= (~@forms [1 2 3 4] ["one" "two" "three"]) {1 "one", 2 "two", 3 "three"}))
      (clojure.test/is (= (~@forms [:foo :bar] ["foo" "bar" "baz"]) {:foo "foo", :bar "bar"}))))
 
 (defmacro defcheck-62 [name & forms]
-  `(deftimedtest ~name 16
+  `(deftimedtest ~name 32
      (clojure.test/is (= (take 5 (~@forms #(* 2 %) 1)) [1 2 4 8 16]))
      (clojure.test/is (= (take 5 (~@forms #(* 2 %) 1)) [1 2 4 8 16]))
      (clojure.test/is (= (take 5 (~@forms #(* 2 %) 1)) [1 2 4 8 16]))))
 
 (defmacro defcheck-63 [name & forms]
-  `(deftimedtest ~name 128
+  `(deftimedtest ~name 512
      (clojure.test/is (= (~@forms #(> % 5) [1 3 6 8]) {false [1 3], true [6 8]}))
      (clojure.test/is (= (~@forms #(apply / %) [[1 2] [2 4] [4 6] [3 6]])
                         {(/ 2) [[1 2] [2 4] [3 6]], (/ 2 3) [[4 6]]}))
@@ -402,7 +402,7 @@
      (clojure.test/is (= (~@forms 1023 858) 33))))
 
 (defmacro defcheck-67 [name & forms]
-  `(deftimedtest ~name 128
+  `(deftimedtest ~name 256
      (clojure.test/is (= (~@forms 2) [2 3]))
      (clojure.test/is (= (~@forms 5) [2 3 5 7 11]))
      (clojure.test/is (= (last (~@forms 100)) 541))))
@@ -417,7 +417,7 @@
                             result#))))))
 
 (defmacro defcheck-69 [name & forms]
-  `(deftimedtest ~name 16
+  `(deftimedtest ~name 32
      (clojure.test/is (= (~@forms * {:a 2, :b 3, :c 4} {:a 2} {:b 2} {:c 5})
                         {:a 4, :b 6, :c 20}))
      (clojure.test/is (= (~@forms - {1 10, 2 20} {1 3, 2 10, 3 15})
