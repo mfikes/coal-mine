@@ -106,7 +106,7 @@
      (clojure.test/is (= (~@forms ["b" "c" "d"]) "d"))))
 
 (defmacro defcheck-20 [name & forms]
-  `(deftimedtest ~name 16
+  `(deftimedtest ~name 32
      (clojure.test/is (= (~@forms (list 1 2 3 4 5)) 4))
      (clojure.test/is (= (~@forms ["a" "b" "c"]) "b"))
      (clojure.test/is (= (~@forms [[1 2] [3 4]]) [1 2]))))
@@ -395,7 +395,7 @@
      (clojure.test/is (= [:map :set :vector :list] (map ~@forms [{} #{} [] ()])))))
 
 (defmacro defcheck-66 [name & forms]
-  `(deftimedtest ~name 64
+  `(deftimedtest ~name 128
      (clojure.test/is (= (~@forms 2 4) 2))
      (clojure.test/is (= (~@forms 10 5) 5))
      (clojure.test/is (= (~@forms 5 7) 1))
@@ -417,7 +417,7 @@
                             result#))))))
 
 (defmacro defcheck-69 [name & forms]
-  `(deftimedtest ~name 32
+  `(deftimedtest ~name 64
      (clojure.test/is (= (~@forms * {:a 2, :b 3, :c 4} {:a 2} {:b 2} {:c 5})
                         {:a 4, :b 6, :c 20}))
      (clojure.test/is (= (~@forms - {1 10, 2 20} {1 3, 2 10, 3 15})
@@ -426,7 +426,7 @@
                         {:a [3 4 5], :b [6 7], :c [8 9]}))))
 
 (defmacro defcheck-70 [name & forms]
-  `(deftimedtest ~name 16
+  `(deftimedtest ~name 32
      (clojure.test/is (= (~@forms "Have a nice day.")
                         ["a" "day" "Have" "nice"]))
      (clojure.test/is (= (~@forms "Clojure is a fun language!")
@@ -682,7 +682,7 @@
                          "      "]))))
 
 (defmacro defcheck-95 [name & forms]
-  `(deftimedtest ~name 16
+  `(deftimedtest ~name 32
      (clojure.test/is (= (~@forms '(:a (:b nil nil) nil))
                         true))
      (clojure.test/is (= (~@forms '(:a (:b nil nil)))
