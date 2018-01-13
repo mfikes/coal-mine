@@ -3,13 +3,6 @@
             [clojure.test]
             [clojure.set]))
 
-(defcheck solution-1018af94
-  (fn [n]
-    (drop 2 (take (+ n 2)
-              (filter
-                (memoize (fn [p] (= (count (filter #(= 0 %) (map #(rem p %) (range 2 p)))) 0 )))
-                (range))))))
-
 (defcheck solution-102c7987
   (fn [x]
     (take x
@@ -2075,21 +2068,6 @@
                                          ns)))))]
       (take x (sieve (iterate inc 2))))))
 
-(defcheck solution-49be4cbd
-  (fn [n]
-    (take n
-      ((fn primes [x]
-         (if ((fn prime? [x]
-                (if (< x 2) false
-                            (if (= x 2) true
-                                        (if (even? x) false
-                                                      (loop [i 3 max_i (/ x 2)]
-                                                        (if (>= i max_i) true
-                                                                         (if (and (prime? i) (= 0 (mod x i))) false
-                                                                                                              (recur (+ i 2) max_i)))))))) x)
-           (cons x (lazy-seq (primes (inc x))))
-           (lazy-seq (primes (inc x))))) 2))))
-
 (defcheck solution-49ce3474
   (fn nprimes ([n] (nprimes [] 2 n))
     ([primes curr n] (if (= n 0)
@@ -2170,18 +2148,6 @@
   (fn [num-primes]
     (let [is-prime (fn[n] (every? #(not= 0 (rem n %)) (range 2 (inc (/ n 2)))))]
       (take num-primes (filter is-prime (drop 2 (range)))))))
-
-(defcheck solution-4d1bc839
-  (fn sieve
-    [n]
-    (loop [res (range 1 5000)
-           cur (first res)]
-      (let [next (first (filter #(> % cur) res))]
-        (if (not (number? next))
-          (vec (take n (rest (reverse res))))
-          (recur (cons next (filter (fn [e] (not (zero? (mod e next)))) res))
-            next))
-        ))))
 
 (defcheck solution-4d2354b1
   (fn [n] (letfn [(prime? [a] (not-any? zero? (map #(mod a %) (range 2 a))))]
@@ -2548,22 +2514,6 @@
                    (drop (inc (last x)) (range))))))
            [2])
       (dec k))))
-
-(defcheck solution-5756f927
-  (fn [n]
-    (let [upper  (max ( + (* n (Math/log n)) (* n (Math/log n) (Math/log n))) 50)
-          sv   (fn sv [nums]
-                 (if (empty? nums) '()
-                                   (let [pc  (first nums)
-                                         s   (set (map #(+ (* pc pc) (* % pc)) (range upper)))
-                                         leftover (filter (comp not s) nums)
-                                         ]
-                                     (if (empty? leftover) '()
-                                                           (lazy-seq (cons pc (sv (rest leftover))))))))
-          ]
-      (take n (sv (map (partial + 2) (range upper))))
-      )
-    ))
 
 (defcheck solution-57ba2de3
   (fn primo [x]
@@ -3737,45 +3687,9 @@
                                (recur (inc x))))))
                        (inc p))))))) 2))))
 
-(defcheck solution-7e9a3088
-  (fn primes [n]
-    (letfn [(gcd [a, b]
-              (loop [a a
-                     b b]
-                (if (= b 0)
-                  a
-                  (recur b (rem a b)))))
-            (tot [n]
-              (count (filter #(= 1 (gcd n %)) (range 1 n))))
-            (prime? [p]
-              (= (- p 1) (tot p)))]
-      (loop [out []
-             x   2]
-        (if (= (count out) n)
-          out
-          (recur
-            (if (prime? x)
-              (conj out x)
-              out)
-            (inc x)))))))
-
 (defcheck solution-7e9feee1
   (fn [n] (take n (cons 2 (filter (fn [x] (not-any? #(zero? (mod x %)) (range 2 (inc (Math/sqrt x)))))
                             (iterate #(+ 2 %) 3))))))
-
-(defcheck solution-7eaa5c4b
-  (fn primes [n]
-    (let [f (fn [ps _] (conj ps
-                         (+ 2 (first (filter (fn [x] (if (== 0
-                                                           (count (filter #(== 0 %)
-                                                                    (map #(mod (+ x 2) %)
-                                                                      ps))))
-                                                       true
-                                                       false))
-                                       (range))))))]
-      (if (== n 1)
-        [2]
-        (reduce f [2] (range (dec n)))))))
 
 (defcheck solution-7eba9791
   (fn [x]
@@ -3957,14 +3871,6 @@
                     (not-any? #(zero? (rem a %))
                       (range 2 (inc (int (Math/sqrt a)))))))))]
       (take n (filter prime? (rest (range)))))))
-
-(defcheck solution-82a774c9
-  (fn prime [x]
-    (let [n      300
-          nums   (range 1 (inc n))
-          remove (mapcat (fn [i] (map #(+ i % (* 2 i %)) nums)) nums)
-          remaining (clojure.set/difference (set nums) (set remove))]
-      (take x (sort (cons 2 (map #(inc (* 2 %)) remaining)))))))
 
 (defcheck solution-82fe9088
   (fn [n]
@@ -6840,20 +6746,6 @@
         prime-greater-than (fn [x] (some return-if-prime (iterate inc (inc x))))]
     (fn [n] (take n (iterate prime-greater-than 2)))))
 
-(defcheck solution-d54af5a0
-  (fn [n]
-    (loop [r [] x 2 y 2 p #{}]
-      (cond
-        (>= (count r) n) (take n r)
-        (> y x) (recur (concat r (remove p
-                                   (range (* 2 (dec x))
-                                     (* 2 x))))
-                  (inc x)
-                  2 p)
-        :else (recur r x
-                (inc y)
-                (conj p (* x y)))))))
-
 (defcheck solution-d5babf9c
   (fn primes[n]
     ;;cheating on range, revisit lazily
@@ -7257,18 +7149,6 @@
 
 (defcheck solution-e507e960
   (fn [x] (take x (filter (fn [t] (not-any? #(= 0 (rem t %)) (range 2 (dec t)))) (iterate inc 2)))))
-
-(defcheck solution-e539d8b7
-  (fn [x]
-    (loop [ i 2 banned [] primes [] ]
-      (let [candidates (into [] (take 50 (iterate (partial + i) i ))) ]
-        (cond
-          (= (count primes) x) primes
-          (not (some #(= (first candidates) %) banned))   (recur (inc i) (into banned candidates) (conj primes (first candidates)))
-          (some #(= (first candidates) %) banned)  (recur (inc i) (into banned candidates) primes)
-          )
-        )
-      )))
 
 (defcheck solution-e5af4b08
   (fn [n]
