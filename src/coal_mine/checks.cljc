@@ -898,7 +898,7 @@
                         [0 1 2 3 4 5 6 7 8 9 11 22 33 44 55 66 77 88 99 101]))))
 
 (defmacro defcheck-116 [name & forms]
-  `(deftimedtest 1000 ~name
+  `(deftimedtest ~name 512
      (clojure.test/is (= false (~@forms 4)))
      (clojure.test/is (= true (~@forms 563)))
      (clojure.test/is (= 1103 (nth (filter ~@forms (range)) 15)))))
