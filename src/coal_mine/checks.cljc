@@ -255,13 +255,13 @@
      (clojure.test/is (= (~@forms 8) 40320))))
 
 (defmacro defcheck-43 [name & forms]
-  `(deftimedtest ~name 16
+  `(deftimedtest ~name 32
      (clojure.test/is (= (~@forms [1 2 3 4 5 6] 2) '((1 3 5) (2 4 6))))
      (clojure.test/is (= (~@forms (range 9) 3) '((0 3 6) (1 4 7) (2 5 8))))
      (clojure.test/is (= (~@forms (range 10) 5) '((0 5) (1 6) (2 7) (3 8) (4 9))))))
 
 (defmacro defcheck-44 [name & forms]
-  `(deftimedtest ~name 16
+  `(deftimedtest ~name 32
      (clojure.test/is (= (~@forms 2 [1 2 3 4 5]) '(3 4 5 1 2)))
      (clojure.test/is (= (~@forms -2 [1 2 3 4 5]) '(4 5 1 2 3)))
      (clojure.test/is (= (~@forms 6 [1 2 3 4 5]) '(2 3 4 5 1)))
@@ -319,19 +319,19 @@
      (clojure.test/is (= (~@forms [7 6 5 4]) []))))
 
 (defmacro defcheck-54 [name & forms]
-  `(deftimedtest ~name 16
+  `(deftimedtest ~name 32
      (clojure.test/is (= (~@forms 3 (range 9)) '((0 1 2) (3 4 5) (6 7 8))))
      (clojure.test/is (= (~@forms 2 (range 8)) '((0 1) (2 3) (4 5) (6 7))))
      (clojure.test/is (= (~@forms 3 (range 8)) '((0 1 2) (3 4 5))))))
 
 (defmacro defcheck-55 [name & forms]
-  `(deftimedtest ~name 16
+  `(deftimedtest ~name 32
      (clojure.test/is (= (~@forms [1 1 2 3 2 1 1]) {1 4, 2 2, 3 1}))
      (clojure.test/is (= (~@forms [:b :a :b :a :b]) {:a 2, :b 3}))
      (clojure.test/is (= (~@forms '([1 2] [1 3] [1 3])) {[1 2] 1, [1 3] 2}))))
 
 (defmacro defcheck-56 [name & forms]
-  `(deftimedtest ~name 128
+  `(deftimedtest ~name 256
      (clojure.test/is (= (~@forms [1 2 1 3 1 2 4]) [1 2 3 4]))
      (clojure.test/is (= (~@forms [:a :a :b :b :c :c]) [:a :b :c]))
      (clojure.test/is (= (~@forms '([2 4] [1 2] [1 3] [1 3])) '([2 4] [1 2] [1 3])))
@@ -402,7 +402,7 @@
      (clojure.test/is (= (~@forms 1023 858) 33))))
 
 (defmacro defcheck-67 [name & forms]
-  `(deftimedtest ~name 256
+  `(deftimedtest ~name 512
      (clojure.test/is (= (~@forms 2) [2 3]))
      (clojure.test/is (= (~@forms 5) [2 3 5 7 11]))
      (clojure.test/is (= (last (~@forms 100)) 541))))
@@ -1205,7 +1205,7 @@
                                              "   *   "]))))
 
 (defmacro defcheck-140 [name & forms]
-  `(deftimedtest ~name 512
+  `(deftimedtest ~name 1024
      (clojure.test/is (= (~@forms #{#{'a 'B 'C 'd}
                                     #{'A 'b 'c 'd}
                                     #{'A 'b 'c 'D}
