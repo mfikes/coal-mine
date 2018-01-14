@@ -1187,40 +1187,11 @@
       (and (prime? n)
            (= n (/ (+ (next-prime n) (prev-prime n)) 2))))))
 
-(defcheck solution-36e7aa40
-  (fn [n]
-    (letfn [(prime? [n]
-              (cond
-                (> 2 n) false
-                (= 2 n) true
-                (even? n) false
-                :else (let [prevs (range 3 (quot n 2))]
-                        (empty? (filter #(= 0 (rem n %)) prevs)))))]
-      (if (or (= 2 n) (not (prime? n))) false
-                                        (let [primes (filter prime? (range))
-                                              u      (last (take-while #(> n %) primes))
-                                              v      (first (drop-while #(>= n %) primes))]
-                                          (= n (/ (+ u v) 2)))))))
-
 (defcheck solution-370b6f52
   (letfn [(prime? [n] (not-any? #(zero? (mod n %)) (range 2 n)))
           (prime-before [n] (first (filter prime? (range (dec n) 2 -1))))
           (prime-after [n] (first (filter prime? (iterate inc (inc n)))))]
     #(and (> % 3) (prime? %) (= % (/ (+ (prime-before %) (prime-after %)) 2)))))
-
-(defcheck solution-3750bf49
-  (fn [n]
-    (letfn [(ps [so-far]
-              (lazy-seq (let [ns (iterate inc (inc (last so-far)))
-                              np (first (for [n ns
-                                              :when (not-any?
-                                                      #(zero? (mod n %)) so-far)]
-                                          n))]
-                          (cons np (ps (conj so-far np))))))]
-      (let [primes (ps [2])
-            [a b c] (first (drop-while #(< (second %) n)
-                             (partition 3 1 primes)))]
-        (and (= n b) (= (- b a) (- c b)))))))
 
 (defcheck solution-376024a2
   (fn my-prime-sandwich
@@ -1292,34 +1263,8 @@
            (if-let [l (first (filter p (range (dec n) 1 -1)))]
              (== (* 2 n) (+ l (first (filter p (iterate inc (inc n)))))))))))
 
-(defcheck solution-387e25ad
-  (fn [n]
-    (if (< n 5)
-      false
-      (letfn [(isPrime [val]
-                (empty? (filter #(= 0 %) (take (- val 2) (map #(rem val %) (iterate inc 2))))))]
-        (let [previous (first (filter #(or (= 1 %) (isPrime %)) (iterate dec (dec n))))
-              next     (first (filter isPrime (iterate inc (inc n))))]
-          (and (isPrime n) (not= previous 1) (= n (/ (+ previous next) 2)))
-          )))))
-
 (defcheck solution-39627c5a
   (fn [x] (and (> x 2) (let [p (fn [n] (every? #(> (rem n %) 0) (range 2 (inc (quot n 2))))) i (fn [n f] (second (filter p (iterate f n))))] (and (p x) (= x (/ (+ (i x dec) (i x inc)) 2)))))))
-
-(defcheck solution-39de51f0
-  (fn [n]
-    (let [compute-primes (fn [result number]
-                           (if (> (last result) n)
-                             result
-                             (let [divisors (take-while #(<= (* % %) number) result)]
-                               (if (some #(zero? (rem number %)) divisors)
-                                 (recur result (+ number 2))
-                                 (recur (conj result number) (+ number 2))))))
-          [t s f] (take 3 (reverse (compute-primes [2] 3)))]
-      (cond
-        (nil? f) false
-        (= n s) (= n (/ (+ f t) 2))
-        :else false))))
 
 (defcheck solution-3a3faade
   (fn [n]
@@ -1385,14 +1330,6 @@
               nextPrime (some #(if (isPrime? %) %) (drop (inc n) (range)))]
           (and prevPrime (= n (/ (+ prevPrime nextPrime) 2))))))))
 
-(defcheck solution-3b5ebb2a
-  (fn [c]
-    (let [cs (loop [ps [2] n 3]
-               (if (< c (last ps))
-                 (reverse ps)
-                 (let [p (loop [x n] (if (every? #(pos? (rem x %)) ps) x (recur (+ 2 x))))]
-                   (recur (conj ps p) (+ 2 p)))))] (and (< 3 (count cs)) (= c (second cs)) (= (* 2 c) (+ (first cs) (second (rest cs))))))))
-
 (defcheck solution-3b8b6c5e
   (let [
         prime?       (fn [n]
@@ -1414,14 +1351,6 @@
                                         (== m n)))))
         ]
     is-balanced?))
-
-(defcheck solution-3c117586
-  (fn [x]
-    (letfn [(prime? [x] (and (> x 1) (every? #(not (zero? (rem x %))) (range 2 x)))) (primes [] (filter prime? (drop 2 (range))))] (if (prime? x)
-                                                                                                                                     (let [prev-prime (last (take-while (partial > x) (primes))) next-prime (last (take 2 (drop-while (partial > x) (primes))))] (if prev-prime
-                                                                                                                                                                                                                                                                   (if (= x (/ (+ prev-prime next-prime) 2)) true false)
-                                                                                                                                                                                                                                                                   false))
-                                                                                                                                     false))))
 
 (defcheck solution-3c1d33b5
   #(if (< % 5) false
@@ -3176,18 +3105,6 @@
           (= (- b a) (- c b)))
         false))))
 
-(defcheck solution-7b7eb3f0
-  (fn balanced? [k]
-    (letfn [(primes [n sofar]
-              (lazy-seq
-                (if (every? (fn [m] (not (zero? (rem n m)))) sofar)
-                  (cons n (primes (inc n) (conj sofar n)))
-                  (primes (inc n) sofar))))
-            (balanced []
-              (letfn [(average? [[a b c]] (= b (/ (+ a c) 2)))]
-                (map second (filter average? (partition 3 1 (primes 2 []))))))]
-      (= k (some (fn [n] (if (<= k n) n nil)) (balanced))))))
-
 (defcheck solution-7bbb2e1a
   (fn [n]
     (let [isprime? #(if (< % 2)
@@ -4115,18 +4032,6 @@
           (= (* x 2) (+ next-prime prev-prime)))
         false))
     ))
-
-(defcheck solution-9b8566e9
-  (fn f [n]
-    (let [prime?        (fn [x]
-                          (not-any? zero?
-                            (map #(rem x %)
-                              (range 2 (inc (/ x 2))))))
-          prime-numbers (fn []
-                          (filter prime? (drop 2 (range))))
-          result        (map second (filter (fn [[g h i]] (= (* 2 h) (+ g i))) (partition 3 1 (prime-numbers))))
-          ]
-      (and (prime? n) (= n (first (drop-while #(< % n) result)))))))
 
 (defcheck solution-9be24b7c
   ; Hacked it :(
@@ -5748,27 +5653,6 @@
              (if-let [s (f p (r (+ % 2) (+ 1 % (- % q)) 2))]
                (= (- % q) (- s %))))))))))
 
-(defcheck solution-ce67e53e
-  (fn bal-prime? [n]
-    (letfn [(primez
-              ([] (cons 2 (primez 2 [2])))
-              ([last got]
-               (lazy-seq
-                 (loop [next (inc last)]
-                   (if (not-any? #(zero? (mod next %)) got)
-                     (cons next (primez next (conj got next)))
-                     (recur (inc next)))))))]
-      (loop [[prv cur nxt & r :as ps] (primez)]
-        (cond
-          (> cur n)
-          false
-
-          (= cur n)
-          (= n (/ (+ prv nxt) 2))
-
-          :default
-          (recur (rest ps)))))))
-
 (defcheck solution-cea20d85
   (letfn [
           (is-prime [n] (every? #(< 0 (mod n %)) (take-while #(<= (* % %) n) (drop 2 (range)))))
@@ -6165,18 +6049,6 @@
             (< n p) false                                   ;passed it, not prime
             (> n p) (recur (next ps))                       ;keep going
             :else (= n (/ (+ a b) 2))))))))
-
-(defcheck solution-dc19c650
-  (fn [n]
-    (loop [primes ((fn p [n c]
-                     (if (some #(zero? (mod n %)) c)
-                       (p (inc n) c)
-                       (lazy-seq (cons n (p (inc n) (conj c n)))))) 2 [])]
-      (let [[a b c & r] primes]
-        (cond
-          (> b n) false
-          (= b n) (= (- b a) (- c b))
-          :else (recur (rest primes)))))))
 
 (defcheck solution-dc902cf8
   (fn [x]
@@ -6997,18 +6869,6 @@
         (and
          (= x a)
          (= (* 2 a) (+ b c)))))))
-
-(defcheck solution-f5fe4016
-  (fn balanced-prime? [n]
-    (letfn
-     [(prime? [n primes] (not (some #(zero? (rem n %)) primes)))
-      (numbers-above [n] (lazy-seq (iterate inc (inc n))))
-      (next-prime [s] (first (filter #(prime? % s) (numbers-above (last s)))))
-      (prime-generator [primes] (conj primes (next-prime primes)))]
-      (let [primes (iterate prime-generator [2])
-            plist  (reverse (second (drop-while #(< (last %) n) primes)))
-            [p0 p1 p2] (take 3 plist)]
-        (if (< (count plist) 3) false (= n p1 (/ (+ p0 p2) 2)))))))
 
 (defcheck solution-f6592d13
   (fn [n]
