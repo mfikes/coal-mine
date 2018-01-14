@@ -59,7 +59,7 @@
                    (not-any?
                      (fn [divisor] (zero? (rem n divisor)))
                      (range 2 n))))
-            (from [x] (range (inc x) Integer/MAX_VALUE))
+            (from [x] (range (inc x) 2147483647))
             (first-prime [aseq]
               (first (filter prime? aseq)))
             (average [a b] (/ (+ a b) 2))]
@@ -730,21 +730,8 @@
       (and (prime? n)
            (not= 2 n)                                       ; otherwise exception adding prev-prime=nil, below
            (let [prev-prime (first (filter prime? (range (dec n) 0 -1)))
-                 post-prime (first (filter prime? (range (inc n) Integer/MAX_VALUE)))]
+                 post-prime (first (filter prime? (range (inc n) 2147483647)))]
              (= n (/ (+ prev-prime post-prime) 2)))))))
-
-(defcheck solution-23a972d2
-  (fn [x]
-    (let [prime?  #(cond (<= % 2) false
-                         (.isProbablePrime (BigInteger/valueOf %) 5) %
-                         :else false)
-          find-lp (fn [n] (cond (<= n 2) 0
-                                (prime? (dec n)) (dec n)
-                                :else (recur (dec n))))
-          find-np (fn [n] (cond (prime? (inc n)) (inc n)
-                                :else (recur (inc n))))]
-      (cond (prime? x) (= x (/ (+ (find-lp x) (find-np x)) 2))
-            :else false))))
 
 (defcheck solution-23b5ff7a
   (fn [n]
@@ -912,7 +899,7 @@
       (if (not (prime? val))
         false
         (let [before (first (filter prime? (range (dec val) 1 -1)))
-              after  (first (filter prime? (range (inc val) Double/POSITIVE_INFINITY)))]
+              after  (first (filter prime? (range (inc val) ##Inf)))]
           (if (nil? before)
             false
             (= val
@@ -1008,16 +995,6 @@
       (if (or (<= n 2) (not (prime? n)))
         false
         (do (let [bal (+ (pprime (dec n)) (nprime (inc n)))] (= n (/ bal 2))))))))
-
-(defcheck solution-2998607
-  (fn __
-    [number]
-    (letfn [(prime? [num] (.isProbablePrime (new BigInteger (str num)) 10))]
-      (if (prime? number)
-        (let [next-prime (first (filter prime? (drop (inc number) (range))))
-              prev-prime (first (filter prime? (reverse (range 1 number))))]
-          (and next-prime prev-prime (= number (/ (+ next-prime prev-prime) 2))))
-        false))))
 
 (defcheck solution-2a0c3c34
   (fn [n]
@@ -1335,35 +1312,6 @@
         (= candidate (/ (+ (nth primes (dec (first first-matching))) (nth primes (inc (first first-matching)))) 2))
         false))))
 
-(defcheck solution-32f1e8a4
-  (fn prime-sandwich [p]
-    (let [siftlist-cache {}]                                ;; cache intermediate dynamic table
-      (letfn [
-              (prime? [n]
-                ;; celebrates clojure's java interop, using BigInteger isProbablePrime with 5% certainty
-                (.isProbablePrime (BigInteger/valueOf n) 5))]
-
-
-        (if (and (> p 2)
-                 (even? p))
-          false
-          (if (or (not (prime? p))
-                  (< p 5))
-            false
-            (letfn [(prep [n]
-                      (loop [v (dec n)]
-                        (if (prime? v)
-                          v
-                          (recur (dec v)))))
-                    (nxtp [n]
-                      (loop [v (inc n)]
-                        (if (prime? v)
-                          v
-                          (recur (inc v)))))]
-              (if (= p (/ (+ (prep p) (nxtp p)) 2))
-                true
-                false))))))))
-
 (defcheck solution-3322a445
   (letfn [(primes
             ([] (primes (iterate inc 2)))
@@ -1393,7 +1341,7 @@
     (letfn [(divides? [n k] (zero? (rem n k)))
             (prime? [n] (not-any? (partial divides? n) (range 2 n)))
             (next-prime [f] (first (filter prime? (iterate f (f n)))))]
-      (and (> n 2) (prime? n) (= n (* 1/2 (+ (next-prime inc) (next-prime dec))))))))
+      (and (> n 2) (prime? n) (= n (/ (+ (next-prime inc) (next-prime dec)) 2))))))
 
 (defcheck solution-3417a571
   (fn [n]
@@ -1900,7 +1848,7 @@
                         seq
                         nil?)))]
       (and (prime? n)
-           (let [next-prime (first (drop-while (comp not prime?) (range (+ n 1) Integer/MAX_VALUE)))
+           (let [next-prime (first (drop-while (comp not prime?) (range (+ n 1) 2147483647)))
                  prev-prime (first (drop-while (comp not prime?) (range (- n 1) 1 -1)))]
              (and prev-prime (= (/ (+ next-prime prev-prime) 2) n)))))))
 
@@ -2037,39 +1985,6 @@
             (next-prime [] (some prime? (iterate inc (inc p))))]
       (and (> p 2) (prime? p) (= p (/ (+ (last-prime) (next-prime)) 2))))))
 
-(defcheck solution-453e4ecd
-  (fn [n]
-    (let
-     [prime?
-      (fn [i]
-        (.isProbablePrime
-          (.toBigInteger
-            (bigint i))
-          100))
-      calc-margin
-      (fn [n chgf]
-        (loop [i (chgf n)]
-          (if
-           (or
-            (neg? i)
-            (prime? i))
-            i
-            (recur (chgf i)))))
-      avg-margin
-      (fn [n]
-        (/
-          (+
-           (calc-margin n inc)
-           (calc-margin n dec))
-          2))
-      bprime?
-      (fn [n]
-        (and
-         (prime? n)
-         (= n (avg-margin n))))
-      ]
-      (bprime? n))))
-
 (defcheck solution-459899f9
   (let [divides?
         (fn [d n]
@@ -2160,7 +2075,7 @@
                        (not-any? multiple?)))))
         primes (filter prime? (range))
         mean   (fn [vs]
-                 (/ (apply +' vs) (count vs)))
+                 (/ (apply + vs) (count vs)))
         f      (fn [n]
                  (let [ps (take-while #(<= % n) primes)]
                    (and (= n (last ps))
@@ -2240,7 +2155,7 @@
     (letfn [
             (prime? [x] (not (some #(zero? (rem x %)) (range 2 x))))
             (prev-prime [x] (first (filter prime? (range (dec x) -2 -1))))
-            (next-prime [x] (first (filter prime? (range (inc x) Long/MAX_VALUE))))]
+            (next-prime [x] (first (filter prime? (range (inc x) 2147483647))))]
       (and (> a 2) (prime? a) (= a (/ (+ (prev-prime a) (next-prime a)) 2))))))
 
 (defcheck solution-4c56d9c1
@@ -2471,7 +2386,7 @@
     (letfn [(prime? [n]
               (not-any? #(= 0 (mod n %)) (range 2 n)))
             (gen-primes []
-              (filter prime? (range 1 Double/POSITIVE_INFINITY)))
+              (filter prime? (range 1 ##Inf)))
             (find-item-and-neighbors [item coll]
               (first
                 (drop-while #(not= (second %) item)
@@ -2504,7 +2419,7 @@
       (if (not (prime? n)) false
                            (let [anil (first (filter prime? (range (dec n) 1 -1)))
                                  a    (if (nil? anil) 0 anil)
-                                 c    (first (filter prime? (range (inc n) Long/MAX_VALUE)))]
+                                 c    (first (filter prime? (range (inc n) 2147483647)))]
                              (== n (/ (+ a c) 2)))))))
 
 (defcheck solution-544c05f0
@@ -2516,16 +2431,10 @@
                                    (range 2 (inc (Math/sqrt x)))))))]
           (when (prime? num)
             (when-let [down (first (filter prime? (range (dec num) 0 -1)))]
-              (when-let [up (first (filter prime? (range (inc num) Double/POSITIVE_INFINITY)))]
+              (when-let [up (first (filter prime? (range (inc num) ##Inf)))]
                 #_(println num down up)
                 (= (+ up down) (* 2 num))))))
         false)))
-
-(defcheck solution-545f8fa9
-  #(letfn [(p? [n] (.isProbablePrime (BigInteger/valueOf n) 10))
-           (pa [n f] (let [nd (f n)]
-                       (if (p? nd) nd (pa nd f))))]
-     (and (p? %) (= % (/ (+ (pa % inc) (pa % dec)) 2)))))
 
 (defcheck solution-54871bf1
   (fn bprime [n]
@@ -2711,30 +2620,6 @@
           dec-prime (first (filter is-prime? (iterate dec (dec n))))]
       (and (= (/ (+ dec-prime inc-prime) 2) n) (is-prime? n) (>= n 3)))))
 
-(defcheck solution-589a2d1e
-  (fn [x]
-    (letfn
-     [(prime? [n] (let [early-primes #{2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59}
-                        div-ep?      (not (some #(= 0 (rem n %)) early-primes))
-                        ]
-                    (if (contains? early-primes n)
-                      true
-                      (if (some #(= 0 (rem n %)) early-primes)
-                        false
-                        (.isProbablePrime (BigInteger/valueOf n) 5)
-
-                        ))))
-      ]
-      (if (or (< x 5) (not (prime? x)))
-        false
-
-        (let [prevprime (first (filter prime? (range (- x 2) 2 -2)))
-              nextprime (first (filter prime? (range (+ x 2) (+ x 5 (- x prevprime)) 2)))
-              ]
-          (if (nil? nextprime)
-            false
-            (= (/ (+ prevprime nextprime) 2) x)))))))
-
 (defcheck solution-58a9a6f8
   (fn [n]
     (let [a (fn [x]
@@ -2907,17 +2792,6 @@
             (let [next (second (filter prime? (iterate inc n)))]
               (= n (/ (+ prev next) 2)))))))))
 
-(defcheck solution-5e47909a
-  (fn balanced-prime? [n]
-    (letfn [(prime?
-              [n & {:keys [certainly] :or {certainly (rand-int Integer/MAX_VALUE)}}]
-              (. (biginteger n) (isProbablePrime certainly)))
-            (neighbor-prime [f n]
-              (first (filter prime? (iterate f (f n)))))]
-      (and (> n 2)
-           (prime? n)
-           (= n (/ (+ (neighbor-prime dec n) (neighbor-prime inc n)) 2))))))
-
 (defcheck solution-5e8ab478
   (fn [x]
     (let [prime?      (fn [n] (and (> n 2) (not-any? #(= 0 (mod n %)) (range 2 n))))
@@ -2994,28 +2868,6 @@
                                    [(range (dec n) 1 -1) (drop (inc n) (range))])]
              (and (not-any? nil? neighbor-primes)
                   (= n (/ (apply + neighbor-primes) 2))))))))
-
-(defcheck solution-61e1a273
-  (fn [n]
-    (letfn [(prime-search [s]
-              (if (prime? (first s))
-                (cons (first s) (lazy-seq (prime-search (rest s))))
-                (prime-search (rest s)))
-              )
-            (prime? [n]
-              (.isProbablePrime (BigInteger/valueOf n) 5))]
-      (if (prime? n)
-        (let [[right _] (prime-search (iterate dec (dec n)))
-              [left _] (prime-search (iterate inc (inc n)))]
-          (if (and
-               (> left 0)
-               (> right 0)
-               (= (/ (+ right left) 2) n))
-            true
-            false)
-          )
-        false)
-      )))
 
 (defcheck solution-620c3975
   (fn balanced? [x]
@@ -3185,18 +3037,6 @@
           ]
       (and (> x 2) (prime? x) (= (- x prevprime) (- nextprime x))))))
 
-(defcheck solution-6891248d
-  (fn is-sp [n]
-    (letfn [(is-prime? [x]
-              (.isProbablePrime (BigInteger/valueOf x) 5))
-            (count-prime [f x]
-              (if (is-prime? x) x (count-prime f (f x))))
-            (last-prime [x] (count-prime dec x))
-            (next-prime [x] (count-prime inc x))]
-      (and (= (* 2 n)
-             (+ (last-prime (dec n)) (next-prime (inc n))))
-           (is-prime? n)))))
-
 (defcheck solution-6897275
   (fn [n]
     (letfn [(prime? [k]
@@ -3245,7 +3085,7 @@
               (let [op (some #(if (prime? %) % false) (range start end inc))]
                 (if (boolean op) op 0)))
             (next-prime [n]
-              (next-or-previous-prime n (inc n) Integer/MAX_VALUE 1))
+              (next-or-previous-prime n (inc n) 2147483647 1))
             (prev-prime [n]
               (next-or-previous-prime n (dec n) 0 -1))]
       (if (not (prime? n))
@@ -3322,12 +3162,12 @@
   (let [prime-worker (fn prime-worker [i, iterators]
                        (let [iterator (get iterators i)]
                          (if iterator
-                           (recur (inc' i)
+                           (recur (inc i)
                              (reduce
-                               #(update-in %1 [(+' i %2)] conj %2)
+                               #(update-in %1 [(+ i %2)] conj %2)
                                (dissoc iterators i)
                                iterator))
-                           (lazy-seq (cons i (prime-worker (inc i) (assoc iterators (*' i i) [i])))))))
+                           (lazy-seq (cons i (prime-worker (inc i) (assoc iterators (* i i) [i])))))))
         primes       (prime-worker 2 {})
         prime?       (fn [n] (= n (first (drop-while #(< % n) primes))))]
     (fn [n]
@@ -3825,7 +3665,7 @@
             (mean [a b] (/ (+ a b) 2))]
       (if (or (not (prime? n)) (< n 3))
         false
-        (let [next-prime (->> (range (inc n) Integer/MAX_VALUE) (filter prime?) (first))
+        (let [next-prime (->> (range (inc n) 2147483647) (filter prime?) (first))
               last-prime (->> (range (dec n) 1 -1) (filter prime?) (first))]
           (= (mean last-prime next-prime) n))))))
 
@@ -4402,12 +4242,6 @@
                         (prev-prime n))
                     2)))))))
 
-(defcheck solution-8847c6a5
-  (fn [x]
-    (letfn [(ip [n] (every? #(ratio? (/ n %)) (range 2 n)))
-            (np [n f] (if (ip n) n (np (f n) f)))]
-      (and (> x 2) (ip x) (= (/ (+ (np (dec x) dec) (np (inc x) inc)) 2) x)))))
-
 (defcheck solution-8994b668
   (fn [n]
     (cond (<= n 3) false
@@ -4698,15 +4532,6 @@
                       false
                       (= (+ x x) (+ p1 (after-prime x))))))))))
 
-(defcheck solution-8f3ddd30
-  (fn [n]
-    (let [p #(.isProbablePrime (BigInteger/valueOf %) 5)
-          f #(loop [x (%2 %)]
-               (if (p x) x (recur (%2 x))))
-          a (f n dec)
-          b (f n inc)]
-      (and (p n) (= n (/ (+ a b) 2))))))
-
 (defcheck solution-8fb2d07e
   (fn balanced-prime [n]
     (let [gen-primes    (fn []
@@ -4780,7 +4605,7 @@
               (next-prime-in-seq (range (dec n) 1 -1))
               )
             (next-prime [n]
-              (next-prime-in-seq (range (inc n) Double/POSITIVE_INFINITY 1))
+              (next-prime-in-seq (range (inc n) ##Inf 1))
               )
             ]
       (if (is-prime n)
@@ -4870,7 +4695,7 @@
        (is-prime? n)
        (not= n 2)
        (= (/ (+ (next-prime (range (dec n) 0 -1))
-                (next-prime (range (inc n) (Integer/MAX_VALUE)))) 2) n)))))
+                (next-prime (range (inc n) (2147483647)))) 2) n)))))
 
 (defcheck solution-966bff1b
   #(->> % #{5, 53, 157, 173, 211, 257, 263, 373, 563, 593, 607, 653, 733, 947, 977, 1103} nil? not))
@@ -5148,7 +4973,7 @@
             (prime-below [x]
               (some #(if (prime? %) %) (range (dec x) 0 -1)))
             (prime-above [x]
-              (some #(if (prime? %) %) (range (inc x) Integer/MAX_VALUE 1)))
+              (some #(if (prime? %) %) (range (inc x) 2147483647 1)))
             (avg [x y]
               (/ (+ x y) 2))]
 
@@ -5437,7 +5262,7 @@
               (letfn [(step [coll]
                         (let [head (first coll)]
                           (lazy-seq (cons head (step (filter #(pos? (mod % head)) coll))))))]
-                (step (range 2 Long/MAX_VALUE))))
+                (step (range 2 2147483647))))
             (balanced-prime []
               (map second (filter #(= (second %) (/ (+ (first %) (last %)) 2)) (partition 3 1 (prime)))))]
       (= num (last (take-while #(<= % num) (balanced-prime)))))))
@@ -5491,14 +5316,6 @@
         #_(prn lhs mid rhs)
         (and lhs (= mid n (mean lhs rhs)))))))
 
-(defcheck solution-a6a9b2f2
-  (fn [n] (letfn [(p? [x] (.isProbablePrime (BigInteger/valueOf x) 5))
-                  (pp [p] (some #(if (p? %) %) (range (dec p) 0 -1)))
-                  (np [p] (some #(if (p? %) %) (range (inc p) Integer/MAX_VALUE)))]
-            (if (or (not (p? n)) (= n 2))
-              false
-              (= n (/ (+ (pp n) (np n)) 2))))))
-
 (defcheck solution-a752a455
   (fn [n]
     (letfn [(is-prime [n]
@@ -5511,15 +5328,6 @@
       (and (is-prime n)
            (= n
              (/ (+ (find-prime n inc) (find-prime n dec)) 2))))))
-
-(defcheck solution-a7854065
-  (fn [n]
-    (let [is-prime?  #(.isProbablePrime (BigInteger/valueOf %) 64)
-          next-prime #(first (filter is-prime? (iterate %1 (%1 %2))))]
-      (and (is-prime? n)
-           (= (* 2 n)
-             (+ (next-prime dec n)
-                (next-prime inc n)))))))
 
 (defcheck solution-a797c391
   (fn p116 [num]
@@ -5822,7 +5630,7 @@
 (defcheck solution-b0432a36
   (fn n116 [n]
     (letfn [(prime [k]
-              (let [r (java.lang.Math/floor (java.lang.Math/sqrt k))]
+              (let [r (Math/floor (Math/sqrt k))]
                 (every? (complement zero?) (map #(mod k %) (rest (rest (range (inc r))))))))
             (prime-bef [k] (loop [i (dec k)] (if (prime i) i (recur (dec i)))))
             (prime-after [k] (loop [i (inc k)] (if (prime i) i (recur (inc i)))))]
@@ -5895,7 +5703,7 @@
         (= 1 n) false
         (= 2 n) false
         :else
-        (let [a (first (filter prime? (range (inc n) Long/MAX_VALUE)))
+        (let [a (first (filter prime? (range (inc n) 2147483647)))
               b (first (filter prime? (range (dec n) 0 -1)))]
           (= n (/ (+ a b) 2)))))))
 
@@ -6395,7 +6203,7 @@
                    (not-any? zero? (map #(mod p %) (range 2 p)))))]
       (and (prime? p)
            (let [prev-p (first (filter prime? (range (dec p) 1 -1)))
-                 next-p (first (filter prime? (range (inc p) Integer/MAX_VALUE)))]
+                 next-p (first (filter prime? (range (inc p) 2147483647)))]
              (and prev-p
                   (= (+ next-p prev-p) (* 2 p))))))))
 
@@ -6513,7 +6321,7 @@
           before-prime (fn [x]
                          (loop [x (dec x)] (cond (<= x 0) 0 (is-prime? x) x :else (recur (dec x)))))
           after-prime  (fn [x]
-                         (loop [x (inc x)] (cond (= x Integer/MAX_VALUE) 0 (is-prime? x) x :else (recur (inc x)))))
+                         (loop [x (inc x)] (cond (= x 2147483647) 0 (is-prime? x) x :else (recur (inc x)))))
           pval         (/ (+ (after-prime x) (before-prime x)) 2)]
       (and (is-prime? x) (= pval x))
       )
@@ -6748,30 +6556,6 @@
       (and (prime? n)
            (= n (/ (+ (p-prime n) (n-prime n)) 2))))))
 
-(defcheck solution-c6ddf1a2
-  (fn prime-sandwich [c]
-    (let [prime?         (fn [n]
-                           (if (even? n) false
-                                         (let [root (num (int (Math/sqrt n)))]
-                                           (loop [i 3]
-                                             (if (> i root) true
-                                                            (if (zero? (mod n i)) false
-                                                                                  (recur (+ i 2))))))))
-          prime-from     (fn [c]
-                           (first (drop-while #(not (prime? %)) c)))
-          previous-prime (->> c
-                           dec
-                           (iterate dec)
-                           prime-from)
-          next-prime     (->> c
-                           inc
-                           (iterate inc)
-                           prime-from)]
-      (and (> c 4) (prime? c) (-> previous-prime
-                                (+ next-prime)
-                                (/ 2)
-                                (= c))))))
-
 (defcheck solution-c75fd1f
   #(cond
      (= % 4) false
@@ -6960,7 +6744,7 @@
           (prime? [n]
             (if (zero? (mod n 2)) false
                                   (empty? (filter #(zero? (mod n %))
-                                            (range 3 (inc (. Math sqrt n)) 2
+                                            (range 3 (inc (Math/sqrt n)) 2
                                               )))))]
 
     (fn [n]
@@ -7296,7 +7080,7 @@
                                     -1)))
                  r-prime (first (filter prime
                                   (range (+ n 1)
-                                    Integer/MAX_VALUE)))]
+                                    2147483647)))]
              (if (or (= nil l-prime)
                      (= nil r-prime))
                false
@@ -7353,9 +7137,9 @@
   (fn s [n] (if (> n 4) (let [f (fn [p m] (reduce (fn [d n] (if (some #(zero? (rem n %)) d) d (conj d n))) p (range 2 m))) w (f [] n) a (peek w) r (f w (+ 1 (- (* 2 n) a))) [a b c] (take 3 (rseq r))] (= n b (/ (+ a c) 2))) false)))
 
 (defcheck solution-d9f64ff5
-  (fn f [#^Integer n]
+  (fn f [n]
     (if (<= n 3) false
-                 (let [prime? (fn [#^Integer n]
+                 (let [prime? (fn [n]
                                 (loop [i (int 2)]
                                   (cond
                                     (> (* i i) n) true
@@ -7523,8 +7307,8 @@
 
 (defcheck solution-dd5b91c0
   (fn balanced-prime? [n]
-    (letfn [(isqrt [x] (-> x java.lang.Math/sqrt java.lang.Math/ceil
-                         java.lang.Math/round))
+    (letfn [(isqrt [x] (-> x Math/sqrt Math/ceil
+                         Math/round))
             (prime? [m] (and (>= m 2)
                              (or (= m 2)
                                  (empty? (filter #(= 0 (mod m %))
@@ -8009,7 +7793,7 @@
 
 (defcheck solution-e8c6be68
   (let [p (fn [x] (every? #(not (integer? (/ x %))) (range 2 x)))
-        l (filter p (range 2 Double/POSITIVE_INFINITY))]
+        l (filter p (range 2 ##Inf))]
     (fn [x]
       (and (p x)
            (let [a (last (cons -100 (take-while #(< % x) l)))
@@ -8088,28 +7872,6 @@
 
 (defcheck solution-ebb6c91c
   #(if (#{5 53 157 173 211 257 263 373 563 593 607 653 733 947 977 1103 1123 1187} %) true false))
-
-(defcheck solution-ebe11546
-  (fn [x] (let [prime?     #(.isProbablePrime (biginteger %) 7)
-                next-prime (fn [x] (first (filter prime? (iterate inc (inc x)))))
-                last-prime (- (* 2 x) (next-prime x))]
-            (and (prime? last-prime) (= x (next-prime last-prime))))))
-
-(defcheck solution-ecf508be
-  (fn __ [n]
-    (and
-     (.isProbablePrime (BigInteger. (str n)) 99)
-     (=
-       (* 2 n)
-       (+
-        (first
-          (filter
-            #(.isProbablePrime (BigInteger. (str %)) 99)
-            (iterate inc (inc n))))
-        (first
-          (filter
-            #(.isProbablePrime (BigInteger. (str %)) 99)
-            (iterate dec (dec n)))))))))
 
 (defcheck solution-ecf917d6
   (fn balanced-prime [n]
@@ -8378,7 +8140,7 @@
   (fn [n]
     (let [isprime? (fn [n] (and (not= 1 n) (not-any? #(zero? (mod n %)) (range 2 n))))
           lo       (first (filter isprime? (range (dec n) 0 -1)))
-          hi       (first (filter isprime? (range (inc n) Float/POSITIVE_INFINITY)))]
+          hi       (first (filter isprime? (range (inc n) ##Inf)))]
       (and lo hi
            (isprime? n)
            (= n (/ (+ lo hi) 2))))))
@@ -8675,39 +8437,6 @@
           -1 false
           0 (= p (/ (+ pp np) 2))
           1 (recur cpap-3s))))))
-
-(defcheck solution-fdc18ce6
-  (fn [n]
-    (letfn [(prime? [n] (.isProbablePrime (BigInteger/valueOf n) 5))
-            (np [f] (first (filter prime? (iterate f (f n)))))]
-      (and (prime? n) (= (/ ((fnil + 0) (np dec) (np inc)) 2) n)))))
-
-(defcheck solution-fe4075f5
-  (fn __
-    [n]
-    (letfn [(prime? [n]
-              (if (even? n) false
-                            (let [root (num (int (Math/sqrt n)))]
-                              (loop [i 3]
-                                (if (> i root) true
-                                               (if (zero? (mod n i)) false
-                                                                     (recur (+ i 2))))))))
-            (sister-prime
-              [n op]
-              (loop [n (op n)]
-                (if (< n 2) 0
-                            (if (prime? n)
-                              n
-                              (recur (op n))))))
-            (previous-prime [n] (sister-prime n dec))
-            (next-prime [n] (sister-prime n inc))]
-      (if (prime? n)
-        (if
-         (= n
-           (/ (+ (next-prime n) (previous-prime n)) 2))
-          true                                              ; [(next-prime n) n (previous-prime n)]
-          false)
-        false))))
 
 (defcheck solution-fea7cdbc
   (fn b-prime? [n]
