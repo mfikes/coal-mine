@@ -381,7 +381,7 @@
                         {1 [[1] [3]], 2 [[1 2] [2 3]], 3 [[1 2 3]]}))))
 
 (defmacro defcheck-64 [name & forms]
-  `(deftimedtest ~name 32
+  `(deftimedtest ~name 64
      (clojure.test/is (= 15 (reduce ~@forms [1 2 3 4 5])))
      (clojure.test/is (= 0 (reduce ~@forms [])))
      (clojure.test/is (= 6 (reduce ~@forms 1 [2 3])))))
