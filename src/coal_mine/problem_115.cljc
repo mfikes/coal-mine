@@ -107,7 +107,7 @@
 
 (defcheck solution-1295035d
   (fn balance? [n]
-    (let [ord (fn [ch] (- (int ch) (int \0)))
+    (let [ord (fn [ch] (- (parse-char ch) (parse-char \0)))
           s (str n)
           size (quot (count s) 2)
           l (map ord (take size s))
@@ -283,7 +283,7 @@
   (fn balance-of-n [n]
     (letfn[(get-sum
              [s]
-             (reduce #( + %1 (- (int %2) (int \0)) ) 0 (subvec s 0 (/ (count s) 2))))]
+             (reduce #( + %1 (- (parse-char %2) (parse-char \0)) ) 0 (subvec s 0 (/ (count s) 2))))]
       (= (get-sum  (vec(str n)))
         (get-sum (vec(reverse (str n))))))))
 
@@ -469,7 +469,7 @@
 
 (defcheck solution-1d6ba675
   (fn [x]
-    (let [c (map #(- (int %) (int \0)) (str x))
+    (let [c (map #(- (parse-char %) (parse-char \0)) (str x))
           l (quot (count c) 2)
           a (apply + (take l c))
           b (apply + (take l (reverse c)))]
@@ -521,7 +521,7 @@
 
 (defcheck solution-1e48e31
   (fn [n]
-    (let [nsx (map #(- (int %) (int \0)) (vec (str n)))
+    (let [nsx (map #(- (parse-char %) (parse-char \0)) (vec (str n)))
           hl (int (/ (count nsx) 2))
           fh (take hl nsx)
           sh (drop (- (count nsx) hl) nsx)]
@@ -604,7 +604,7 @@
 
 (defcheck solution-2028b35
   (fn [n]
-    (let [digits (map #(- (int %) (int \0)) (str n))
+    (let [digits (map #(- (parse-char %) (parse-char \0)) (str n))
           m (/ (count digits) 2)]
       (= (apply + (take (int m) digits))
         (apply + (drop m digits))))))
@@ -735,7 +735,7 @@
 (defcheck solution-246e9b43
   (fn [n]
     (letfn [(dig-sum [s]
-              (reduce + (map (fn [c] (- (int c) (int \0)))
+              (reduce + (map (fn [c] (- (parse-char c) (parse-char \0)))
                           s)))]
       (let [s (str n)
             len (count s)
@@ -758,7 +758,7 @@
 
 (defcheck solution-251c4b67
   (fn [num]
-    (let [dig (fn [n](map #(- (int %) (int \0)) (str n)))
+    (let [dig (fn [n](map #(- (parse-char %) (parse-char \0)) (str n)))
           digits (dig num)
           total (count digits)
           half (int (/ total 2))
@@ -788,7 +788,7 @@
           c (quot (count s) 2)
           s1 (take c s)
           s2 (take c (reverse s))
-          f (fn [r] (reduce + (map #(- (int %) (int \0)) r)))]
+          f (fn [r] (reduce + (map #(- (parse-char %) (parse-char \0)) r)))]
       (= (f s1) (f s2)))))
 
 (defcheck solution-2723e40c
@@ -919,7 +919,7 @@
           mid (quot c 2)
           s1 (subs (str n) 0 mid)
           s2 (subs (str n) (if (even? c) mid (inc mid)))
-          sum-digits (fn [s] (apply + (map #(- (int %) (int \0)) s)))]
+          sum-digits (fn [s] (apply + (map #(- (parse-char %) (parse-char \0)) s)))]
       (= (sum-digits s1) (sum-digits s2)))))
 
 (defcheck solution-2b51d085
@@ -949,7 +949,7 @@
           half (fn [n] (+ (int (/ n 2)) (rem n 2)))
           left-half (fn [s] (subs s 0 (half (count s))))
           right-half (fn [s] (subs s (- (count s) (half (count s)))))
-          digval (fn [c] (- (int c) (int \0)))
+          digval (fn [c] (- (parse-char c) (parse-char \0)))
           digsum (fn [s] (apply + (map digval (seq s))))
           ]
       (= (digsum (left-half s)) (digsum (right-half s))))))
@@ -967,7 +967,7 @@
 
 (defcheck solution-2c1892a0
   (fn [n]
-    (let [digits (map #(- (int %) (int \0)) (seq (str n)))
+    (let [digits (map #(- (parse-char %) (parse-char \0)) (seq (str n)))
           half-count (/ (count digits) 2)
           left-sum (reduce + (take half-count digits))
           right-sum (reduce + (take half-count (reverse digits)))
@@ -992,7 +992,7 @@
 
 (defcheck solution-2cef08a8
   (fn balanced? [x]
-    (let [s    (map #(- (int %) (int \0)) (seq (str x)))
+    (let [s    (map #(- (parse-char %) (parse-char \0)) (seq (str x)))
           c    (int (/ (count s) 2))
           s1   (take c s)
           s2   (take-last c s)
@@ -1080,7 +1080,7 @@
 
 (defcheck solution-2ec7cf82
   (fn [n]
-    (let [a (map #(- (int %) (int \0))  (str n))
+    (let [a (map #(- (parse-char %) (parse-char \0))  (str n))
           c (count a)
           f (int (/ c 2))
           m (if (odd? c) 1 0)
@@ -1096,7 +1096,7 @@
 
 (defcheck solution-2f45cc06
   (fn[n]
-    (let [chr->int #(- (int %) (int \0))]
+    (let [chr->int #(- (parse-char %) (parse-char \0))]
       (loop [s (str n)
              lhs 0
              rhs 0]
@@ -1212,7 +1212,7 @@
 
 (defcheck solution-3391ccd4
   (fn balanced? [n]
-    (let [nums (into [] (map #(- (int %) (int \0)) (seq (str n)))) length (count nums) half-length (quot length 2)]
+    (let [nums (into [] (map #(- (parse-char %) (parse-char \0)) (seq (str n)))) length (count nums) half-length (quot length 2)]
       (= (reduce + (subvec nums 0 half-length))
         (reduce + (subvec nums (- length half-length)))))))
 
@@ -1272,7 +1272,7 @@
     (letfn [(digits
               [n]
               (->> (str n)
-                (map #(- (int %) (int \0)))))]
+                (map #(- (parse-char %) (parse-char \0)))))]
       (let [d (digits n)]
         (let [c (quot (count d) 2)]
           (= (apply + (take c d)) (apply + (take c (reverse d)))))
@@ -1292,7 +1292,7 @@
   (fn [s]
     (let [s (map int (str s))
           parts ((juxt take take-last) (/ (count s) 2) s)
-          dsum (fn [s] (reduce + (map #(- % (int \0)) s)))]
+          dsum (fn [s] (reduce + (map #(- % (parse-char \0)) s)))]
       (apply = (map dsum parts)))))
 
 (defcheck solution-367917eb
@@ -1303,7 +1303,7 @@
         (reduce
           +
           (map
-            #(- (int %) (int \0))
+            #(- (parse-char %) (parse-char \0))
             n
             )
           )
@@ -1318,7 +1318,7 @@
 
 (defcheck solution-36d66563
   (fn [x]
-    (let[il (map #(- (int  %) (int \0)) (str x))
+    (let[il (map #(- (parse-char  %) (parse-char \0)) (str x))
          sizediv2 (quot (count il) 2)]
       (=
         (apply + (take sizediv2 il))
@@ -1382,7 +1382,7 @@
 
 (defcheck solution-389da6a1
   (fn balance [n]
-    (let [char->int (fn [c] (- (int c) (int \0)))
+    (let [char->int (fn [c] (- (parse-char c) (parse-char \0)))
           first-half (fn [l] (take (/ (count l) 2) l))
           digits (map char->int (str n))]
       (= (reduce + (first-half digits))
@@ -1420,7 +1420,7 @@
   (fn [n]
     (let [
           s (str n)
-          nums (map #(int (- (int %) (int \0))) s)
+          nums (map #(int (- (parse-char %) (parse-char \0))) s)
           size (count s)
           t (int (/ size 2))
           d (int (/ (inc size) 2))]
@@ -1469,7 +1469,7 @@
 
 (defcheck solution-3a954bcf
   (fn [n]
-    (letfn [(char-to-digit [c] (- (int c) (int \0)))
+    (letfn [(char-to-digit [c] (- (parse-char c) (parse-char \0)))
             (sum-of-digits [s] (apply + (map char-to-digit s)))]
       (let [s (str n)
             len (count s)]
@@ -1494,7 +1494,7 @@
 (defcheck solution-3ae35d4f
   (fn balanced? [n]
     (letfn [(to-digits [n]
-              (map #(- (int %) (int \0))  (seq (str n))))]
+              (map #(- (parse-char %) (parse-char \0))  (seq (str n))))]
       (let [vn (to-digits n)
             svn (split-at (/ (count vn) 2) vn)]
         (= 0 (reduce  + (map #(- %1 %2) (first svn) (second svn))))))))
@@ -1566,8 +1566,8 @@
           head (take half ds)
           middle (if (odd? length) 1 0)
           tail (drop (+ half middle) ds)
-          hsum (reduce + (map #(- (int %) (int \0)) head))
-          tsum (reduce + (map #(- (int %) (int \0)) tail))
+          hsum (reduce + (map #(- (parse-char %) (parse-char \0)) head))
+          tsum (reduce + (map #(- (parse-char %) (parse-char \0)) tail))
           ]
       ;[(= hsum tsum) half length hsum tsum head tail ds]
       (= hsum tsum)
@@ -1859,7 +1859,7 @@
   (fn balanced [n]
     (let [s (seq (str n))
           c (count s)
-          char->int (fn [c] (- (int c) (int \0)))
+          char->int (fn [c] (- (parse-char c) (parse-char \0)))
           side-sum (fn [s] (reduce + (map char->int s)))]
       (= (side-sum
            (take (if (even? c)
@@ -1885,7 +1885,7 @@
   (fn [v]
     (let [sv (str v)
           cv (count sv)
-          asdig (map #(- (int %) (int \0)) (map identity sv))
+          asdig (map #(- (parse-char %) (parse-char \0)) (map identity sv))
           fh  (take (if (odd? cv) (dec ( / cv 2)) (/ cv 2)) asdig)
           lh  (drop (/ cv 2) asdig)
           ]
@@ -2032,7 +2032,7 @@
 
 (defcheck solution-4a371c43
   (fn [n]
-    (let [s (vec (map #(- (int %) (int \0)) (str n)))
+    (let [s (vec (map #(- (parse-char %) (parse-char \0)) (str n)))
           c (int (/ (count s) 2))]
       (= (apply + (subvec s 0 c))
         (apply + (subvec s (if (odd? (count s)) (inc c) c)))))))
@@ -2082,7 +2082,7 @@
 
 (defcheck solution-4bf89f2d
   (fn [n]
-    (let [digits (map #(- (int %) (int \0)) (.toString n))
+    (let [digits (map #(- (parse-char %) (parse-char \0)) (.toString n))
           half (quot (inc (count digits)) 2)
           ]
       (= (reduce + (take half digits))
@@ -2137,7 +2137,7 @@
 
 (defcheck solution-4ce4cdcf
   (fn [n]
-    (let [s (map #(- (int (char %)) (int \0)) (pr-str n))
+    (let [s (map #(- (parse-char (char %)) (parse-char \0)) (pr-str n))
           h (int (/ (count s) 2))
           l (take h s)
           r (take-last h s)] [l r]
@@ -2166,7 +2166,7 @@
 (defcheck solution-4d7a8703
   (fn [n]
     (let [s (str n)
-          si (map #(- (int %) (int \0)) (seq s))
+          si (map #(- (parse-char %) (parse-char \0)) (seq s))
           mid (quot (count s) 2)]
       (=
         (apply + (take mid si))
@@ -2238,7 +2238,7 @@
 
 (defcheck solution-4fda4686
   (fn balanced? [n]
-    (let [to-digits (fn [n] (map #(- (int %) (int \0)) (seq (str n))))
+    (let [to-digits (fn [n] (map #(- (parse-char %) (parse-char \0)) (seq (str n))))
           digits (to-digits n)
           num-of-digits (count digits)
           split-pos (int (/ num-of-digits 2.0))
@@ -2297,7 +2297,7 @@
 
 (defcheck solution-5072f5c5
   (fn [n]
-    (let [sq (map #(- (int %) (int \0)) (seq (str n)))
+    (let [sq (map #(- (parse-char %) (parse-char \0)) (seq (str n)))
           c (count sq)
           s (if (even? c) (/ c 2) (/ (dec c) 2))
           sums (map #(reduce + %) (partition s (if (even? c) s (inc s)) sq))]
@@ -2328,7 +2328,7 @@
 
 (defcheck solution-52879a63
   (fn [n]
-    (let [digits (mapv #(- (int %) (int \0)) (str n))
+    (let [digits (mapv #(- (parse-char %) (parse-char \0)) (str n))
           half (quot (count digits) 2)
           left (take half digits)
           right (take-last half digits)]
@@ -2392,7 +2392,7 @@
 (defcheck solution-5397ef99
   (letfn [(digits [x]
             (->> (str x)
-              (map #(- (int %) (int \0)))))
+              (map #(- (parse-char %) (parse-char \0)))))
           (split-to-halfs [coll]
             (if (= 1 (count coll))
               (list coll coll)
@@ -2435,7 +2435,7 @@
 (defcheck solution-5466137
   (fn [n]
     (letfn [(sum-it [nums]
-              (reduce #(+ %1 (- (int %2) (int \0))) 0 nums))]
+              (reduce #(+ %1 (- (parse-char %2) (parse-char \0))) 0 nums))]
       (let [s (str n)
             hl (/ (count s) 2)
             h1 (take hl s)
@@ -2449,7 +2449,7 @@
           f (fn [a]
               (apply +
                 (map
-                  #(- (int %) (int \0))
+                  #(- (parse-char %) (parse-char \0))
                   a)))]
       (= (f (take c n))
         (f (take-last c n))))))
@@ -2619,14 +2619,14 @@
           i (int (/ (count s) 2))
           l (take i s)
           r (take i (reverse s))
-          len2 (fn [s] (apply + (map #(* % %) (map #(- (int %) (int \0)) s))))
+          len2 (fn [s] (apply + (map #(* % %) (map #(- (parse-char %) (parse-char \0)) s))))
           ] (= (len2 l) (len2 r)))))
 
 (defcheck solution-5a479bae
   #(let[digits (seq (str %))
         lowerHalf (take (+ (quot (count digits) 2) (rem (count digits) 2)) digits)
         upperHalf (drop (quot (count digits) 2) digits)
-        addDigits (fn [x y] (+ x (- (int y) (int \0))))]
+        addDigits (fn [x y] (+ x (- (parse-char y) (parse-char \0))))]
      (= (reduce addDigits 0 lowerHalf) (reduce addDigits 0 upperHalf))))
 
 (defcheck solution-5a5f0264
@@ -2643,7 +2643,7 @@
 
 (defcheck solution-5abe4c90
   (fn [n]
-    (let [sn (map #(mod (inc (- (int %) (int \1))) 10) (str n))
+    (let [sn (map #(mod (inc (- (parse-char %) (parse-char \1))) 10) (str n))
           cnt (count sn)
           cn (-> sn count (/ 2) int)]
       (= (apply + (take cn sn))
@@ -2695,7 +2695,7 @@
     [x]
     (loop [left []
            right []
-           remain (map (fn [x] (- (int x) (int \0))) (into [] (str x)))]
+           remain (map (fn [x] (- (parse-char x) (parse-char \0))) (into [] (str x)))]
       (if (< (count remain) 2)
         (= (reduce + left) (reduce + right ))
         (recur (conj left (first remain))
@@ -2818,7 +2818,7 @@
           chunk      (if (= chunk 0) 1 chunk)
           left       (subs st 0 chunk)
           right      (subs st (- len chunk))
-          digits-sum (fn [s] (reduce + (map #(- (int %) (int \0)) s)))]
+          digits-sum (fn [s] (reduce + (map #(- (parse-char %) (parse-char \0)) s)))]
       (= (digits-sum left) (digits-sum right)))))
 
 (defcheck solution-604b0397
@@ -2912,7 +2912,7 @@
 
 (defcheck solution-61d73f14
   (fn f [num]
-    (let [d (map #(- (int %) (int \0)) (str num))
+    (let [d (map #(- (parse-char %) (parse-char \0)) (str num))
           c (count d)
           m (quot c 2)]
       (if (even? c)
@@ -2931,7 +2931,7 @@
     (let [halves
           (let [sq (seq (str x))
                 s  (int (/ (count sq) 2))]
-            (map (fn [half] (map #(- (int %) (int \0)) half))
+            (map (fn [half] (map #(- (parse-char %) (parse-char \0)) half))
               [(take s sq) (drop (- (count sq) s) sq)]))]
       (apply = (map #(reduce + %) halves)))))
 
@@ -3070,7 +3070,7 @@
 
 (defcheck solution-67283c69
   (fn [n]
-    (let [digits (map #(- (int %) (int \0)) (str n))
+    (let [digits (map #(- (parse-char %) (parse-char \0)) (str n))
           len (count digits)
           half (quot len 2)]
       (= (apply + (take half digits))
@@ -3221,7 +3221,7 @@
         (apply = (map sum-digit-strs halves))))
 
   (fn balance-number? [n]
-    (let [char->int #(- (int %) (int \0))
+    (let [char->int #(- (parse-char %) (parse-char \0))
           digits (map char->int (str n))
           half-len (quot (count digits) 2)
           halves (map #(% half-len digits) [take, take-last])
@@ -3295,7 +3295,7 @@
 (defcheck solution-6dd5eafc
   (fn balanced?
     [x]
-    (let [digits (map #(- (int %) (int \0) ) (str x))
+    (let [digits (map #(- (parse-char %) (parse-char \0) ) (str x))
           num-digits (count digits)
           splits (split-at (quot num-digits 2) digits)
           split1 (if (= 0 (rem num-digits 2)) (splits 1) (rest (splits 1)))]
@@ -3309,7 +3309,7 @@
 
 (defcheck solution-6f2f1720
   (fn is-balanced? [n]
-    (let [get-digits (fn [x] (map #(- (int %) (int \0)) (seq (str x))))
+    (let [get-digits (fn [x] (map #(- (parse-char %) (parse-char \0)) (seq (str x))))
           digits (get-digits n)
           half (quot (count digits) 2)
           fh (take half digits)
@@ -3435,7 +3435,7 @@
 
 (defcheck solution-7502bb8
   (fn [n]
-    (let [digits (map #(- (int %) (int \0)) (str n))
+    (let [digits (map #(- (parse-char %) (parse-char \0)) (str n))
           length (count digits)
           count1 (quot length 2)
           count2 (- length count1)]
@@ -3504,7 +3504,7 @@
     ))
 
 (defcheck solution-7608fda
-  (fn [n] (let [v (map #(- (int  %) (int \0)) (str n))]
+  (fn [n] (let [v (map #(- (parse-char  %) (parse-char \0)) (str n))]
             (apply = (map #(apply + %) (map #(first (split-at (/ (count %) 2) %)) (list v (reverse v))))))))
 
 (defcheck solution-766135d3
@@ -3546,7 +3546,7 @@
 
 (defcheck solution-77f284a0
   (fn [n]
-    (let [xs (vec (map #(- (int %) (int \0)) (vec (str n))))
+    (let [xs (vec (map #(- (parse-char %) (parse-char \0)) (vec (str n))))
           ct (count xs)
           hf (int (/ ct 2))
           left (subvec xs 0 hf)
@@ -3589,7 +3589,7 @@
           prefix (take halflen v)
           suffix (drop (- len halflen) v)]
       (letfn [(sumdigits [v]
-                (apply + (map #(- (int %) (int \0)) v)))]
+                (apply + (map #(- (parse-char %) (parse-char \0)) v)))]
         (= (sumdigits prefix) (sumdigits suffix))))))
 
 (defcheck solution-794c344b
@@ -3770,7 +3770,7 @@
   (fn [n]
     (let [l (count (str n))
           h (quot l 2)
-          [l r] (partition (+ h (rem l 2)) h (map #(- (int %) (int \0)) (str n)))]
+          [l r] (partition (+ h (rem l 2)) h (map #(- (parse-char %) (parse-char \0)) (str n)))]
       (= (apply + l) (apply + r)))))
 
 (defcheck solution-7d9eb709
@@ -3821,12 +3821,12 @@
 
 (defcheck solution-7e0fc20a
   (fn [n]
-    (let [c0 (int \0)
+    (let [c0 (parse-char \0)
           sn (str n)
           cn (count sn)
           hn (quot cn 2)]
-      (= (apply + (map #(- (int %) c0) (subs sn 0 hn)))
-        (apply + (map #(- (int %) c0) (subs sn (- cn hn) cn)))))))
+      (= (apply + (map #(- (parse-char %) c0) (subs sn 0 hn)))
+        (apply + (map #(- (parse-char %) c0) (subs sn (- cn hn) cn)))))))
 
 (defcheck solution-7e2071ac
   (letfn [(int2l [n]
@@ -4021,7 +4021,7 @@
 
 (defcheck solution-85de2bc0
   (fn balance [x]
-    (let [digits (map #(- (int %) (int \0)) (str x))
+    (let [digits (map #(- (parse-char %) (parse-char \0)) (str x))
           n (/ (count digits) 2)
           left (take n digits)
           right (take-last n digits)]
@@ -4047,7 +4047,7 @@
           half (quot (count l) 2)
           lt (take half l)
           rt (take-last half l)
-          to-int #(- (int %) (int \0))]
+          to-int #(- (parse-char %) (parse-char \0))]
       (= (reduce + (map to-int lt))
         (reduce + (map to-int rt))))))
 
@@ -4123,7 +4123,7 @@
   (fn balance-n
     [n]
     (let [
-          lst (map #(- (int %) (int \0)) (str n))
+          lst (map #(- (parse-char %) (parse-char \0)) (str n))
           len (count lst)
           half (quot len 2)
           flag (if (even? len) 0 1)]
@@ -4310,14 +4310,14 @@
 (defcheck solution-8c624410
   (fn [n]
     (let [digits (->> (str n)
-                   (map #(- (int %) (int \0))))
+                   (map #(- (parse-char %) (parse-char \0))))
           q (quot (count digits) 2)]
       (= (reduce + (take q digits))
         (reduce + (take-last q digits))))))
 
 (defcheck solution-8daa7ad
   (fn [x]
-    (let [as (map #(- (int %) (int \0)) (str x))
+    (let [as (map #(- (parse-char %) (parse-char \0)) (str x))
           bs (reverse as)
           n (int (/ (count as) 2))]
       (= (apply + (take n as)) (apply + (take n bs))))))
@@ -4487,7 +4487,7 @@
 
 (defcheck solution-9197d567
   (fn [n]
-    (let [digits (map #(- (int %) (int \0)) (str n))
+    (let [digits (map #(- (parse-char %) (parse-char \0)) (str n))
           mid (int (/ (count digits) 2))
           [left right] (split-at mid digits)
           ;; maybe discard middle, if count was odd:
@@ -4612,7 +4612,7 @@
 
 (defcheck solution-94b1bfc2
   (fn [N]
-    (let [d (map #(- (int %) (int \0)) (seq (str N)))
+    (let [d (map #(- (parse-char %) (parse-char \0)) (seq (str N)))
           h (int (/ (count d) 2))]
       (apply =
         (map #(apply + %)
@@ -4730,7 +4730,7 @@
 
 (defcheck solution-97ce6751
   (fn [x]
-    (let [digits (map #(- (int %) (int \0))
+    (let [digits (map #(- (parse-char %) (parse-char \0))
                    (str x))
           c (quot (count digits) 2)
           sides ((juxt (partial take c) (partial take-last c)) digits)]
@@ -4784,7 +4784,7 @@
           left-half (take half-length digits)
           right-half (take half-length (reverse digits))
           sum-digits #(->> %
-                        (map (fn [n] (- (int n) (int \0))))
+                        (map (fn [n] (- (parse-char n) (parse-char \0))))
                         (reduce +))]
       (= (sum-digits left-half)
         (sum-digits right-half)))))
@@ -4904,7 +4904,7 @@
 
 (defcheck solution-9b033355
   (fn [x]
-    (let [to-i #(- (int %) (int \0))
+    (let [to-i #(- (parse-char %) (parse-char \0))
           s (str x)
           c (count s)
           m (int (/ c 2))]
@@ -4982,7 +4982,7 @@
 
 (defcheck solution-9c76d943
   (fn [b]
-    (->> (map #(- (int %) (int \0)) (str b))
+    (->> (map #(- (parse-char %) (parse-char \0)) (str b))
       (#(let [r (quot (count %) 2)]
           (= (apply + (take r %))
             (apply + (take-last r %))))))))
@@ -5413,8 +5413,8 @@
           half (quot len 2)
           step (if (> (mod len 2) 0) (inc half) half)
           [p1 p2] (partition half step s)
-          n1 (map #(- (int %) (int \0)) p1)
-          n2 (map #(- (int %) (int \0)) p2)]
+          n1 (map #(- (parse-char %) (parse-char \0)) p1)
+          n2 (map #(- (parse-char %) (parse-char \0)) p2)]
       (= (apply + n1) (apply + n2)))))
 
 (defcheck solution-a882d381
@@ -5469,7 +5469,7 @@
 (defcheck solution-aa2a63ef
   (fn
     [x]
-    (let [a (map #(- (int %) (int \0)) (str x))
+    (let [a (map #(- (parse-char %) (parse-char \0)) (str x))
           b (reverse a)
           h (quot (count a) 2)]
       (= (apply + (take h a)) (apply + (take h b))))))
@@ -5560,7 +5560,7 @@
 
 (defcheck solution-add8aaee
   (fn isba [n]
-    (let [s (map #(- (int %) (int \0)) (str n))
+    (let [s (map #(- (parse-char %) (parse-char \0)) (str n))
           hl (quot (count s) 2)
           l (take hl s)
           r (take hl (reverse s))]
@@ -5581,7 +5581,7 @@
 
 (defcheck solution-ade1139d
   (fn [n]
-    (let [digits (map #(- (int %) (int \0)) (str n))
+    (let [digits (map #(- (parse-char %) (parse-char \0)) (str n))
           l (count digits)
           a (quot l 2)]
       (=
@@ -5712,7 +5712,7 @@
 (defcheck solution-b43ba3f7
   (fn [n]
     (let [s (str n) l (int (/ (count s) 2))]
-      (letfn [(ssn [sn] (apply + (map #(- (int %) (int \0)) (take l sn))))]
+      (letfn [(ssn [sn] (apply + (map #(- (parse-char %) (parse-char \0)) (take l sn))))]
         (= (ssn s) (ssn (reverse s)))))))
 
 (defcheck solution-b4525b07
@@ -5877,7 +5877,7 @@
 
 (defcheck solution-b7aadbcc
   (fn [n]
-    (let [digits (map #(- (int %) (int \0)) (str n))
+    (let [digits (map #(- (parse-char %) (parse-char \0)) (str n))
           c (quot (count digits) 2)
           [a b] [(take c digits) (if (even? (count digits))
                                    (drop c digits)
@@ -5924,7 +5924,7 @@
               (apply + (map int (subs s (- l m))))))))
 
 (defcheck solution-b8eaf0cc
-  #(let [n (str %) i (int (/ (count n) 2)) c2i (fn [c] (- (int c) (int \0)))]
+  #(let [n (str %) i (int (/ (count n) 2)) c2i (fn [c] (- (parse-char c) (parse-char \0)))]
      (= (->> n (take i) (map c2i) (apply +))
        (->> n reverse (take i) (map c2i) (apply +)))))
 
@@ -6185,7 +6185,7 @@
 (defcheck solution-c187f1ce
   (fn [n]
     (let [
-          ds (map #(- (int %) (int \0)) (str n))
+          ds (map #(- (parse-char %) (parse-char \0)) (str n))
           half (/ (count ds) 2)
           left (take half ds)
           right (take-last half ds)]
@@ -6369,9 +6369,9 @@
           front (take (quot l 2) sn)
           back (take-last (quot l 2) sn)
           frontsum (reduce + 0 (for [d front]
-                                 (- (int d) (int \0))))
+                                 (- (parse-char d) (parse-char \0))))
           backsum (reduce + 0 (for [d back]
-                                (- (int d) (int \0))))]
+                                (- (parse-char d) (parse-char \0))))]
       (= frontsum backsum))))
 
 (defcheck solution-c807c63d
@@ -6543,7 +6543,7 @@
 
 (defcheck solution-cb620050
   (fn [n]
-    (let [ch->int #(- (int %) (int \0))
+    (let [ch->int #(- (parse-char %) (parse-char \0))
           digits (map ch->int (str n))
           half (/ (count digits) 2)]
       (=  (reduce + (take (Math/floor half) digits))
@@ -6570,7 +6570,7 @@
    [(split-str [str]
       (let [n (quot (count str) 2)]
         [(take n str) (take-last n str)]))
-    (to-int [char] (- (int char) (int \0)))]
+    (to-int [char] (- (parse-char char) (parse-char \0)))]
     (fn [num]
       (apply = (map #(reduce + (map to-int %)) (split-str (str num)))))))
 
@@ -6633,7 +6633,7 @@
 
 (defcheck solution-cda7cb1d
   (fn [n]
-    (let [digitize (fn [n] (map #(- (int %) (int \0)) (str n)))
+    (let [digitize (fn [n] (map #(- (parse-char %) (parse-char \0)) (str n)))
           digits (digitize n)
           len (count digits)
           [lhs rhs] (split-at (quot len 2) digits)
@@ -6645,7 +6645,7 @@
     (let [s1 (seq (str x))
           [f1 l1] (split-at (quot (count s1) 2) s1)
           f2 (if (> (count l1) (count f1)) (drop 1 l1) l1)
-          f2num (fn [a] (- (int a) (int \0)))
+          f2num (fn [a] (- (parse-char a) (parse-char \0)))
           ]
       (= (apply + (map f2num f1)) (apply + (map f2num f2)))
       )))
@@ -6695,8 +6695,8 @@
                      m (if (even? c) (/ c 2) (/ (- c 1) 2))
                      t (take m s)
                      b (drop (- c m) s)]
-                 (= (apply + (map #(- (int %) (int \0)) t))
-                   (apply + (map #(- (int %) (int \0)) b)))))))
+                 (= (apply + (map #(- (parse-char %) (parse-char \0)) t))
+                   (apply + (map #(- (parse-char %) (parse-char \0)) b)))))))
 
 (defcheck solution-cf99c234
   (fn [n]
@@ -6771,7 +6771,7 @@
 
 (defcheck solution-d2a448b
   (fn balanced? [n]
-    (let [s (->> n(str)(map #(- (int %) (int \0))))
+    (let [s (->> n(str)(map #(- (parse-char %) (parse-char \0))))
           p (-> s count(/ 2)int)]
       (= (reduce + (take p s)) (reduce + (take-last p s))))))
 
@@ -6812,7 +6812,7 @@
 ;; See CLJS-2462
 #_(defcheck solution-d327efca
   (fn [n]
-    (letfn [(digits [x] (mapv #(- (int %) (int \0)) (str x)))
+    (letfn [(digits [x] (mapv #(- (parse-char %) (parse-char \0)) (str x)))
             (sum-of-sq [items] (reduce + (map #(* % %) items)))]
       (let [d (digits n)
             l (count d)
@@ -7197,7 +7197,7 @@
       (= (sort l) (sort r)))))
 
 (defcheck solution-de5eb294
-  (fn [n] (let [sn (str n) half (quot (count sn) 2)] (letfn [(strsum [s] (apply + (map #(- (int %) (int \0)) s)))] (= (strsum (take half sn)) (strsum (take-last half sn)))))))
+  (fn [n] (let [sn (str n) half (quot (count sn) 2)] (letfn [(strsum [s] (apply + (map #(- (parse-char %) (parse-char \0)) s)))] (= (strsum (take half sn)) (strsum (take-last half sn)))))))
 
 (defcheck solution-def0ca2f
   #(let [mkseq (fn [n]
@@ -7286,8 +7286,8 @@
 
 (defcheck solution-e114fe75
   (fn [n]
-    (let [zero   (int \0)
-          digits (map #(- (int %) zero) (str n))
+    (let [zero   (parse-char \0)
+          digits (map #(- (parse-char %) zero) (str n))
           total  (count digits)
           half   (quot total 2)
           left   (take half digits)
@@ -7296,7 +7296,7 @@
 
 (defcheck solution-e12b05c2
   (fn [i]
-    (let [i2d (fn [i] (->> i str seq (map #(- (int %) (int \0)))))
+    (let [i2d (fn [i] (->> i str seq (map #(- (parse-char %) (parse-char \0)))))
           dgt (i2d i)
           len (count dgt)
           ld2 (quot len 2)
@@ -7398,7 +7398,7 @@
 (defcheck solution-e530d9fa
   (fn bon [x]
     (letfn [(digits [x]
-              (map #(- (int %) (int \0)) (str x)))]
+              (map #(- (parse-char %) (parse-char \0)) (str x)))]
       (let [d (digits x)
             h (quot (count d) 2)]
         (apply = (map #(reduce + %) [(take h d) (take-last h d)]))))))
@@ -7548,7 +7548,7 @@
 
 (defcheck solution-eb71b183
   (fn [x]
-    (let [s (map #(- (int %) (int \0)) (str x))
+    (let [s (map #(- (parse-char %) (parse-char \0)) (str x))
           len (quot (count s) 2)
           sum #(->> % (take len) (reduce +))]
       (= (sum s) (sum (reverse s))))))
@@ -7570,7 +7570,7 @@
 
 (defcheck solution-eb8dca9f
   (fn balanced? [x]
-    (let [digits (map #(- (int %) (int \0)) (str x))
+    (let [digits (map #(- (parse-char %) (parse-char \0)) (str x))
           center (quot (count digits) 2)
           l (apply + (take center digits))
           r (apply + (drop (if (odd? (count digits)) ( inc center) center) digits))]
@@ -7651,7 +7651,7 @@
     (let [chs
               (apply vector
                 (map
-                  #(- (int %) (int \0))
+                  #(- (parse-char %) (parse-char \0))
                   (str n)))
           cnt (count chs)]
       (loop [n 0 lo 0 hi 0]
@@ -8006,7 +8006,7 @@
 
 (defcheck solution-f8320791
   (fn [n]
-    (let [digits (map #(-> % (int) (- (int \0))) (str n))
+    (let [digits (map #(-> % (parse-char) (- (parse-char \0))) (str n))
           len (/ (count digits) 2)
           l (reduce + (take len digits))
           r (reduce + (take len (reverse digits)))]
@@ -8086,7 +8086,7 @@
 
 (defcheck solution-f9402245
   (fn [n]
-    (let [digits (->> n (.toString) (map #(- (int %) (int \0))))
+    (let [digits (->> n (.toString) (map #(- (parse-char %) (parse-char \0))))
           length (count digits)]
       (if (< length 2)
         true
@@ -8235,7 +8235,7 @@
 (defcheck solution-fcc6ac9f
   (fn [n]
     (let
-     [d (map #(- (int %) (int \0)) (str n))
+     [d (map #(- (parse-char %) (parse-char \0)) (str n))
       h (int (/ (count d) 2))]
       (=
         (apply + (take h d))
@@ -8255,7 +8255,7 @@
   (fn [n]
     (let [l (count (str n))
           h (quot l 2)
-          [l r] (partition (+ h (rem l 2)) h (map #(- (int %) (int \0)) (str n)))]
+          [l r] (partition (+ h (rem l 2)) h (map #(- (parse-char %) (parse-char \0)) (str n)))]
       (= (apply + l) (apply + r)))))
 
 (defcheck solution-fd8f8393
@@ -8358,7 +8358,7 @@
 (defcheck solution-ff15aae6
   (fn balsum [n]
     (let [predigits (seq (str n))
-          digits (map #(- (int %) (int \0)) predigits)
+          digits (map #(- (parse-char %) (parse-char \0)) predigits)
           numdigits (count digits)
           #_#__ (println "numdigits" numdigits)
           halfdigits (int (/ numdigits 2))
