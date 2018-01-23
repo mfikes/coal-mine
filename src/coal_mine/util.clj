@@ -17,8 +17,8 @@
   (try
     (let [rdr (readers/source-logging-push-back-reader (PushbackReader. (StringReader. s)))]
       (binding [reader/*alias-map* identity]
-        (->> (repeatedly #(-> (reader/read {:eof nil} rdr)
-                            meta :source))
+        (->> (repeatedly #(let [v (reader/read {:eof nil} rdr)]
+                            (or (:source (meta v)) v)))
           (take-while some?)
           (str/join " "))))
     (catch Throwable e
