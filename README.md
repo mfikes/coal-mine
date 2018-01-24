@@ -9,8 +9,8 @@ useful for testing compiler performance.
 To run all tests: `(coal-mine.test-runner/-main)`
 
 Alternatively, `script/test` will run the all the tests via ClojureScript on Node, split for 
-RAM use reduction, while optionally specifying the ClojureScript build to use:
+RAM use reduction, while optionally specifying deps to use:
 
 ```
-CLJS_VERSION=1.9.946 script/test
+script/test -Sdeps "{:deps {org.clojure/clojurescript {:mvn/version \"1.9.946\"}}}"
 ```

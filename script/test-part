@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-function fp() {
-    echo `pwd`/"$1"
-}
+DEFAULT_CLJS_VERSION=1.9.946
 
 checkBuildSucceeded() {
     CMD_RESULT=$?
@@ -20,15 +18,10 @@ checkTestsSucceeded() {
     fi
 }
 
-SRC=`fp src`
-cd builds
-
-clojure -J-Xmx3G ../script/build $SRC/coal_mine/test_runner_$1.cljs coal-mine.test-runner-$1
+clojure -Sdeps "${DEPS:-{:deps {org.clojure/clojurescript {:mvn/version \"${CANARY_CLOJURESCRIPT_VERSION:-$DEFAULT_CLJS_VERSION}\"}}}}" -J-Xmx3G script/build src/coal_mine/test_runner_$1.cljs coal-mine.test-runner-$1
 checkBuildSucceeded
 echo "Running coal-mine.test-runner-$1 in Node ..."
 node -max-old-space-size=3072 main.js | tee test-out.txt
 grep '0 failures, 0 errors.' test-out.txt > /dev/null
 checkTestsSucceeded
 grep 'tests containing' test-out.txt >> aggregate.txt
-
-cd ..

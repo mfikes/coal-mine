@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
-rm -rf builds
+rm -rf out
+rm main.js
+rm test-out.txt

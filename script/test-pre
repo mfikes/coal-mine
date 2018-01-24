@@ -1,7 +1,3 @@
 #!/usr/bin/env bash
 
-script/setup-deps-edn builds
-
-cd builds
 rm -f aggregate.txt
-cd ..

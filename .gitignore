@@ -18,3 +18,5 @@ main.js
 /.cljs_node_repl
 /builds
 /.cpcache
+/aggregate.txt
+/test-out.txt

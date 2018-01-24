@@ -1,4 +1,3 @@
-#!/usr/bin/env clojure
 (require '[cljs.build.api])
 
 (let [main (second *command-line-args*)
@@ -9,7 +8,7 @@
                         .start)]
   (try
     (println "\nBuilding" main "...")
-    (cljs.build.api/build (or (first *command-line-args*) "src")
+    (cljs.build.api/build (first *command-line-args*)
       {:optimizations  :none
        :parallel-build true
        :target         :nodejs
