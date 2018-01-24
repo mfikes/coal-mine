@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
 
+while [ $# -gt 0 ]
+do
+  case "$1" in
+    -Sdeps)
+      shift
+      export DEPS="${1}"
+      shift
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
 checkSucceeded() {
     CMD_RESULT=$?
     if [ $CMD_RESULT != 0 ]; then

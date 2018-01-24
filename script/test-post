@@ -1,8 +1,4 @@
 #!/usr/bin/env bash
 
-cd builds
-
 echo
-../script/aggregate
-
-cd ..
+script/aggregate
