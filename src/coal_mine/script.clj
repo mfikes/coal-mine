@@ -37,7 +37,6 @@
 
 (defn test []
   (let [subtotals (doall (map test-part [1 2 3 4 5]))]
-    (prn 'subtotals subtotals)
     (println "Ran a total of" (apply + (map first subtotals))
       "tests containing" (apply + (map second subtotals)) "assertions.")))
 
