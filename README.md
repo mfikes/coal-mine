@@ -14,7 +14,7 @@ RAM use reduction.
 To run (without manually cloning):
 
 ```
-clojure -Sdeps '{:deps {coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha ""}}}'
+clojure -Sdeps '{:deps {coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha ""}}}' -m coal-mine.script test
 ```
 
 Shipping ClojureScript version:
