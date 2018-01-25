@@ -19,7 +19,7 @@
          :target         :nodejs
          :main           main
          :output-dir     "/tmp/coal-mine-out"
-         :output-to      "/tmp/coal-main.js"})
+         :output-to      "/tmp/coal-mine-out/main.js"})
       (finally (.interrupt progress-thread)))))
 
 (defn test-part [part]
