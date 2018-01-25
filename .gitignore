@@ -1,4 +1,3 @@
-/out
 /target
 /classes
 /checkouts
@@ -8,15 +7,9 @@ pom.xml.asc
 *.class
 /.lein-*
 /.nrepl-port
-.hgignore
-.hg/
-planck.iml
 .idea
 /.lumo_cache
 /.planck_cache
-main.js
 /.cljs_node_repl
 /builds
 /.cpcache
-/aggregate.txt
-/test-out.txt

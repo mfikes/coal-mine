@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-rm -rf out
-rm main.js
-rm test-out.txt
