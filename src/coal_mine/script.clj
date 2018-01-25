@@ -18,8 +18,8 @@
          :parallel-build true
          :target         :nodejs
          :main           main
-         :output-dir     "/tmp/coal-mine-out"
-         :output-to      "/tmp/coal-mine-out/main.js"})
+         :output-dir     "coal-mine-out"
+         :output-to      "coal-mine-out/main.js"})
       (finally (.interrupt progress-thread)))))
 
 (defn test-part [part]
