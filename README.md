@@ -14,23 +14,25 @@ RAM use reduction.
 To run (without manually cloning):
 
 ```
-clojure -Sdeps '{:deps {coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha ""}}}' -m coal-mine.script test
+clojure -Sdeps '{:deps {coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "6de2507b9a3dc2294a68c920d8cef3fe3c89cbaf"}}}' -m coal-mine.script test
 ```
 
-Shipping ClojureScript version:
+You can also override the ClojureScript dep as follows:
+
+Shipping version:
 
 ```
-clojure -Sdeps '{:deps {org.clojure/clojurescript {:mvn/version "1.9.946"}}}'
+clojure -Sdeps '{:deps {coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "6de2507b9a3dc2294a68c920d8cef3fe3c89cbaf"} org.clojure/clojurescript {:mvn/version "1.9.946"}}}' -m coal-mine.script test
 ```
 
-Local ClojureScript compiler source tree:
+Local compiler source tree:
 
 ```
-script/test -Sdeps '{:deps {org.clojure/clojurescript {:local/root "/path/to/clojurescript"} com.google.javascript/closure-compiler-unshaded {:mvn/version "v20170910"}}}'
+script/test -Sdeps '{:deps {coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "6de2507b9a3dc2294a68c920d8cef3fe3c89cbaf"} org.clojure/clojurescript {:local/root "/path/to/clojurescript"} com.google.javascript/closure-compiler-unshaded {:mvn/version "v20170910"}}}' -m coal-mine.script test
 ```
 
 Arbitrary GitHub version of ClojureScript:
 
 ```
-script/test -Sdeps '{:deps {org.clojure/clojurescript {:git/url "https://github.com/clojure/clojurescript" :sha "9ddd356d344aa1ebf9bd9443dd36a1911c92d32f"} com.google.javascript/closure-compiler-unshaded {:mvn/version "v20170910"}}}'
+script/test -Sdeps '{:deps {coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "6de2507b9a3dc2294a68c920d8cef3fe3c89cbaf"} org.clojure/clojurescript {:git/url "https://github.com/clojure/clojurescript" :sha "9ddd356d344aa1ebf9bd9443dd36a1911c92d32f"} com.google.javascript/closure-compiler-unshaded {:mvn/version "v20170910"}}}' -m coal-mine.script test
 ```
