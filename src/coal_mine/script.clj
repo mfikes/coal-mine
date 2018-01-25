@@ -2,7 +2,8 @@
   (:refer-clojure :exclude [test])
   (:require
    [cljs.build.api]
-   [clojure.java.shell :as shell]))
+   [clojure.java.shell :as shell]
+   [clojure.java.io :as io]))
 
 (defn build [source main]
   (let [progress-thread (doto
@@ -22,7 +23,8 @@
       (finally (.interrupt progress-thread)))))
 
 (defn test-part [part]
-  (build (str "coal_mine/test_runner_" part ".cljs") (symbol (str "coal-mine.test-runner-" part)))
+  (let [source (io/resource (str "coal_mine/test_runner_" part ".cljs"))]
+    (build (str "coal_mine/test_runner_" part ".cljs") (symbol source)))
   (println "Running" (str "coal-mine.test-runner-" part) "in Node ...")
   (let [results (shell/sh "node" "-max-old-space-size=3072" "/tmp/coal-main.js")]
     (println (:out results))
