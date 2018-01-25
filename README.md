@@ -11,6 +11,20 @@ To run all tests: `(coal-mine.test-runner/-main)`
 Alternatively, `script/test` will run the all the tests via ClojureScript on Node, split for 
 RAM use reduction, while optionally specifying deps to use:
 
+Shipping ClojureScript version:
+
 ```
-script/test -Sdeps "{:deps {org.clojure/clojurescript {:mvn/version \"1.9.946\"}}}"
+script/test -Sdeps '{:deps {org.clojure/clojurescript {:mvn/version "1.9.946"}}}'
+```
+
+Local ClojureScript compiler source tree:
+
+```
+script/test -Sdeps '{:deps {org.clojure/clojurescript {:local/root "/path/to/clojurescript"} com.google.javascript/closure-compiler-unshaded {:mvn/version "v20170910"}}}'
+```
+
+Arbitrary GitHub version of ClojureScript:
+
+```
+script/test -Sdeps '{:deps {org.clojure/clojurescript {:git/url "https://github.com/clojure/clojurescript" :sha "9ddd356d344aa1ebf9bd9443dd36a1911c92d32f"} com.google.javascript/closure-compiler-unshaded {:mvn/version "v20170910"}}}'
 ```
