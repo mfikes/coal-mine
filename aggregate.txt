@@ -1,5 +1,0 @@
-Ran 5887 tests containing 20917 assertions.
-Ran 14646 tests containing 50851 assertions.
-Ran 5708 tests containing 26249 assertions.
-Ran 3159 tests containing 15687 assertions.
-Ran 1577 tests containing 7984 assertions.

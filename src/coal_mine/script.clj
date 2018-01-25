@@ -17,6 +17,7 @@
          :parallel-build true
          :target         :nodejs
          :main           main
+         :output-dir     "/tmp/coal-mine-out"
          :output-to      "/tmp/coal-main.js"})
       (finally (.interrupt progress-thread)))))
 

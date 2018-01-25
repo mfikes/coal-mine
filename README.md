@@ -8,13 +8,19 @@ useful for testing compiler performance.
 
 To run all tests: `(coal-mine.test-runner/-main)`
 
-Alternatively, `script/test` will run the all the tests via ClojureScript on Node, split for 
-RAM use reduction, while optionally specifying deps to use:
+Alternatively, `clojure -m coal-mine.script test` will run the all the tests via ClojureScript on Node, split for 
+RAM use reduction.
+
+To run (without manually cloning):
+
+```
+clojure -Sdeps '{:deps {coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha ""}}}'
+```
 
 Shipping ClojureScript version:
 
 ```
-script/test -Sdeps '{:deps {org.clojure/clojurescript {:mvn/version "1.9.946"}}}'
+clojure -Sdeps '{:deps {org.clojure/clojurescript {:mvn/version "1.9.946"}}}'
 ```
 
 Local ClojureScript compiler source tree:
