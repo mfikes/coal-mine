@@ -7,7 +7,7 @@
 
 (defn build [source main]
   (let [progress-thread (doto
-                         (Thread. #(while (try (Thread/sleep 500000) true
+                         (Thread. #(while (try (Thread/sleep 200000) true
                                                (catch Throwable _ false))
                                      (println "Still building" main "...")))
                           .start)]
@@ -18,6 +18,7 @@
          :parallel-build true
          :target         :nodejs
          :main           main
+         :cache-analysis false
          :output-dir     ".coal_mine_out"
          :output-to      ".coal_mine_out/main.js"})
       (finally (.interrupt progress-thread)))))
