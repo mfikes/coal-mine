@@ -27,7 +27,7 @@
         main   (symbol (str "coal-mine.test-runner-" part))]
     (build source (symbol main)))
   (println "Running" (str "coal-mine.test-runner-" part) "in Node ...")
-  (let [results (shell/sh "node" "-max-old-space-size=3072" "/tmp/coal-main.js")]
+  (let [results (shell/sh "node" "-max-old-space-size=3072" "coal-mine-out/main.js")]
     (println (:out results))
     (println (:err results))
     (if-not (and (zero? (:exit results))
