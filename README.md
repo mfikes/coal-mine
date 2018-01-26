@@ -28,11 +28,11 @@ clojure -Sdeps '{:deps {coal-mine {:git/url "https://github.com/mfikes/coal-mine
 Specify a local compiler source tree:
 
 ```
-clojure -Sdeps '{:deps {coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "<sha here>"} org.clojure/clojurescript {:local/root "/path/to/clojurescript"} com.google.javascript/closure-compiler-unshaded {:mvn/version "v20170910"}}}' -m coal-mine.script test
+clojure -Sdeps '{:deps {coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "<sha here>"} org.clojure/clojurescript {:local/root "/path/to/clojurescript"}}}' -m coal-mine.script test
 ```
 
 Specify an arbitrary GitHub version of ClojureScript:
 
 ```
-clojure -Sdeps '{:deps {coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "<sha here>"} org.clojure/clojurescript {:git/url "https://github.com/clojure/clojurescript" :sha "9ddd356d344aa1ebf9bd9443dd36a1911c92d32f"} com.google.javascript/closure-compiler-unshaded {:mvn/version "v20170910"}}}' -m coal-mine.script test
+clojure -Sdeps '{:deps {coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "<sha here>"} org.clojure/clojurescript {:git/url "https://github.com/clojure/clojurescript" :sha "9ddd356d344aa1ebf9bd9443dd36a1911c92d32f"}}}' -m coal-mine.script test
 ```
