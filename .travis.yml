@@ -12,6 +12,8 @@ install:
 
 script:
   - if [ -n $CANARY_CLOJURESCRIPT_REV ]; then DEPS="{:deps {org.clojure/clojurescript {:git/url \"https://github.com/clojure/clojurescript\" :sha \"${CANARY_CLOJURESCRIPT_REV}\"}}}"; fi
+  - echo $DEPS
+  - echo "${DEPS:-{}}"
   - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "1" ]; then clojure -Sdeps "${DEPS:-{}}" -m coal-mine.script test-part 1; fi
   - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "1" ]; then clojure -Sdeps "${DEPS:-{}}" -m coal-mine.script test-part 2; fi
   - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "1" ]; then clojure -Sdeps "${DEPS:-{}}" -m coal-mine.script test-part 3; fi
