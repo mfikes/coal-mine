@@ -5,12 +5,20 @@
    [clojure.java.shell :as shell]
    [clojure.java.io :as io]))
 
+(defn delete-recursively [fname]
+  (doseq [f (reverse (file-seq (io/file fname)))]
+    (io/delete-file f)))
+
 (defn create-progress-thread [period message]
   (doto
    (Thread. #(while (try (Thread/sleep period) true
                          (catch Throwable _ false))
                (println message)))
     .start))
+
+(def output-dir ".coal_mine_out")
+
+(def output-to (str output-dir "/main.js"))
 
 (defn build [source main]
   (let [progress-thread (create-progress-thread 200000 (str "Still building " main " ..."))]
@@ -21,8 +29,8 @@
          :parallel-build true
          :target         :nodejs
          :main           main
-         :output-dir     ".coal_mine_out"
-         :output-to      ".coal_mine_out/main.js"})
+         :output-dir     output-dir
+         :output-to      output-to})
       (finally (.interrupt progress-thread)))))
 
 (defn test-part [part]
@@ -47,6 +55,8 @@
       "tests containing" (apply + (map second subtotals)) "assertions.")))
 
 (defn -main [fun & args]
-  (case fun
-    "test-part" (test-part (Long/parseLong (first args)))
-    "test" (test)))
+  (try
+    (case fun
+      "test-part" (test-part (Long/parseLong (first args)))
+      "test" (test))
+    (finally (delete-recursively output-dir))))
