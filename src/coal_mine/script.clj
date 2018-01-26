@@ -92,9 +92,7 @@
       "build-part" (build-part (Long/parseLong (first args)))
       "test-part" (test-part (Long/parseLong (first args)))
       "test" (test))
-    (catch Throwable t
-      (.printStackTrace t))
     (finally
+      (shutdown-agents)
       (when (terminal? fun)
-        (delete-recursively output-dir))
-      (System/exit 0))))
+        (delete-recursively output-dir)))))
