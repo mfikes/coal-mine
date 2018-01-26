@@ -11,8 +11,9 @@ install:
   - sudo ./linux-install-1.9.0.315.sh
 
 script:
-  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "1" ]; then clojure -Sdeps "{:deps {org.clojure/clojurescript {:git/url \"https://github.com/clojure/clojurescript\" :sha \"${CANARY_CLOJURESCRIPT_REV:-9ddd356d344aa1ebf9bd9443dd36a1911c92d32f}\"}}}" -m coal-mine.script test-part 1; fi
-  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "2" ]; then clojure -Sdeps "{:deps {org.clojure/clojurescript {:git/url \"https://github.com/clojure/clojurescript\" :sha \"${CANARY_CLOJURESCRIPT_REV:-9ddd356d344aa1ebf9bd9443dd36a1911c92d32f}\"}}}" -m coal-mine.script test-part 2; fi
-  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "3" ]; then clojure -Sdeps "{:deps {org.clojure/clojurescript {:git/url \"https://github.com/clojure/clojurescript\" :sha \"${CANARY_CLOJURESCRIPT_REV:-9ddd356d344aa1ebf9bd9443dd36a1911c92d32f}\"}}}" -m coal-mine.script test-part 3; fi
-  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "4" ]; then clojure -Sdeps "{:deps {org.clojure/clojurescript {:git/url \"https://github.com/clojure/clojurescript\" :sha \"${CANARY_CLOJURESCRIPT_REV:-9ddd356d344aa1ebf9bd9443dd36a1911c92d32f}\"}}}" -m coal-mine.script test-part 4; fi
-  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "5" ]; then clojure -Sdeps "{:deps {org.clojure/clojurescript {:git/url \"https://github.com/clojure/clojurescript\" :sha \"${CANARY_CLOJURESCRIPT_REV:-9ddd356d344aa1ebf9bd9443dd36a1911c92d32f}\"}}}" -m coal-mine.script test-part 5; fi
+  - if [[ $CANARY_CLOJURESCRIPT_REV && ${CANARY_CLOJURESCRIPT_REV-x} ]]; then DEPS="{:deps {org.clojure/clojurescript {:git/url \"https://github.com/clojure/clojurescript\" :sha \"${CANARY_CLOJURESCRIPT_REV}\"}}}"; fi
+  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "1" ]; then clojure -Sdeps "${DEPS:-{}}" -m coal-mine.script test-part 1; fi
+  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "1" ]; then clojure -Sdeps "${DEPS:-{}}" -m coal-mine.script test-part 2; fi
+  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "1" ]; then clojure -Sdeps "${DEPS:-{}}" -m coal-mine.script test-part 3; fi
+  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "1" ]; then clojure -Sdeps "${DEPS:-{}}" -m coal-mine.script test-part 4; fi
+  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "1" ]; then clojure -Sdeps "${DEPS:-{}}" -m coal-mine.script test-part 5; fi
