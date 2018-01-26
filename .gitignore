@@ -13,3 +13,4 @@ pom.xml.asc
 /.cljs_node_repl
 /builds
 /.cpcache
+/.coal_mine_out
