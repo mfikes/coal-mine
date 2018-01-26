@@ -14,8 +14,8 @@ install:
   - sudo ./linux-install-1.9.0.315.sh
 
 script:
-  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "1" ]; then clojure -Sdeps "{:deps {org.clojure/clojurescript {:mvn/version \"${CANARY_CLOJURESCRIPT_VERSION:-1.9.946}\"}}}" -J-Xmx2G -m coal-mine.script test-part 1; fi
-  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "2" ]; then clojure -Sdeps "{:deps {org.clojure/clojurescript {:mvn/version \"${CANARY_CLOJURESCRIPT_VERSION:-1.9.946}\"}}}" -J-Xmx2G -m coal-mine.script test-part 2; fi
-  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "3" ]; then clojure -Sdeps "{:deps {org.clojure/clojurescript {:mvn/version \"${CANARY_CLOJURESCRIPT_VERSION:-1.9.946}\"}}}" -J-Xmx2G -m coal-mine.script test-part 3; fi
-  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "4" ]; then clojure -Sdeps "{:deps {org.clojure/clojurescript {:mvn/version \"${CANARY_CLOJURESCRIPT_VERSION:-1.9.946}\"}}}" -J-Xmx2G -m coal-mine.script test-part 4; fi
-  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "5" ]; then clojure -Sdeps "{:deps {org.clojure/clojurescript {:mvn/version \"${CANARY_CLOJURESCRIPT_VERSION:-1.9.946}\"}}}" -J-Xmx2G -m coal-mine.script test-part 5; fi
+  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "1" ]; then clojure -Sdeps "{:deps {org.clojure/clojurescript {:mvn/version \"${CANARY_CLOJURESCRIPT_VERSION:-1.9.946}\"}}}" -m coal-mine.script test-part 1; fi
+  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "2" ]; then clojure -Sdeps "{:deps {org.clojure/clojurescript {:mvn/version \"${CANARY_CLOJURESCRIPT_VERSION:-1.9.946}\"}}}" -m coal-mine.script test-part 2; fi
+  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "3" ]; then clojure -Sdeps "{:deps {org.clojure/clojurescript {:mvn/version \"${CANARY_CLOJURESCRIPT_VERSION:-1.9.946}\"}}}" -m coal-mine.script test-part 3; fi
+  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "4" ]; then clojure -Sdeps "{:deps {org.clojure/clojurescript {:mvn/version \"${CANARY_CLOJURESCRIPT_VERSION:-1.9.946}\"}}}" -m coal-mine.script test-part 4; fi
+  - if [ -z $PARTITION_FILTER ] || [ $PARTITION_FILTER = "5" ]; then clojure -Sdeps "{:deps {org.clojure/clojurescript {:mvn/version \"${CANARY_CLOJURESCRIPT_VERSION:-1.9.946}\"}}}" -m coal-mine.script test-part 5; fi
