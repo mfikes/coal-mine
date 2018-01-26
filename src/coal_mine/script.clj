@@ -40,7 +40,7 @@
   (println "Running" (str "coal-mine.test-runner-" part) "in Node ...")
   (let [progress-thread (create-progress-thread 400000 (str "Still running " (str "coal-mine.test-runner-" part) " ..."))]
     (try
-      (let [results (shell/sh "node" "-max-old-space-size=3072" ".coal_mine_out/main.js")]
+      (let [results (shell/sh "node" "-max-old-space-size=2048" output-to)]
         (println (:out results))
         (println (:err results))
         (if-not (and (zero? (:exit results))
