@@ -21,7 +21,6 @@
          :parallel-build true
          :target         :nodejs
          :main           main
-         :cache-analysis false
          :output-dir     ".coal_mine_out"
          :output-to      ".coal_mine_out/main.js"})
       (finally (.interrupt progress-thread)))))
