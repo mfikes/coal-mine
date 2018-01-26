@@ -14,7 +14,7 @@ RAM use reduction.
 To run (without manually cloning):
 
 ```
-clojure -Sdeps '{:deps {coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "<sha here>"}}}' -m coal-mine.script test
+clojure -Sdeps '{:deps {github-mfikes/coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "<sha here>"}}}' -m coal-mine.script test
 ```
 
 You can also override the ClojureScript dep as follows:
@@ -22,17 +22,17 @@ You can also override the ClojureScript dep as follows:
 Specify a shipping version:
 
 ```
-clojure -Sdeps '{:deps {org.clojure/clojurescript {:mvn/version "1.9.946"} coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "<sha here>"}}}' -m coal-mine.script test
+clojure -Sdeps '{:deps {org.clojure/clojurescript {:mvn/version "1.9.946"} github-mfikes/coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "<sha here>"}}}' -m coal-mine.script test
 ```
 
 Specify a local compiler source tree:
 
 ```
-clojure -Sdeps '{:deps {org.clojure/clojurescript {:local/root "/path/to/clojurescript"} coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "<sha here>"}}}' -m coal-mine.script test
+clojure -Sdeps '{:deps {org.clojure/clojurescript {:local/root "/path/to/clojurescript"} github-mfikes/coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "<sha here>"}}}' -m coal-mine.script test
 ```
 
 Specify an arbitrary GitHub version of ClojureScript:
 
 ```
-clojure -Sdeps '{:deps {org.clojure/clojurescript {:git/url "https://github.com/clojure/clojurescript" :sha "9ddd356d344aa1ebf9bd9443dd36a1911c92d32f"} coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "<sha here>"}}}' -m coal-mine.script test
+clojure -Sdeps '{:deps {org.clojure/clojurescript {:git/url "https://github.com/clojure/clojurescript" :sha "9ddd356d344aa1ebf9bd9443dd36a1911c92d32f"} github-mfikes/coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "<sha here>"}}}' -m coal-mine.script test
 ```
