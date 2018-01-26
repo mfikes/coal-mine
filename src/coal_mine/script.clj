@@ -31,7 +31,7 @@
        (println "Running" ~msg "...")
        ~@body
        (finally
-         (println "Finished running" ~msg "(Elapsed time:" (quot (- (System/currentTimeMillis) begin#) 1000) "s)")
+         (println "Finished running" ~msg "(Elapsed time:" (quot (- (System/currentTimeMillis) begin#) 1000) "s)\n")
          (.interrupt progress-thread#)))))
 
 (defn get-classpath []
