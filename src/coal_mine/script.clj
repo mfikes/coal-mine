@@ -5,12 +5,15 @@
    [clojure.java.shell :as shell]
    [clojure.java.io :as io]))
 
+(defn create-progress-thread [period message]
+  (doto
+   (Thread. #(while (try (Thread/sleep period) true
+                         (catch Throwable _ false))
+               (println message)))
+    .start))
+
 (defn build [source main]
-  (let [progress-thread (doto
-                         (Thread. #(while (try (Thread/sleep 200000) true
-                                               (catch Throwable _ false))
-                                     (println "Still building" main "...")))
-                          .start)]
+  (let [progress-thread (create-progress-thread 200000 (str "Still building " main " ..."))]
     (try
       (println "\nBuilding" main "...")
       (cljs.build.api/build source
@@ -28,13 +31,16 @@
         main   (symbol (str "coal-mine.test-runner-" part))]
     (build source (symbol main)))
   (println "Running" (str "coal-mine.test-runner-" part) "in Node ...")
-  (let [results (shell/sh "node" "-max-old-space-size=3072" ".coal_mine_out/main.js")]
-    (println (:out results))
-    (println (:err results))
-    (if-not (and (zero? (:exit results))
-                 (re-find #"0 failures, 0 errors." (:out results)))
-      (throw (ex-info "Tests failed" {}))
-      (map #(Long/parseLong %) (rest (first (re-seq #"Ran (\d+) tests containing (\d+) assertions." (:out results))))))))
+  (let [progress-thread (create-progress-thread 200000 (str "Still running " (str "coal-mine.test-runner-" part) " ..."))]
+    (try
+      (let [results (shell/sh "node" "-max-old-space-size=3072" ".coal_mine_out/main.js")]
+        (println (:out results))
+        (println (:err results))
+        (if-not (and (zero? (:exit results))
+                     (re-find #"0 failures, 0 errors." (:out results)))
+          (throw (ex-info "Tests failed" {}))
+          (map #(Long/parseLong %) (rest (first (re-seq #"Ran (\d+) tests containing (\d+) assertions." (:out results)))))))
+      (finally (.interrupt progress-thread)))))
 
 (defn test []
   (let [subtotals (doall (map test-part [1 2 3 4 5]))]
