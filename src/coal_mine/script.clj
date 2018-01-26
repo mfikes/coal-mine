@@ -21,7 +21,7 @@
 (def output-to (str output-dir "/main.js"))
 
 (defn build [source main]
-  (let [progress-thread (create-progress-thread 200000 (str "Still building " main " ..."))]
+  (let [progress-thread (create-progress-thread 800000 (str "Still building " main " ..."))]
     (try
       (println "\nBuilding" main "...")
       (cljs.build.api/build source
@@ -38,7 +38,7 @@
         main   (symbol (str "coal-mine.test-runner-" part))]
     (build source (symbol main)))
   (println "Running" (str "coal-mine.test-runner-" part) "in Node ...")
-  (let [progress-thread (create-progress-thread 200000 (str "Still running " (str "coal-mine.test-runner-" part) " ..."))]
+  (let [progress-thread (create-progress-thread 800000 (str "Still running " (str "coal-mine.test-runner-" part) " ..."))]
     (try
       (let [results (shell/sh "node" "-max-old-space-size=3072" ".coal_mine_out/main.js")]
         (println (:out results))
