@@ -19,19 +19,19 @@ clojure -Sdeps '{:deps {coal-mine {:git/url "https://github.com/mfikes/coal-mine
 
 You can also override the ClojureScript dep as follows:
 
-Shipping version:
+Specify a shipping version:
 
 ```
 clojure -Sdeps '{:deps {coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "<sha here>"} org.clojure/clojurescript {:mvn/version "1.9.946"}}}' -m coal-mine.script test
 ```
 
-Local compiler source tree:
+Specify a local compiler source tree:
 
 ```
 clojure -Sdeps '{:deps {coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "<sha here>"} org.clojure/clojurescript {:local/root "/path/to/clojurescript"} com.google.javascript/closure-compiler-unshaded {:mvn/version "v20170910"}}}' -m coal-mine.script test
 ```
 
-Arbitrary GitHub version of ClojureScript:
+Specify an arbitrary GitHub version of ClojureScript:
 
 ```
 clojure -Sdeps '{:deps {coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "<sha here>"} org.clojure/clojurescript {:git/url "https://github.com/clojure/clojurescript" :sha "9ddd356d344aa1ebf9bd9443dd36a1911c92d32f"} com.google.javascript/closure-compiler-unshaded {:mvn/version "v20170910"}}}' -m coal-mine.script test
