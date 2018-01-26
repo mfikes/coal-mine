@@ -6,37 +6,48 @@
    [clojure.java.io :as io]
    [clojure.string :as string]))
 
+(def compile-heap "-Xmx3G")
+
+(def test-heap "-max-old-space-size=3072")
+
+(def output-dir ".coal_mine_out")
+
+(def test-script (str output-dir "/main.js"))
+
 (defn create-progress-thread [period message]
   (doto
-   (Thread. #(while (try (Thread/sleep period) true
-                         (catch Throwable _ false))
-               (println message)))
+   (Thread. #(while (try
+                      (Thread/sleep period)
+                      true
+                      (catch InterruptedException _
+                        false))
+               (println "Still running" message "...")))
     .start))
 
 (defmacro with-progress [msg & body]
-  `(do
-     (println ~msg)
-     (let [progress-thread# (create-progress-thread 300000 ~msg)]
-       (try
-         ~@body
-         (finally (.interrupt progress-thread#))))))
+  `(let [begin# (System/currentTimeMillis)
+         progress-thread# (create-progress-thread 300000 ~msg)]
+     (try
+       (println "Running" ~msg "...")
+       ~@body
+       (finally
+         (println "Finished running" ~msg "(Elapsed time:" (quot (- (System/currentTimeMillis) begin#) 1000) "s)")
+         (.interrupt progress-thread#)))))
 
 (defn get-classpath []
-  (string/join ":" (map #(.getFile %) (.getURLs (ClassLoader/getSystemClassLoader)))))
+  (->> (.. (ClassLoader/getSystemClassLoader) getURLs)
+    (map (memfn getFile))
+    (string/join ":")))
 
 (defn run-subprocess [fun & args]
-  (with-progress (str "Running subprocess: " (string/join " " (concat [fun] args)) " ...")
-    (let [results (apply shell/sh (concat ["java" "-cp" (get-classpath) "-Xmx3G" "clojure.main" "-m" "coal-mine.script" fun] (map str args)))]
+  (with-progress (string/join " " (concat [fun] args))
+    (let [results (apply shell/sh (concat ["java" "-cp" (get-classpath) compile-heap "clojure.main" "-m" "coal-mine.script" fun] (map str args)))]
       (when-not (zero? (:exit results))
         (throw (ex-info "subprocess failed" results))))))
 
 (defn delete-recursively [fname]
   (doseq [f (reverse (file-seq (io/file fname)))]
     (io/delete-file f true)))
-
-(def output-dir ".coal_mine_out")
-
-(def output-to (str output-dir "/main.js"))
 
 (defn build [source main]
   (cljs.build.api/build source
@@ -45,7 +56,7 @@
      :target         :nodejs
      :main           main
      :output-dir     output-dir
-     :output-to      output-to}))
+     :output-to      test-script}))
 
 (defn build-part [part]
   (let [source (.getFile (io/resource (str "coal_mine/test_runner_" part ".cljs")))
@@ -53,13 +64,13 @@
     (build source (symbol main))))
 
 (defn run-test-part [part]
-  (with-progress (str "Running " (str "coal-mine.test-runner-" part) " in Node ...")
-    (let [results (shell/sh "node" "-max-old-space-size=3072" output-to)]
+  (with-progress (str "coal-mine.test-runner-" part " in Node")
+    (let [results (shell/sh "node" test-heap test-script)]
       (println (:out results))
       (println (:err results))
       (if-not (and (zero? (:exit results))
                    (re-find #"0 failures, 0 errors." (:out results)))
-        (throw (ex-info "Tests failed" {}))
+        (throw (ex-info "Tests failed" results))
         (map #(Long/parseLong %) (rest (first (re-seq #"Ran (\d+) tests containing (\d+) assertions." (:out results)))))))))
 
 (defn test-part [part]
