@@ -6810,7 +6810,8 @@
                   (/ (count digits) 2)
                   digits))))))
 
-(defcheck solution-d327efca
+;; See CLJS-2462
+#_(defcheck solution-d327efca
   (fn [n]
     (letfn [(digits [x] (mapv #(- (parse-char %) (parse-char \0)) (str x)))
             (sum-of-sq [items] (reduce + (map #(* % %) items)))]
