@@ -235,8 +235,7 @@
 (defcheck solution-5beb2f09
   filter #(> (rem % 2) 0))
 
-;; See CLJS-2452
-#_ (defcheck solution-5c636f32
+(defcheck solution-5c636f32
   (fn [x]
     (loop [input x
            result []]
