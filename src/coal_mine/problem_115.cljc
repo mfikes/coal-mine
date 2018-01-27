@@ -6809,6 +6809,7 @@
                  ((juxt take take-last)
                   (/ (count digits) 2)
                   digits))))))
+
 ;; See CLJS-2462
 #_(defcheck solution-d327efca
   (fn [n]

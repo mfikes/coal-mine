@@ -23,8 +23,7 @@
 (defcheck solution-129ea335
   (fn [x] (apply str (re-seq #"[A-Z]" x))))
 
-;; See CLJS-2453
-#_(defcheck solution-12db9287
+(defcheck solution-12db9287
   #_(fn [x] (apply str (filter
                          #(upper-case? %) x)))
 
@@ -512,8 +511,7 @@
 (defcheck solution-72894d8b
   (fn [xs] (apply str (filter #(contains? #{\A \B \C \D \E \F \G \H \I \J \K \L \M \N \O \P \Q \R \S \T \U \V \W \X \Y \Z} %) xs))))
 
-;; See CLJS-2453
-#_(defcheck solution-73ff7279
+(defcheck solution-73ff7279
   (fn[x] (reduce str (re-seq #"[A-Z]*" x))))
 
 (defcheck solution-748d6a7
@@ -637,8 +635,7 @@
 (defcheck solution-86259535
   (fn [s] (apply str (re-seq #"[A-Z]" s))))
 
-;; See CLJS-2453
-#_(defcheck solution-869b5cfb
+(defcheck solution-869b5cfb
   #(reduce str (re-seq #"[A-Z]?" %)))
 
 (defcheck solution-86c36343
@@ -711,8 +708,7 @@
   (fn [chars]
     (apply str(filter #(upper-case? %) (seq chars)))))
 
-;; See CLJS-2453
-#_(defcheck solution-92ac13dd
+(defcheck solution-92ac13dd
   (fn [a] (apply str (re-seq #"[A-Z]*" a))))
 
 (defcheck solution-92c9f3
@@ -930,8 +926,7 @@
 (defcheck solution-aff58e4f
   (fn [s] (reduce #(str % %2) (conj (re-seq #"[A-Z]" s) ""))))
 
-;; See CLJS-2453
-#_(defcheck solution-b1373530
+(defcheck solution-b1373530
   #(apply str (re-seq #"[A-Z]*" %)))
 
 (defcheck solution-b1ccef8b

@@ -5438,8 +5438,7 @@
              (first (filter prime? (iterate inc (inc n)))))
            2))))))
 
-;; See CLJS-1743
-#_(defcheck solution-c473500d
+(defcheck solution-c473500d
   (fn [n]
     (letfn [(primes-seq []
               (letfn [(insert-into-queue [m x p]
@@ -5682,8 +5681,7 @@
                                            (/ 2)
                                            (= n))))))))
 
-;; See CLJS-1743
-#_(defcheck solution-ceb34586
+(defcheck solution-ceb34586
   (fn [n]
     (letfn [(primes []
               (letfn [(reinsert [table q prime]
