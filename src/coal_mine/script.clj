@@ -24,15 +24,21 @@
                (println "Still running" message "...")))
     .start))
 
-(defmacro with-progress [msg & body]
-  `(let [begin# (System/currentTimeMillis)
-         progress-thread# (create-progress-thread 300000 ~msg)]
+(defmacro with-time [msg & body]
+  `(let [begin# (System/currentTimeMillis)]
      (try
        (println "Running" ~msg "...")
        ~@body
        (finally
-         (println "Finished running" ~msg "(Elapsed time:" (quot (- (System/currentTimeMillis) begin#) 1000) "s)\n")
-         (.interrupt progress-thread#)))))
+         (println "Finished running" ~msg "(Elapsed time:" (quot (- (System/currentTimeMillis) begin#) 1000) "s)\n")))))
+
+(defmacro with-progress [msg & body]
+  `(let [progress-thread# (create-progress-thread 300000 ~msg)]
+     (with-time ~msg
+       (try
+         ~@body
+         (finally
+           (.interrupt progress-thread#))))))
 
 (defn get-classpath []
   (->> (.. (ClassLoader/getSystemClassLoader) getURLs)
@@ -79,9 +85,10 @@
   (run-test-part part))
 
 (defn test []
-  (let [subtotals (doall (map test-part [1 2 3 4 5]))]
-    (println "Ran a total of" (apply + (map first subtotals))
-      "tests containing" (apply + (map second subtotals)) "assertions.")))
+  (with-time "all parts"
+    (let [subtotals (doall (map test-part [1 2 3 4 5]))]
+      (println "Ran a total of" (apply + (map first subtotals))
+        "tests containing" (apply + (map second subtotals)) "assertions."))))
 
 (defn terminal? [fun]
   (contains? #{"test" "test-part"} fun))
