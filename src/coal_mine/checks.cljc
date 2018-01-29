@@ -73,8 +73,8 @@
 
 (defmacro defcheck-14 [name & forms]
   `(deftimedtest ~name 32
-     (clojure.test/is (= ~@forms ((fn add-five [x] (+ x 5)) 3)))
-     (clojure.test/is (= ~@forms ((fn [x] (+ x 5)) 3)))
+     (clojure.test/is (= ~@forms ((fn ~'add-five [x#] (+ x# 5)) 3)))
+     (clojure.test/is (= ~@forms ((fn [x#] (+ x# 5)) 3)))
      (clojure.test/is (= ~@forms (#(+ % 5) 3)))
      (clojure.test/is (= ~@forms ((partial + 5) 3)))))
 
