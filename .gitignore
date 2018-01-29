@@ -14,3 +14,4 @@ pom.xml.asc
 /builds
 /.cpcache
 /.coal_mine_out
+/out
