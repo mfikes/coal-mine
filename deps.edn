@@ -1,4 +1,2 @@
 {:deps
- {org.clojure/clojurescript {:git/url "https://github.com/clojure/clojurescript" :sha "9ddd356d344aa1ebf9bd9443dd36a1911c92d32f"}
-  ;; Override with an older version of gcc (the one specified by ClojureScript deps.edn is broken)
-  com.google.javascript/closure-compiler-unshaded {:mvn/version "v20170910"}}}
+ {org.clojure/clojurescript {:git/url "https://github.com/clojure/clojurescript" :sha "84fc1810df95c12caca45644bd71c6cbe0d37508"}}}
