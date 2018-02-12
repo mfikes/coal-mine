@@ -1442,8 +1442,7 @@
                        (sum (take (/ n 2) digit))
                        (sum (take (/ n 2) (reverse digit)))))))
 
-;; See CLJS-2462
-#_(defcheck solution-3a0ed628
+(defcheck solution-3a0ed628
   #(let [v (vec (map int (str %)))
          len (count v)
          half (/ len 2)
@@ -3994,8 +3993,7 @@
           s2 (apply + (map int (take-last half v)))]
       (= s1 s2))))
 
-;; See CLJS-2462
-#_(defcheck solution-85050599
+(defcheck solution-85050599
   (fn [x]
     (let [v (loop [n x o []] (if (zero? n) o (recur (int (/ n 10)) (conj o (mod n 10)))))
           m (/ (count v) 2)]
@@ -6810,8 +6808,7 @@
                   (/ (count digits) 2)
                   digits))))))
 
-;; See CLJS-2462
-#_(defcheck solution-d327efca
+(defcheck solution-d327efca
   (fn [n]
     (letfn [(digits [x] (mapv #(- (parse-char %) (parse-char \0)) (str x)))
             (sum-of-sq [items] (reduce + (map #(* % %) items)))]
@@ -6858,8 +6855,7 @@
           sum       (partial reduce +)]
       (apply = (map sum (map take-half [digits (reverse digits)]))))))
 
-;; See CLJS-2462
-#_(defcheck solution-d442cc33
+(defcheck solution-d442cc33
   (fn a [n]
     (let [s (apply vector (map #(character-digit % 10) (str n)))
           size (/ (count s) 2)
