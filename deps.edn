@@ -1,2 +1,2 @@
 {:deps
- {org.clojure/clojurescript {:git/url "https://github.com/clojure/clojurescript" :sha "84fc1810df95c12caca45644bd71c6cbe0d37508"}}}
+ {org.clojure/clojurescript {:git/url "https://github.com/clojure/clojurescript" :sha "5e96f8b5cd007dff42ce3cd550836905d0d973c9"}}}

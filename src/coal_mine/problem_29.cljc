@@ -419,9 +419,7 @@
 
 (defcheck solution-68309caf
   #(apply str (re-seq #"[A-Z]" % )))
-
-; See CLJS-2453
-#_(defcheck solution-6888979e
+(defcheck solution-6888979e
   (fn [word]
     (->> word
       (re-seq #"[A-Z]*")
