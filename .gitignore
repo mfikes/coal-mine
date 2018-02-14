@@ -15,3 +15,6 @@ pom.xml.asc
 /.cpcache
 /.coal_mine_out
 /out
+/.cljs_nashorn_repl
+/nashorn_code_cache
+/.cljs_rhino_repl
