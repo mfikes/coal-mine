@@ -6,33 +6,23 @@ the top 1000 users on [4Clojure](http://www.4clojure.com).
 This is useful for regression testing compiler patches. Since the codebase is large, it is also 
 useful for testing compiler performance.
 
-To run all tests: `(coal-mine.test-runner/-main)`
+To run all tests:
 
-Alternatively, `clojure -m coal-mine.script test` will run the all the tests via ClojureScript on Node, split for 
+```
+clojure -m coal-mine.test-runner
+```
+
+or 
+
+```
+clojure -m cljs.main -m coal-mine.test-runner
+```
+
+Alternatively, 
+
+```
+clojure -m coal-mine.script test
+``` 
+
+will run the all the tests via ClojureScript on Node, split for 
 RAM use reduction.
-
-To run (without manually cloning):
-
-```
-clojure -Sdeps '{:deps {github-mfikes/coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "<sha here>"}}}' -m coal-mine.script test
-```
-
-You can also override the ClojureScript dep as follows:
-
-Specify a shipping version:
-
-```
-clojure -Sdeps '{:deps {org.clojure/clojurescript {:mvn/version "1.9.946"} com.google.javascript/closure-compiler-unshaded {:mvn/version "v20170910"} github-mfikes/coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "<sha here>"}}}' -m coal-mine.script test
-```
-
-Specify a local compiler source tree:
-
-```
-clojure -Sdeps '{:deps {org.clojure/clojurescript {:local/root "/path/to/clojurescript"} com.google.javascript/closure-compiler-unshaded {:mvn/version "v20170910"} github-mfikes/coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "<sha here>"}}}' -m coal-mine.script test
-```
-
-Specify an arbitrary GitHub version of ClojureScript:
-
-```
-clojure -Sdeps '{:deps {org.clojure/clojurescript {:git/url "https://github.com/clojure/clojurescript" :sha "9ddd356d344aa1ebf9bd9443dd36a1911c92d32f"} com.google.javascript/closure-compiler-unshaded {:mvn/version "v20170910"} github-mfikes/coal-mine {:git/url "https://github.com/mfikes/coal-mine" :sha "<sha here>"}}}' -m coal-mine.script test
-```

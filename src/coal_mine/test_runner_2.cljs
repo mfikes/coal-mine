@@ -1,7 +1,6 @@
 (ns coal-mine.test-runner-2
   (:require
    [clojure.test]
-   [cljs.nodejs :as nodejs]
    coal-mine.problem-33
    coal-mine.problem-34
    coal-mine.problem-35
@@ -34,8 +33,6 @@
    coal-mine.problem-62
    coal-mine.problem-63
    coal-mine.problem-64))
-
-(nodejs/enable-util-print!)
 
 (defn run-tests []
   (clojure.test/run-tests
