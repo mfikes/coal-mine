@@ -308,8 +308,8 @@
      (clojure.test/is (= [1 2 [3 4 5] [1 2 3 4 5]] (let [[a b & c :as d] ~@forms] [a b c d])))))
 
 (defmacro defcheck-52 [name & forms]
-  `(deftimedtest ~name 32
-     (clojure.test/is (= [2 4] (let [[a b c d e] [0 1 2 3 4]] ~@forms)))))
+  `(deftimedtest ~name 128
+     (clojure.test/is (= [2 4] (let [[~'a ~'b ~'c ~'d ~'e] [0 1 2 3 4]] ~@forms)))))
 
 (defmacro defcheck-53 [name & forms]
   `(deftimedtest ~name 32
