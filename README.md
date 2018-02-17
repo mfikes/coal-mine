@@ -6,16 +6,22 @@ the top 1000 users on [4Clojure](http://www.4clojure.com).
 This is useful for regression testing compiler patches. Since the codebase is large, it is also 
 useful for testing compiler performance.
 
-To run all tests:
+To run all tests via Clojure:
 
 ```
-clojure -m coal-mine.test-runner
+clojure -J-XX:CompressedClassSpaceSize=2g -m coal-mine.test-runner
 ```
 
-or 
+or via ClojureScript
 
 ```
-clojure -m cljs.main -m coal-mine.test-runner
+clojure -J-Xmx6g -m cljs.main -m coal-mine.test-runner
+```
+
+For browser-based testing, `index.html` is set up for `out/main.js`:
+
+```
+clojure -J-Xmx6g -m cljs.main -re browser -o out/main.js -c coal-mine.test-runner -r
 ```
 
 Alternatively, 
