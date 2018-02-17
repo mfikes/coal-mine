@@ -304,8 +304,8 @@
      (clojure.test/is (= (set (~@forms [[1 2] :a [3 4] 5 6 :b])) #{[[1 2] [3 4]] [:a :b] [5 6]}))))
 
 (defmacro defcheck-51 [name & forms]
-  `(deftimedtest ~name 32
-     (clojure.test/is (= [1 2 [3 4 5] [1 2 3 4 5]] (let [[a b & c :as d] ~@forms] [a b c d])))))
+  `(deftimedtest ~name 128
+     (clojure.test/is (= [1 2 [3 4 5] [1 2 3 4 5]] (let [[a# b# & c# :as d#] ~@forms] [a# b# c# d#])))))
 
 (defmacro defcheck-52 [name & forms]
   `(deftimedtest ~name 32
