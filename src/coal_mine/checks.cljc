@@ -486,11 +486,11 @@
   `(deftimedtest ~name 32
      (clojure.test/is (= ~@forms
                         (letfn
-                         [(foo [x y] #(bar (conj x y) y))
-                          (bar [x y] (if (> (last x) 10)
-                                       x
-                                       #(foo x (+ 2 y))))]
-                          (trampoline foo [] 1))))))
+                         [(foo# [x# y#] #(bar# (conj x# y#) y#))
+                          (bar# [x# y#] (if (> (last x#) 10)
+                                       x#
+                                       #(foo# x# (+ 2 y#))))]
+                          (trampoline foo# [] 1))))))
 
 (defmacro defcheck-77 [name & forms]
   `(deftimedtest ~name 32
