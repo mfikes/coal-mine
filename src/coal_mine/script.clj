@@ -40,14 +40,9 @@
          (finally
            (.interrupt progress-thread#))))))
 
-(defn get-classpath []
-  (->> (.. (ClassLoader/getSystemClassLoader) getURLs)
-    (map (memfn getFile))
-    (string/join ":")))
-
 (defn run-subprocess [fun & args]
   (with-progress (string/join " " (concat [fun] args))
-    (let [results (apply shell/sh (concat ["java" "-cp" (get-classpath) compile-heap "clojure.main" "-m" "coal-mine.script" fun] (map str args)))]
+    (let [results (apply shell/sh (concat ["java" "-cp" (System/getProperty "java.class.path") compile-heap "clojure.main" "-m" "coal-mine.script" fun] (map str args)))]
       (when-not (zero? (:exit results))
         (throw (ex-info "subprocess failed" results))))))
 
