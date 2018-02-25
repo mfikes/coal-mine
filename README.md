@@ -18,12 +18,6 @@ or via ClojureScript
 clojure -J-Xmx6g -m cljs.main -m coal-mine.test-runner
 ```
 
-For browser-based testing, `index.html` is set up for `out/main.js`:
-
-```
-clojure -J-Xmx6g -m cljs.main -re browser -o out/main.js -c coal-mine.test-runner -r
-```
-
 Alternatively, 
 
 ```
