@@ -501,13 +501,13 @@
 
 (defmacro defcheck-78 [name & forms]
   `(deftimedtest ~name 32
-     (clojure.test/is (= (letfn [(triple [x] #(sub-two (* 3 x)))
-                                 (sub-two [x] #(stop? (- x 2)))
-                                 (stop? [x] (if (> x 50) x #(triple x)))]
-                           (~@forms triple 2))))
-     (clojure.test/is (= (letfn [(my-even? [x] (if (zero? x) true #(my-odd? (dec x))))
-                                 (my-odd? [x] (if (zero? x) false #(my-even? (dec x))))]
-                           (map (partial ~@forms my-even?) (range 6)))
+     (clojure.test/is (= (letfn [(triple# [x#] #(sub-two# (* 3 x#)))
+                                 (sub-two# [x#] #(stop?# (- x# 2)))
+                                 (stop?# [x#] (if (> x# 50) x# #(triple# x#)))]
+                           (~@forms triple# 2))))
+     (clojure.test/is (= (letfn [(my-even?# [x#] (if (zero? x#) true #(my-odd?# (dec x#))))
+                                 (my-odd?# [x#] (if (zero? x#) false #(my-even?# (dec x#))))]
+                           (map (partial ~@forms my-even?#) (range 6)))
                         [true false true false true false]))))
 
 (defmacro defcheck-79 [name & forms]
