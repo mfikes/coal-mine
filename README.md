@@ -1,5 +1,7 @@
 # Coal Mine
 
+<img src="mine.jpg" align="right" height="210px" hspace="5px"/>
+
 A large corpus of Clojure(Script) compiler characterization tests derived from submissions by 
 the top 1000 users on [4Clojure](http://www.4clojure.com).
 
