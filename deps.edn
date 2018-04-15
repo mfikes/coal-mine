@@ -1,1 +1,5 @@
-{:deps {org.clojure/clojurescript {:mvn/version "1.10.238"}}}
+{:deps {org.clojure/clojurescript {:mvn/version "1.10.238"}}
+ :aliases {:clj {:jvm-opts ["-XX:CompressedClassSpaceSize=2g"]}
+           :cljs {:jvm-opts ["-Xmx6g"]
+                  :main-opts ["-m" "cljs.main"]} 
+           :node {:main-opts ["-m" "coal-mine.script" "test"]}}}

@@ -11,19 +11,25 @@ useful for testing compiler performance.
 To run all tests via Clojure:
 
 ```
-clojure -J-XX:CompressedClassSpaceSize=2g -m coal-mine.test-runner
+clj -Aclj -m coal-mine.test-runner
 ```
 
 or via ClojureScript
 
 ```
-clojure -J-Xmx6g -m cljs.main -m coal-mine.test-runner
+clj -Acljs -m coal-mine.test-runner
+```
+
+or via Planck
+
+```
+plk -m coal-mine.test-runner
 ```
 
 Alternatively, 
 
 ```
-clojure -m coal-mine.script test
+clj -Anode
 ``` 
 
 will run the all the tests via ClojureScript on Node, split for 
