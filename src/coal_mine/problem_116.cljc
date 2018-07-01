@@ -6475,21 +6475,6 @@
                       post (first (drop-while #(>= n %) primes))]
                   (= n (/ (+ pre post) 2))))))))
 
-(defcheck solution-e891af1
-  (fn __ [i]
-    (let [? (fn [i]
-              (or (= i 2)
-                  (let [s (->> (Math/sqrt i) range (map inc) rest)]
-                    (and (not-empty s) (every? #(not (zero? (mod i %))) s)))))]
-      (case i
-        2 false
-        (and (? i)
-             (let [f (fn [r] (->> (range) (map #(r i 1 %)) (filter ?) first))
-                   p (f -)
-                   n (f +)]
-               (and (? n)
-                    (= n (+ i (- i p))))))))))
-
 (defcheck solution-e89fc863
   ((fn [p]
      (fn [b]
