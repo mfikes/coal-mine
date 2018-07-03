@@ -538,7 +538,7 @@
      (clojure.test/is (= (~@forms #{:a :b :c :d} #{:c :e :a :f :d}) #{:a :c :d}))))
 
 (defmacro defcheck-82 [name & forms]
-  `(deftimedtest ~name 32
+  `(deftimedtest ~name 1024
      (clojure.test/is (= true (~@forms #{"hat" "coat" "dog" "cat" "oat" "cot" "hot" "hog"})))
      (clojure.test/is (= false (~@forms #{"cot" "hot" "bat" "fat"})))
      (clojure.test/is (= false (~@forms #{"to" "top" "stop" "tops" "toss"})))
