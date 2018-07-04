@@ -1,5 +1,12 @@
 dist: trusty
 
+env:
+  - PARTITION_FILTER=1
+  - PARTITION_FILTER=2
+  - PARTITION_FILTER=3
+  - PARTITION_FILTER=4
+  - PARTITION_FILTER=5
+
 language: node_js
 
 node_js:
