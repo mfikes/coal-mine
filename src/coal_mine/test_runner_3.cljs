@@ -1,15 +1,6 @@
 (ns coal-mine.test-runner-3
   (:require
    [clojure.test]
-   coal-mine.problem-65
-   coal-mine.problem-66
-   coal-mine.problem-67
-   coal-mine.problem-68
-   coal-mine.problem-69
-   coal-mine.problem-70
-   coal-mine.problem-71
-   coal-mine.problem-72
-   coal-mine.problem-73
    coal-mine.problem-74
    coal-mine.problem-75
    coal-mine.problem-76
@@ -35,15 +26,6 @@
 
 (defn run-tests []
   (clojure.test/run-tests
-    'coal-mine.problem-65
-    'coal-mine.problem-66
-    'coal-mine.problem-67
-    'coal-mine.problem-68
-    'coal-mine.problem-69
-    'coal-mine.problem-70
-    'coal-mine.problem-71
-    'coal-mine.problem-72
-    'coal-mine.problem-73
     'coal-mine.problem-74
     'coal-mine.problem-75
     'coal-mine.problem-76
