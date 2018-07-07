@@ -1,7 +1,8 @@
 (ns coal-mine.problem-73
   (:require [coal-mine.checks :refer [defcheck-73] :rename {defcheck-73 defcheck}]
             [clojure.test]
-            [clojure.set]))
+            [clojure.set]
+            [clojure.walk]))
 
 (defcheck solution-102a59f9
   #(last (some #{[:o :o :o] [:x :x :x]}
