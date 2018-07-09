@@ -571,7 +571,7 @@
                             ["uncle" "cousin"] ["son" "grandson"]})))))
 
 (defmacro defcheck-85 [name & forms]
-  `(deftimedtest ~name 32
+  `(deftimedtest ~name 2048
      (clojure.test/is (= (~@forms #{1 :a}) #{#{1 :a} #{:a} #{} #{1}}))
      (clojure.test/is (= (~@forms #{}) #{#{}}))
      (clojure.test/is (= (~@forms #{1 2 3})
