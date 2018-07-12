@@ -579,7 +579,7 @@
      (clojure.test/is (= (count (~@forms (into #{} (range 10)))) 1024))))
 
 (defmacro defcheck-86 [name & forms]
-  `(deftimedtest ~name 32
+  `(deftimedtest ~name 1024
      (clojure.test/is (= (~@forms 7) true))
      (clojure.test/is (= (~@forms 986543210) true))
      (clojure.test/is (= (~@forms 2) false))
