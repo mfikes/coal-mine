@@ -11569,50 +11569,6 @@
       (let [g (apply word-graph ws)]
         (= (count ws) (apply max (map #(dfs % [] g) ws)))))))
 
-(defcheck solution-c17b5b9
-  (fn [ws]
-    (let [ld-graph
-          (reduce
-            #(assoc-in % %2 true) {}
-            (apply concat
-              (for [w ws, v ws
-                    :when
-                    (= 1 (let [av (vec v), bv (vec w)
-                               m  (inc (count v))
-                               n  (inc (count w))
-                               chart (make-array Integer/TYPE
-                                       m n)]
-                           (doseq [i (range m)]
-                             (aset chart i 0 i))
-                           (doseq [j (range n)]
-                             (aset chart 0 j j))
-
-                           (doseq [i (range 1 m)
-                                   j (range 1 n)
-                                   :let [i* (dec i)
-                                         j* (dec j)]]
-                             (aset
-                               chart i j
-                               (min (inc (aget chart i* j))
-                                 (inc (aget chart i j*))
-                                 (let [prev (aget chart i* j*)]
-                                   (if (= (av i*) (bv j*))
-                                     prev (inc prev))))))
-
-                           (aget chart (dec m) (dec n))))]
-                [[v w] [w v]])))
-
-          chain
-          (fn chain [init remaining]
-            (if (seq remaining)
-              (for [x init
-                    :when (remaining x)
-                    ys (chain (keys (ld-graph x))
-                         (disj remaining x))]
-                (conj ys x))
-              [()]))]
-      (boolean (seq (chain ws ws))))))
-
 (defcheck solution-c2d3c645
   (fn r [s]
     (let [l (fn [str1 str2]
