@@ -11,7 +11,7 @@
        ~@body
        (let [elapsed# (- (coal-mine.checks/system-time) start#)]
          (when (> elapsed# ~threshold)
-           (println '~name "took" (int elapsed#) "ms to execute."))))))
+           #_(println '~name "took" (int elapsed#) "ms to execute."))))))
 
 (defmacro defcheck-1 [name & forms]
   `(deftimedtest ~name 32
