@@ -593,7 +593,7 @@
      (clojure.test/is (= (~@forms #{[1 2] [2 3]} #{[2 3] [3 4]}) #{[1 2] [3 4]}))))
 
 (defmacro defcheck-89 [name & forms]
-  `(deftimedtest ~name 32
+  `(deftimedtest ~name 512
      (clojure.test/is (= true (~@forms [[:a :b]])))
      (clojure.test/is (= false (~@forms [[:a :a] [:b :b]])))
      (clojure.test/is (= false (~@forms [[:a :b] [:a :b] [:a :c] [:c :a]
