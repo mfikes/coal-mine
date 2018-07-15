@@ -1,5 +1,6 @@
 (ns coal-mine.test-runner-4
   (:require
+   [cljs.core.specs.alpha]
    [clojure.test]
    coal-mine.problem-97
    coal-mine.problem-98
