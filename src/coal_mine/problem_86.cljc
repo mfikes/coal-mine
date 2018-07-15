@@ -1,7 +1,8 @@
 (ns coal-mine.problem-86
   (:require [coal-mine.checks :refer [defcheck-86] :rename {defcheck-86 defcheck}]
             [clojure.test]
-            [clojure.set]))
+            [clojure.set]
+            [clojure.walk]))
 
 (defn str->int [s] #?(:clj (Integer/parseInt s)
                       :cljs (js/parseInt s)))
