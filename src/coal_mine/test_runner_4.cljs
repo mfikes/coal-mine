@@ -2,7 +2,6 @@
   (:require
    [cljs.core.specs.alpha]
    [clojure.test]
-   coal-mine.problem-93
    coal-mine.problem-94
    coal-mine.problem-95
    coal-mine.problem-96
@@ -38,7 +37,6 @@
 
 (defn run-tests []
   (clojure.test/run-tests
-    'coal-mine.problem-93
     'coal-mine.problem-94
     'coal-mine.problem-95
     'coal-mine.problem-96
