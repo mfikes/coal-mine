@@ -1,6 +1,7 @@
 (ns coal-mine.problem-93
   (:require [coal-mine.checks :refer [defcheck-93] :rename {defcheck-93 defcheck}]
-            [clojure.test]))
+            [clojure.test]
+            [clojure.walk]))
 
 (defcheck solution-104f154
   (fn flatter [coll]
