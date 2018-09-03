@@ -56,6 +56,7 @@
      :parallel-build true
      :target         :nodejs
      :main           main
+     :source-map     false
      :output-dir     output-dir
      :output-to      test-script}))
 
