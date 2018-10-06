@@ -1176,7 +1176,7 @@
      (clojure.test/is (= [1 2 3 4 5 0 1] (~@forms 1234501 10)))
      (clojure.test/is (= [0] (~@forms 0 11)))
      (clojure.test/is (= [1 0 0 1] (~@forms 9 2)))
-     (clojure.test/is (= [1 0] (let [n# (rand-int 100000)] (~@forms n# n#))))
+     (clojure.test/is (= [1 0] (let [n# (inc (rand-int 100000))] (~@forms n# n#))))
      (clojure.test/is (= [16 18 5 24 15 1] (~@forms 2147483647 42)))))
 
 (defmacro defcheck-138 [name & forms]
