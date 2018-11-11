@@ -586,19 +586,6 @@
                                         nil))
             r))))))
 
-(defcheck solution-1e84b8ee
-  (fn [xs]
-    (letfn [(all-paths [xs]
-              (let [x2 (into xs (for [[a b] xs [c d] (disj xs [a b]) :when (= b c)] [a d]))
-                    x3 (into x2 (for [[a b] xs [c d] (disj xs [a b]) :when (= a d)] [b c]))]
-                (if (= xs x3)
-                  (filter #(not= (first %) (second %)) xs)
-                  (recur x3))))]
-      (let [paths (into #{} (map #(vec (sort %)) (all-paths xs)))
-            nodes (into (into #{} (map first xs)) (map second xs))]
-        (or (< (count nodes) 3)
-            (= (* (count nodes) (dec (count nodes)) 0.5) (count paths)))))))
-
 (defcheck solution-1ee78b2f
   (fn f [s]
     (let [nodes (set (concat (map first s) (map second s)))
