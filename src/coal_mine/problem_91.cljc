@@ -1660,33 +1660,6 @@
           (if (= merged edge-set) merged (merge-nodes merged))))]
       (= 1 (count (merge-nodes (set (map set edge-list))))))))
 
-(defcheck solution-3794ee79
-  (fn graphConnected[l]
-    (letfn [(createGraph[l]
-              (reduce
-                (fn [m [f s]]
-                  (merge-with (comp vec set concat) m {f [s]} {s [f]})) {} l))
-            (dfsPath
-              ([g node dest] (dfsPath g [] #{} node dest))
-              ([g v s node dest]
-               (cond
-                 (contains? s dest) #{v}
-                 (or (contains? s node) (empty? (g node))) #{}
-                 :else  (reduce
-                          #(apply (partial merge %1) %2)
-                          (map #(dfsPath g (conj v node) (conj s node) % dest) (g node))))))
-            (cartesianProduct
-              ([s1] (reduce
-                      (fn [s [fst sec]]
-                        (if (or (contains? s [fst sec]) (contains? s [sec fst]) (= fst sec))
-                          s
-                          (conj s [fst sec]))) #{} (cartesianProduct s1 s1)))
-              ([s1 s2] (set (apply concat (map (fn [el] (map #(vec [% el]) s1)) s2)))))]
-      (let [g (createGraph l)]
-        (every? identity (map (complement empty?)
-                           (map (fn [[f s]] (dfsPath g f s))
-                             (cartesianProduct (keys g)))))))))
-
 (defcheck solution-383cc963
   (fn [edges]
     (let [find-connections (fn [m [a b]] (conj m
@@ -7085,19 +7058,6 @@
         )
       )
     ))
-
-(defcheck solution-bb22de0f
-  (fn [p]
-    (letfn [(conn? [m c e v]
-              (cond (= c e) true
-                    (contains? v c) false
-                    (empty? (m c)) false
-                    :else (reduce #(or %1 %2) (flatten (for [n (m c)] (conn? m n e (merge v c)))))))]
-      (let [e (apply merge-with concat (map #(hash-map (first %) [(second %)]) (concat p (map reverse p))))
-            k (keys e)]
-        (if (= (count k) 1)
-          true
-          (reduce #(and %1 %2) (for [x (rest k)] (conn? e (first k) x #{}))))))))
 
 (defcheck solution-bb30f1ce
   (fn graph-conn [edges]
