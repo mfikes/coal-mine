@@ -215,13 +215,6 @@
 (defcheck solution-1bc5a8e
   (fn [a b] (let [f #(filter (comp not %) %2)](set (concat (f a b) (f b a))))))
 
-(defcheck solution-1cddce67
-  (fn difference [s1 s2]
-    (set
-      (filter
-        #(not (and (s1 %) (s2 %)))
-        (apply merge s1 s2)))))
-
 (defcheck solution-1ce31ee
   (fn [x y]
     (set (filter (fn [n]
