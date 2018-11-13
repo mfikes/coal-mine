@@ -51,11 +51,6 @@
           (recur (rest colla) (disj collb (first colla)) acc)
           (recur (rest colla) collb (conj acc (first colla))))))))
 
-(defcheck solution-140aa5fe
-  (fn symmetric-difference- [s1 s2]
-    "88. Write a function which returns the symmetric difference of two sets."
-    (apply merge (apply disj s1 s2) (apply disj s2 s1))))
-
 (defcheck solution-141d3e58
   (fn my-sym-diff [s1 s2]
     (letfn [(my-diff [set1 set2] (filter #(not (contains? set2 %)) set1))]
@@ -1356,10 +1351,6 @@
                        (into #{} (filter #(not-contains? a %) b) ))]
       (into (difference a b) (difference b a)))))
 
-(defcheck solution-6d3c9951
-  (fn [x y]
-    (into #{} (filter #(not= (nil? (x %)) (nil? (y %))) (apply merge x y)))))
-
 (defcheck solution-6d42f8bf
   #(clojure.set/union
      (clojure.set/difference %1 %2)
@@ -1422,10 +1413,6 @@
   (fn
     [set1 set2]
     (clojure.set/union (clojure.set/difference set1 set2) (clojure.set/difference set2 set1))))
-
-(defcheck solution-71696517
-  (fn [s1 s2] (set (->> (apply merge s1 s2)
-                     (remove #(and (s1 %) (s2 %)))))))
 
 (defcheck solution-71e82039
   (fn [a b]
@@ -1596,15 +1583,6 @@
 
 (defcheck solution-7c1683c9
   (fn [x y] (set (concat (remove (set (filter x y)) x) (remove (set (filter y x)) y)))))
-
-(defcheck solution-7ca5d8df
-  #(let [all (apply merge %1 %2)]
-     (reduce (fn [res i]
-               (if (and (contains? %1 i) (contains? %2 i))
-                 (disj res i)
-                 res))
-       all
-       all)))
 
 (defcheck solution-7caa3de9
   #(->> (for [x (into %1 %2)
