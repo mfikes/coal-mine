@@ -460,16 +460,6 @@
             false
             (recur (sumsq (.toString ssq)) (inc cnt))))))))
 
-(defcheck solution-1933ffb0
-  (fn [n]
-    (loop [n n s #{}]
-      (let [i (comp #(str->int %) str)
-            v (reduce + (map (comp #(* % %) i) (str n)))]
-        (cond
-          (= v 1) true
-          (s v) false
-          1 (recur v (merge s v)))))))
-
 (defcheck solution-1994ed42
   (fn f [x]
     (let [dgs (fn [n] (map #(str->int (str %)) (str n)))
@@ -3546,23 +3536,6 @@
   (fn [y]
     (let [f (fn [x](apply + (map (comp #(* % %) #(- % 48) char->ascii) (seq (str x)))))]
       (= (some #{4 1} (iterate f y)) 1))))
-
-(defcheck solution-5f61a312
-  (fn __ [n]
-    ((fn calc [x seen]
-       (let [new-x (->> x
-                     str
-                     seq
-                     (map str)
-                     (map str->int)
-                     (reduce #(+ %1 (* %2 %2)) 0)
-                     )]
-         (if (= new-x 1)
-           true
-           (if (contains? seen new-x)
-             false
-             (calc new-x (merge seen new-x))))))
-     n #{})))
 
 (defcheck solution-5fc5d505
   (fn [n]
