@@ -751,7 +751,7 @@
      (clojure.test/is (== (~@forms 5 21 2) 210))))
 
 (defmacro defcheck-101 [name & forms]
-  `(deftimedtest ~name 32
+  `(deftimedtest ~name 2048
      (clojure.test/is (= (~@forms "kitten" "sitting") 3))
      (clojure.test/is (= (~@forms "closure" "clojure") (~@forms "clojure" "closure") 1))
      (clojure.test/is (= (~@forms "xyx" "xyyyx") 2))
