@@ -342,23 +342,6 @@
            (into m
              (map #(conj % v) m))) #{#{}})
 
-(defcheck solution-1b974d6b
-  (fn [l]
-    (set (loop [so-far [#{}]
-                left l
-                ]
-           (if (empty? left)
-             so-far
-             (recur
-               (apply conj so-far
-                 (for [s so-far
-                       l [(first left)]]
-                   (merge s l)))
-               (rest left))
-             )
-           ))
-    ))
-
 (defcheck solution-1bb2952
   (fn ps [s] (if (empty? s) #{s}
                             (let [x (first s) s2 (disj s x) ps2 (ps s2)]
@@ -482,17 +465,6 @@
                        (map
                          #(conj % (first s))
                          (p (set (rest s)))))))))
-
-(defcheck solution-203e4dc9
-  (fn iter
-    ([in]
-     (iter in #{#{}}))
-    ([in out]
-     (if (empty? in)
-       out
-       (recur (disj in (first in))
-         (apply merge out
-           (map #(conj % (first in)) out)))))))
 
 (defcheck solution-2086541
   (fn my-ps [s]
@@ -841,17 +813,6 @@
          f (fn [e coll] (map (partial c e) coll))
          g (fn [a b] (set (concat a (f b a)))) ]
      (reduce g #{#{}} %)))
-
-(defcheck solution-261f4054
-  (fn ps [s]
-    (loop [res #{#{}} li s]
-      (if (empty? li)
-        res
-        (recur
-          (apply merge res
-            (for [x res]
-              (clojure.set/union x (hash-set (first li)))))
-          (rest li))))))
 
 (defcheck solution-268c1c7a
   (fn f [s]
@@ -1672,10 +1633,6 @@
                             hd        (first s)]
                         (concat [s] [[hd]] (map #(conj % hd) perm-rest) perm-rest))))]
       (conj (set (map set (permute x))) #{}))))
-
-(defcheck solution-42a9f8d
-  (fn ps [s]
-    (reduce (fn [k i] (into k (cons #{i} (map #(merge % i) k)))) #{#{}} s)))
 
 (defcheck solution-42f5cd1e
   (fn [x] (set
@@ -2585,14 +2542,6 @@
 (defcheck solution-59aebc8a
   (fn [s]
     (set (reduce #(concat %1 (map (fn [i] (set (conj i %2))) %1)) #{#{}} s))))
-
-(defcheck solution-59f2743
-  (fn [s]
-    (loop [s (vec s) p #{#{}}]
-      (if (empty? s)
-        p
-        (recur (rest s)
-          (into p (map #(merge % (first s)) p)))))))
 
 (defcheck solution-5a5f275
   #(set
@@ -5468,10 +5417,6 @@
         (into c (map #(conj % e) c)))
       #{#{}}
       s)))
-
-(defcheck solution-be4b9b07
-  (fn ps [s]
-    (reduce (fn [k i] (into k (map #(merge % i) k))) #{#{}} s)))
 
 (defcheck solution-be9191fe
   (fn ps [s]
