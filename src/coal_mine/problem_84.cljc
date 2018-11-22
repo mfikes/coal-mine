@@ -5471,18 +5471,6 @@
         s
         (recur (into s news))))))
 
-(defcheck solution-b205dad6
-  (fn [s]
-    (let [add-ent (fn add-ent [parent child setdict]
-                    (if (nil? child) #{}
-                                     (clojure.set/union (into #{} setdict) #{[parent child]} (add-ent parent (get setdict child) setdict))))
-          make-dict (fn make-dict [s]
-                      (if (empty? s) {}
-                                     (let [[k v] (first s)]
-                                       (apply merge {k v} (make-dict (rest s))))))
-          sdict (make-dict s)]
-      (apply clojure.set/union (map #(add-ent % (get sdict %) sdict) (keys sdict))))))
-
 (defcheck solution-b31b8ff
   (fn [xs]
     (let [m (into {} xs)
