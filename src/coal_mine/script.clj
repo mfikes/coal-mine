@@ -8,7 +8,7 @@
 
 (def compile-heap "-Xmx3G")
 
-(def test-heap "-max-old-space-size=3072")
+(def test-heap "-max-old-space-size=3584")
 
 (def output-dir ".coal_mine_out")
 

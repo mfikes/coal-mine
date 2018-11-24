@@ -60,7 +60,13 @@
    coal-mine.problem-56
    coal-mine.problem-57
    coal-mine.problem-58
-   coal-mine.problem-59))
+   coal-mine.problem-59
+   coal-mine.problem-60
+   coal-mine.problem-61
+   coal-mine.problem-62
+   coal-mine.problem-63
+   coal-mine.problem-64
+   coal-mine.problem-65))
 
 (defn run-tests []
   (clojure.test/run-tests
@@ -122,7 +128,13 @@
     'coal-mine.problem-56
     'coal-mine.problem-57
     'coal-mine.problem-58
-    'coal-mine.problem-59))
+    'coal-mine.problem-59
+    'coal-mine.problem-60
+    'coal-mine.problem-61
+    'coal-mine.problem-62
+    'coal-mine.problem-63
+    'coal-mine.problem-64
+    'coal-mine.problem-65))
 
 (defn -main []
   (run-tests))
