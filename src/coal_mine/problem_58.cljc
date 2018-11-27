@@ -6553,3 +6553,11 @@
       (if (> (count fs) 1)
         ((apply new-comp (butlast fs)) (apply (last fs) args))
         (apply (last fs) args)))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-58))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

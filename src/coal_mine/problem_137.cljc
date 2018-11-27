@@ -7318,3 +7318,13 @@
                                (recur (quot n base)
                                  base
                                  (cons (rem n base) acc)))) n base []))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-137))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))
+
+

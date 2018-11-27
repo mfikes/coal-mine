@@ -4723,3 +4723,11 @@
   #(apply concat (map (fn [x]
                         (take (dec %2) x))
                    (partition-all %2 %1))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-41))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

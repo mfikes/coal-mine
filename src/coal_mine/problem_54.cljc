@@ -6563,3 +6563,11 @@
     (let [p (take n s)]
       (when (= (count p) n)
         (cons p (f n (drop n s)))))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-54))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

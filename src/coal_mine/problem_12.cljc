@@ -34,3 +34,11 @@
 
 (defcheck solution-b0ea640a
   )
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-12))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

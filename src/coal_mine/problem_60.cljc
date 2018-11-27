@@ -9181,3 +9181,11 @@
      (if (seq s)
        (cons x (lazy-seq (red f (f x (first s)) (rest s))))
        [x]))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-60))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

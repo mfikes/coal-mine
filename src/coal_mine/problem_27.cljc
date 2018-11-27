@@ -2274,3 +2274,11 @@
                   :else (recur
                           (  (comp (partial drop 1) drop-last)  xs )
                           ))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-27))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

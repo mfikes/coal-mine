@@ -8409,3 +8409,12 @@
           len-parts (quot n-len 2)
           parts (map #(% len-parts digits) [take take-last])]
       (apply = (map #(apply + %) parts)))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-115))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))
+

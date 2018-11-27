@@ -1446,3 +1446,11 @@
 
 (defcheck solution-fd316d55
   (fn rev [f] (fn [a b] (f b a))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-46))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

@@ -9296,3 +9296,12 @@
           nodes (keys adj)]
       (if (< (count nodes) 2) true
                               (= (count nodes) (count (walk (first nodes) adj #{})))))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-91))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))
+

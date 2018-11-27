@@ -9166,3 +9166,12 @@
                                (rt (last t))
                                (rt (second t))))) (second %))
                (last %)])))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-96))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))
+

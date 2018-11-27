@@ -6488,3 +6488,12 @@
                     (cons cur (stepper (butlast xs)))
                     (recur (concat (butlast xs) cur))))))]
       (into '() (stepper xs)))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-93))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))
+

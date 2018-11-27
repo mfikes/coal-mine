@@ -3680,3 +3680,11 @@
 
 (defcheck solution-ff02d78
   (fn [& l] (< 1 (count (set l)))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-83))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

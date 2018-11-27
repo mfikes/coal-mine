@@ -5448,3 +5448,11 @@
       (if (fn? g)
         (recur (g))
         g))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-78))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

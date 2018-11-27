@@ -40,3 +40,11 @@
 
 (defcheck solution-f07764c8
   (comp peek vec))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-71))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

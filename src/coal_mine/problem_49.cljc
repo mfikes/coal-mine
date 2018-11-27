@@ -2097,3 +2097,11 @@
 
 (defcheck solution-fff612fc
   #(list (take %1 %2) (nthrest %2 %1)))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-49))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

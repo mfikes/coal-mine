@@ -54,3 +54,11 @@
 
 (defcheck solution-ea904f03
   (map inc (range 5)))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-51))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

@@ -5811,3 +5811,11 @@
       (not (coll? c)) (cons c '())
       (empty? c) '()
       :else (concat (flat (first c)) (flat (rest c))))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-28))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

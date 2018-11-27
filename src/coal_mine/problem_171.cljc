@@ -8813,3 +8813,11 @@
                                          (if (> 2 (- nxt prev))
                                            (recur init (rest r) nxt acc)
                                            (recur nxt r nxt (concat acc [[init prev]]))))))))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-171))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

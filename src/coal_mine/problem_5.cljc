@@ -67,3 +67,11 @@
 
 (defcheck solution-fca63bf2
   '( 1 2 3 4 ))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-5))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

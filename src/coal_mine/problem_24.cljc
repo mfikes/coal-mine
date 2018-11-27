@@ -627,3 +627,11 @@
 (defcheck solution-fb79aff3
   (fn adder [sq]
     (reduce + sq)))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-24))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

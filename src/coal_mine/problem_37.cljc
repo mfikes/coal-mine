@@ -13,3 +13,11 @@
 
 (defcheck solution-e5fac09a
   (str "ABC"))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-37))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

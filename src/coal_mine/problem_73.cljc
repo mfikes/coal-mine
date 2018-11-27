@@ -11979,3 +11979,11 @@
           won (into board [[a11 a21 a31] [a12 a22 a32] [a13 a23 a33] [a11 a22 a33] [a31 a22 a13]])]
       (if (seq (filter #(= % [:x :x :x]) won)) :x
                                                (if (seq (filter #(= % [:o :o :o]) won)) :o nil)))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-73))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

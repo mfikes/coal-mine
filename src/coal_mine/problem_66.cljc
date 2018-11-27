@@ -5281,3 +5281,11 @@
     (loop [a x b y]
       (if(zero? b) a
                    (recur b (rem a b))))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-66))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

@@ -1183,3 +1183,13 @@
           reapplied (map (fn [s] (filter #(clojure.set/subset? % s) simpflified)) bafs)
           ]
       (set (map first (filter #(= (count %) 1) reapplied))))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-140))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))
+
+

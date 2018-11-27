@@ -14349,3 +14349,12 @@
           as-string           (map row-to-string new-vals)
           ]
       as-string)))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-94))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))
+

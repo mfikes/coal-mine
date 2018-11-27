@@ -7860,3 +7860,12 @@
           c #(/ (f %) (f %2) (f (- % %2)))
           n' (dec n)]
       (map #(c n' %) (range n)))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-97))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))
+

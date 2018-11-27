@@ -1,6 +1,7 @@
 (ns coal-mine.problem-98
   (:require [coal-mine.checks :refer [defcheck-98] :rename {defcheck-98 defcheck}]
             [clojure.test]
+            [clojure.walk]
             [clojure.set]))
 
 (defcheck solution-102a8de6
@@ -3849,3 +3850,12 @@
       (set)
       )
     ))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-98))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))
+

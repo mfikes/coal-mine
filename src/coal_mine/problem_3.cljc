@@ -44,3 +44,11 @@
 
 (defcheck solution-f3c64f8f
   (clojure.string/upper-case "hello world"))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-3))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

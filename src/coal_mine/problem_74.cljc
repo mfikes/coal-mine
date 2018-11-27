@@ -6442,3 +6442,11 @@
                  j (int (Math/sqrt i))]
              (if (= (* j j) i) (conj %1 %2) %1))
           [] (.split s ","))))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-74))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

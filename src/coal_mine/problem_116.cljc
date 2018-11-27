@@ -7153,3 +7153,12 @@
         (= x (/ (+ next-prime prev-prime) 2))
         false
         ))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-116))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))
+

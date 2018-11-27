@@ -3861,3 +3861,11 @@
         )
       )
     ))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-59))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

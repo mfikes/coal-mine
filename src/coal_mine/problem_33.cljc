@@ -3050,3 +3050,11 @@
 (defcheck solution-ffa4b52d
   (fn [s c]
     (mapcat #(repeat c %) s)))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-33))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

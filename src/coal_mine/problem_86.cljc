@@ -10179,3 +10179,11 @@
            (= 1 newn) true
            (contains? seen newn) false
            true (subhappy newn (conj seen newn))))) n #{})))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-86))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))
