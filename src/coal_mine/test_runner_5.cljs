@@ -2,6 +2,18 @@
   (:require
    [cljs.core.specs.alpha]
    [clojure.test]
+   coal-mine.problem-115
+   coal-mine.problem-116
+   coal-mine.problem-117
+   coal-mine.problem-118
+   coal-mine.problem-119
+   coal-mine.problem-120
+   coal-mine.problem-121
+   coal-mine.problem-122
+   coal-mine.problem-124
+   coal-mine.problem-125
+   coal-mine.problem-127
+   coal-mine.problem-128
    coal-mine.problem-130
    coal-mine.problem-131
    coal-mine.problem-132
@@ -32,6 +44,18 @@
 
 (defn run-tests []
   (clojure.test/run-tests
+    'coal-mine.problem-115
+    'coal-mine.problem-116
+    'coal-mine.problem-117
+    'coal-mine.problem-118
+    'coal-mine.problem-119
+    'coal-mine.problem-120
+    'coal-mine.problem-121
+    'coal-mine.problem-122
+    'coal-mine.problem-124
+    'coal-mine.problem-125
+    'coal-mine.problem-127
+    'coal-mine.problem-128
     'coal-mine.problem-130
     'coal-mine.problem-131
     'coal-mine.problem-132
