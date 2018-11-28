@@ -14,10 +14,7 @@
    coal-mine.problem-95
    coal-mine.problem-96
    coal-mine.problem-97
-   coal-mine.problem-98
-   coal-mine.problem-99
-   coal-mine.problem-100
-   coal-mine.problem-101))
+   coal-mine.problem-98))
 
 (defn run-tests []
   (clojure.test/run-tests
@@ -33,10 +30,7 @@
     'coal-mine.problem-95
     'coal-mine.problem-96
     'coal-mine.problem-97
-    'coal-mine.problem-98
-    'coal-mine.problem-99
-    'coal-mine.problem-100
-    'coal-mine.problem-101))
+    'coal-mine.problem-98))
 
 (defn -main []
   (run-tests))
