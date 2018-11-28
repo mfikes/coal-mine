@@ -4065,3 +4065,12 @@
   (fn [x y]
     (let [p (str (* x y))]
       (map #(read-string (str %)) (seq p)))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-99))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))
+

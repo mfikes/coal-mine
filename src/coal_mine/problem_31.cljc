@@ -3429,3 +3429,11 @@
 (defcheck solution-fd80575
   (fn [coll]
     (partition-by #(list %) coll)))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-31))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

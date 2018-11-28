@@ -3569,3 +3569,11 @@
 (defcheck solution-fe51ead0
   (fn [a b]
     (mapcat #(list %1 %2) a b)))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-39))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

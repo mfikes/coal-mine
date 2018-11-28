@@ -11488,3 +11488,11 @@
                   sort
                   last)]
         (or ans [])))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-53))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

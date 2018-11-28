@@ -2571,3 +2571,11 @@
 
 (defcheck solution-ff66b6fc
   (fn [ks vs] (apply merge (map hash-map ks vs))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-61))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

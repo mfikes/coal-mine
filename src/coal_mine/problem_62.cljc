@@ -3238,3 +3238,11 @@
   (fn [f x]
     (let [t (atom x)]
       (lazy-cat [x] (repeatedly #(swap! t f))))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-62))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

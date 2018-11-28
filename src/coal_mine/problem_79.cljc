@@ -8650,3 +8650,11 @@
                       (map (fn [[a b]] (min a b)))
                       (map + %2))
              (reverse coll)))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-79))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

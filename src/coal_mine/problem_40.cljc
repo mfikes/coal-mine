@@ -3424,3 +3424,11 @@
 
 (defcheck solution-ff95e507
   (fn [ch coll] (reduce (fn [t v] (into t [ch v])) [(first coll)] (rest coll))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-40))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

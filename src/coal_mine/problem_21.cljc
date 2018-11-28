@@ -2775,3 +2775,11 @@
     (if (= n 0)
       (first s)
       (recur (rest s) (- n 1)))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-21))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

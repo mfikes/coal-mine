@@ -2253,3 +2253,11 @@
                       (concat
                         (repeat 2 (first ls))
                         (rec (rest ls)))))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-32))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

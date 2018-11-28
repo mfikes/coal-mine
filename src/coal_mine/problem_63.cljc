@@ -6436,3 +6436,11 @@
   (fn [f coll]
     (apply merge-with concat
       (map #(hash-map (f %) [%]) coll))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-63))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

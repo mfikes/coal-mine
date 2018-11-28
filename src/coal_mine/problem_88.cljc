@@ -3771,3 +3771,11 @@
 
 (defcheck solution-ff46cacd
   #(let [s1 %1 s2 %2 diff clojure.set/difference union clojure.set/union] (union (diff s1 s2) (diff s2 s1))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-88))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

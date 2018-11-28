@@ -4619,3 +4619,11 @@
 (defcheck solution-ffec09a4
   (fn [src]
     (apply hash-map (mapcat #(list (first(mapcat identity (val %))) (key %)) (group-by count (partition-by identity (sort src)))))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-55))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

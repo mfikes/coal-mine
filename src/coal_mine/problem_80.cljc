@@ -5000,3 +5000,11 @@
 
 (defcheck solution-ff79de6f
   #(= % (apply + (filter (fn [i] (= (mod % i) 0)) (range 1 %)))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-80))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

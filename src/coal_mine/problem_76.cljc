@@ -140,3 +140,11 @@
 
 (defcheck solution-f0ffc5ab
   (take-nth 2 (range 1 12)))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-76))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

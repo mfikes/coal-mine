@@ -760,3 +760,11 @@
 
 (defcheck solution-ffe55236
   filter (fn [x] (= 1 (rem x 2))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-25))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

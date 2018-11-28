@@ -3400,3 +3400,11 @@
       (if a
         (recur (next a) (inc b))
         b))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-22))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

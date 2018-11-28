@@ -4154,3 +4154,11 @@ the first of each collection, the second, etc..."
     (reverse
       (reduce #(conj (butlast %1) (conj (last %1) %2))
         (repeat n []) s))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-43))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

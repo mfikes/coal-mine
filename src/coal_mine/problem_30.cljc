@@ -4838,3 +4838,11 @@
 
 (defcheck solution-ffee97f
   #(reduce (fn [xs y] (if (= (last xs) y) xs (conj xs y))) [] %))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-30))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

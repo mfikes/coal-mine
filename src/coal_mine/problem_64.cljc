@@ -92,3 +92,11 @@
 (defcheck solution-fce394b2
   (fn ([acc x] (+ acc x))
     ([] 0)))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-64))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

@@ -1350,3 +1350,11 @@
 (defcheck solution-ffef3858
   (fn [string]
     (apply str (filter #(upper-case? %) string))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-29))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

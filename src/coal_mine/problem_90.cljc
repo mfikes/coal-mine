@@ -3203,3 +3203,11 @@
         (apply conj s (reduce #(conj %1 [%2 n]) #{} lset)))
       #{}
       rset)))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-90))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

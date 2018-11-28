@@ -64,3 +64,11 @@
 
 (defcheck solution-ecf2874a
   (map #(+ 2 %) [5 4 3 2 1]))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-68))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

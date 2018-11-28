@@ -7125,3 +7125,11 @@
     (set (map set
            (filter #(> (count %) 1)
              (vals (group-by frequencies col)))))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-77))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

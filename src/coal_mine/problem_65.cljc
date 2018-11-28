@@ -7451,3 +7451,11 @@
        (= j (+ 2 i)) :set
        (= x (first l)) :list
        true :vector)))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-65))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

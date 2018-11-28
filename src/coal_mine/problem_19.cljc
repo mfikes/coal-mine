@@ -1519,3 +1519,11 @@
 
 (defcheck solution-ff8f6639
   (fn a [l] (nth l (- (count l) 1))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-19))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

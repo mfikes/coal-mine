@@ -3478,3 +3478,11 @@
       (if (< first last)
         (recur (inc first) last (conj res first))
         res))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-34))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

@@ -2935,3 +2935,11 @@
 
 (defcheck solution-ff5b5e3
   #(sort-by (fn [w] (.toLowerCase w)) (re-seq #"\w+" %)))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-70))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

@@ -7898,3 +7898,11 @@
             (for [[inc? item] (map list sel s)
                   :when inc?]
               item)))))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-85))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

@@ -2834,3 +2834,11 @@
 
 (defcheck solution-ff9cfbc6
   (fn [sq] (vals (group-by type sq))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-50))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

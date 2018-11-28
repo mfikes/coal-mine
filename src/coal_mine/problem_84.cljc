@@ -7989,3 +7989,11 @@
       (set (mapcat (fn [a] (map #(vector a %)
                              ((fn rs [b] (mapcat #(cons % (rs %)) (es b))) a)))
              (keys es))))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-84))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

@@ -7557,3 +7557,12 @@
           (ffirst mult-seqs)
           (let [max-first (apply max (map first mult-seqs))]
             (recur (map #(if (< (first %) max-first) (rest %) %) mult-seqs))))))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-100))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))
+

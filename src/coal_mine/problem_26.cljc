@@ -5603,3 +5603,11 @@
         (= m 2) (list 1 1)
         (> m n) (apply list s)
         :else (recur (inc m) (conj s (+ (last s) (last (butlast s)))))))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-26))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

@@ -5503,3 +5503,12 @@
   (fn m [f coll] (lazy-seq
                    (when-let [s (seq coll)]
                      (cons (f (first s)) (m f (rest s)))))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-118))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))
+

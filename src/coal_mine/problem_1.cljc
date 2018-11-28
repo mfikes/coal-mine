@@ -91,3 +91,11 @@
 
 (defcheck solution-f6c98138
   (= 1 (/ 1)))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-1))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

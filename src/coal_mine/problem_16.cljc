@@ -327,3 +327,11 @@
 
 (defcheck solution-fd1cefb1
   (fn [name] (str "Hello, " name "!")))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-16))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

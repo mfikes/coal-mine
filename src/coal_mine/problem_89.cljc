@@ -1,6 +1,7 @@
 (ns coal-mine.problem-89
   (:require [coal-mine.checks :refer [defcheck-89] :rename {defcheck-89 defcheck}]
             [clojure.test]
+            [clojure.walk]
             [clojure.set]))
 
 (defcheck solution-104d52cb
@@ -10385,3 +10386,11 @@ having odd degrees, and the rest of edges with even-degree"
          (seq e) false
          :else true))
      (> 3 (->> e flatten frequencies vals (filter odd?) count)))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-89))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

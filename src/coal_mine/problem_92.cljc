@@ -10028,3 +10028,12 @@
               (partition 2 1 [0])
               (map (fn [[x y]] (if (< x y) (- x) x)))
               (reduce +)))))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-92))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))
+

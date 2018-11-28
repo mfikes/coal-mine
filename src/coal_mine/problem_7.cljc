@@ -70,3 +70,11 @@
 
 (defcheck solution-fadb40d4
   (vec (range 1 5)))
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-7))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))

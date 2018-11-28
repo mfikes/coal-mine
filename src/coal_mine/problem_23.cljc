@@ -3133,3 +3133,11 @@
     (if (= (last s) (first s))
       (cons (last s) r)
       (cons (last s) (rev r (butlast s))))) '())
+
+(defn run-tests []
+  (clojure.test/run-tests 'coal-mine.problem-23))
+
+(defn -main []
+  (run-tests))
+
+#?(:cljs (set! *main-cli-fn* -main))
