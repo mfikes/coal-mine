@@ -6347,15 +6347,6 @@
          (or (nil? t) (c t))))
       false)))
 
-(defcheck solution-c6b57157
-  (fn t? [tree]
-
-    (cond (not (empty? (filter #(= % false) (flatten tree)))) false
-          (or (nil? tree) (not (coll? tree))) true
-          (and (= (count tree) 3) (t? (nth tree 0)) (t? (nth tree 0)) (t? (nth tree 2))) true
-          :else false)
-    ))
-
 (defcheck solution-c6ea5723
   (fn check-bt? [coll]
     (if (or (not (sequential? coll)) (not= 3 (count coll)))
