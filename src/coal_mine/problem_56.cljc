@@ -136,16 +136,6 @@
     (reduce (fn [xs item] (if (some #(= item %1) xs) xs (conj xs item)))
       [] col)))
 
-(defcheck solution-148a2b3c
-  (fn [x]
-    (letfn [(dedup [seen l]
-              (let [e (first l)
-                    r (rest l)]
-                (if (and (nil? (seen e)) (not (empty? l)))
-                  (cons e (dedup (clojure.set/union #{e} seen) r))
-                  (if (not (empty? l))
-                    (dedup seen r)))))] (dedup {} x))))
-
 (defcheck solution-14b0f34
   (fn [xs]
     ((fn ss [xs s]
@@ -1643,21 +1633,6 @@
         (if (some #(= (first s) %) accum)
           (recur (rest s) accum)
           (recur (rest s) (conj accum (first s))))))))
-
-(defcheck solution-46d932af
-  (fn
-    [a]
-    (loop [acc []
-           curr (first a)
-           remaining (rest a)]
-      (if (= nil curr)
-        acc
-        (recur
-          (if (some #{curr} acc)
-            acc
-            (merge acc curr))
-          (first remaining)
-          (rest remaining))))))
 
 (defcheck solution-46e18814
   #(first (reduce (fn[[acc s] i] (if (contains? s i) [acc s] [(conj acc i) (conj s i)])) [[] #{}] %)))
