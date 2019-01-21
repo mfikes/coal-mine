@@ -648,7 +648,6 @@
 (defcheck solution-3dbd46
   (fn [& xs] (->> xs
                distinct
-               keys
                count
                (= 2))))
 
