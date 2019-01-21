@@ -6377,7 +6377,7 @@
   (fn [bt]
     (letfn [(smart-pop [v]
               (if (= 1 (count (flatten v)))
-                empty
+                []
                 (if (> (count (last v)) 1)
                   (conj (pop v) (into [] (rest (peek v))))
                   (recur (pop v)))))
