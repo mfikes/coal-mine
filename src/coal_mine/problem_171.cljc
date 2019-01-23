@@ -7451,7 +7451,7 @@
             s        (set coll)
             interval (take-while s (range low (inc (apply max coll))))]
         (cons [(first interval) (last interval)]
-          (lazy-seq (intervals (clojure.set/difference s interval)))))
+              (lazy-seq (intervals (clojure.set/difference s (set interval))))))
       ())))
 
 (defcheck solution-db44d605
