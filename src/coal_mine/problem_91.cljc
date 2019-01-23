@@ -461,7 +461,7 @@
      (=
        (set (flatten (seq g)))
        (f (first (first g))
-         (clojure.set/union g (map reverse g))
+          (clojure.set/union g (set (map reverse g)))
          #{})))
     ([e g v]
      #_(println e g v)
@@ -1298,7 +1298,7 @@
              (let [r2 (set (join r r))]
                (if (every? r r2) r
                                  (tc (clojure.set/union r r2)))))]
-     (let [h (clojure.set/union % (map vec (map reverse %)))
+     (let [h (clojure.set/union % (set (map vec (map reverse %))))
            pairs (for [e1 h e2 h] [(e1 0) (e2 0)])]
        (every? (tc h) pairs))))
 
@@ -1486,19 +1486,19 @@
 (defcheck solution-33a887d7
   (fn connected [vertexes]
     (= 1 (count
-           (reduce
-             (fn [sets [a b]]
-               (let [m (group-by (fn [s] (or (contains? s a) (contains? s b))) sets)]
-                 (clojure.set/union
-                   (hash-set
-                     (reduce
-                       clojure.set/union
-                       (into #{} [a b])
-                       (get m true #{})))
-                   (get m false #{}))))
-             #{}
-             vertexes)
-           ))))
+          (reduce
+           (fn [sets [a b]]
+             (let [m (group-by (fn [s] (or (contains? s a) (contains? s b))) sets)]
+               (clojure.set/union
+                (hash-set
+                 (reduce
+                  #(clojure.set/union %1 (set %2))
+                  (into #{} [a b])
+                  (get m true)))
+                (set (get m false)))))
+           #{}
+           vertexes)
+          ))))
 
 (defcheck solution-3409644e
   (fn connected?
@@ -2161,7 +2161,7 @@
           (reduce clojure.set/union v
             (let [step (filter #(or (= t (first %)) (= t (second %))) e)
                   nbs (disj (set (concat (map first step) (map second step))) t)
-                  rst (clojure.set/difference e step)
+                  rst (clojure.set/difference e (set step))
                   new (clojure.set/difference nbs v)
                   ]
               ;(println "t" t "n" nbs "r" rst "new" new "v" v)
@@ -3029,7 +3029,7 @@
                                     (rest q))
                                   (recur (conj visited n)
                                     (clojure.set/union v connected-with-n)
-                                    (clojure.set/union (rest q) connected-with-n))))))]
+                                    (clojure.set/union (set (rest q)) connected-with-n))))))]
       (connected-iter? #{} #{begin} #{begin}))))
 
 (defcheck solution-5e245a81
@@ -3719,7 +3719,7 @@
                (filter (fn [[x y]] (or (= x a) (= y a))) G))
           c? (fn c? [a b G]
                (let [N (st a G)
-                     D (clojure.set/difference G N)]
+                     D (clojure.set/difference G (set N))]
                  (when G
                    (if (some (fn [[x y]] (or (= x b) (= y b))) N)
                      true
@@ -5031,7 +5031,7 @@
               (let [tset (set tuple)
                     isets (filter #(not (empty? (clojure.set/intersection % tset))) s)]
                 (clojure.set/union
-                  (clojure.set/difference s isets)
+                 (clojure.set/difference s (set isets))
                   (hash-set (apply clojure.set/union tset isets)))))
             #{} edges)]
       (= 1 (count csets)))))
@@ -5652,7 +5652,7 @@
               (loop [m s acc []]
                 (if (empty? m) acc
                                (let [ans (getgroup m)]
-                                 (recur (clojure.set/difference m ans)
+                                 (recur (clojure.set/difference m (set ans))
                                    (conj acc (distinct (flatten ans))))))))]
       (loop [m (into #{} (conup d)) prevn 0]
         (if (= (count m) prevn)
@@ -6552,7 +6552,7 @@
               (let [next
                     (into (empty res)
                       (clojure.set/union res
-                        (mapcat neighbors res)))]
+                                         (set (mapcat neighbors res))))]
                 (if (= res next)
                   res (recur next)))))]
 
@@ -6594,7 +6594,7 @@
           (= visited all-vertices)
           (let [checked-vertex (first to-check)
                 new-visited (conj visited checked-vertex)
-                new-to-check (clojure.set/union (rest to-check) (clojure.set/difference (get graph checked-vertex #{}) new-visited))]
+                new-to-check (clojure.set/union (set (rest to-check)) (clojure.set/difference (get graph checked-vertex #{}) new-visited))]
             (recur new-to-check new-visited)
             )
           )
@@ -7115,7 +7115,7 @@
                 (clojure.set/union u (set v))))]
       (loop [acc (set (first s)) edges (rest s)]
         (let [newacc (set (reduce merge acc edges))
-              newedges (remove #(clojure.set/subset? % newacc) edges)]
+              newedges (remove #(clojure.set/subset? (set %) newacc) edges)]
           (if (= newacc acc)
             (empty? edges)
             (recur newacc newedges)))))))
@@ -7662,13 +7662,13 @@
   (fn [g]
     (let [start (ffirst g)
           num-nodes (count (into #{} (flatten (seq g))))
-          edges (into #{} (clojure.set/union g (map reverse g)))
+          edges (into #{} (clojure.set/union g (set (map reverse g))))
           orbit (fn orbit [n e already-seen]
                   (let [out-edges (filter #(= n (first %)) e)
                         successors (clojure.set/difference (into #{} (map last out-edges)) already-seen)]
                     (if (empty? successors)
                       already-seen
-                      (let [other-edges (clojure.set/difference e out-edges)]
+                      (let [other-edges (clojure.set/difference e (set out-edges))]
                         (apply clojure.set/union (map #(orbit % other-edges (into already-seen[%])) successors))))))
           component (orbit start edges #{start})]
       (= num-nodes (count component)))))
@@ -8882,7 +8882,7 @@
          (for [a (range (count coll)), b (range (count coll))
                :when (< a b)]
            ;[(coll a) (coll b)
-           (walk (clojure.set/union g (map (fn [[x y]] [y x]) g))
+           (walk (clojure.set/union g (set (map (fn [[x y]] [y x]) g)))
              (coll a) (coll b))
            ))))))
 
@@ -8890,8 +8890,8 @@
   (fn [graph]
     (letfn [(adjacent [k]
               (clojure.set/union
-                (->> graph (filter #(= k (first %))) (map second))
-                (->> graph (filter #(= k (second %))) (map first))))
+               (set (->> graph (filter #(= k (first %))) (map second)))
+               (set (->> graph (filter #(= k (second %))) (map first)))))
             (dfs-connected? [[v & vs] remaining]
               (cond (empty? remaining) true
                     (nil? v) false
