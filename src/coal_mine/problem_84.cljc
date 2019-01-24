@@ -837,7 +837,7 @@
 (defcheck solution-29b500e7
   (fn transitive-closure [closure]
     (let [new-closure (reduce clojure.set/union closure (map (fn [[a b]]
-                                                               (map #(vector a (last %)) (filter #(= (first %) b) closure))
+                                                               (set (map #(vector a (last %)) (filter #(= (first %) b) closure)))
                                                                ) closure))]
       (if (= new-closure closure)
         closure
@@ -1053,7 +1053,7 @@
 
 (defcheck solution-33554998
   (fn trans-closure [s]
-    (let [sn (clojure.set/union s (for [[a b] s [c d] s :when (= b c)] [a d]))]
+    (let [sn (clojure.set/union s (set (for [[a b] s [c d] s :when (= b c)] [a d])))]
       (if (= s sn) s (recur sn)))))
 
 (defcheck solution-33f2b2b0
@@ -1536,22 +1536,23 @@
   (fn tc [R]
     (letfn [(f [priors x R found]
               (if (empty? R) found
-                             (let [reach (filter (fn [[a b]] (= a x)) R)
-                                   R-reduced (clojure.set/difference R reach)
-                                   extended (if (empty? priors)
-                                              (list (list x))
-                                              (map #(cons x %) priors)) ; add x to the path
-                                   ]
-                               (if (seq reach)
-                                 (apply clojure.set/union (for [[_ y] reach] (f extended y R-reduced
-                                                                               (clojure.set/union found
-                                                                                 (set (apply concat (for [p extended] (for [n p] (list n y)))))))))
-                                 found)
-                               ))
+                  (let [reach (filter (fn [[a b]] (= a x)) R)
+                        R-reduced (clojure.set/difference R (set reach))
+                        extended (if (empty? priors)
+                                   (list (list x))
+                                   (map #(cons x %) priors)) ; add x to the path
+                        ]
+                    (if (seq reach)
+                      (apply clojure.set/union (for [[_ y] reach]
+                                                 (f extended y R-reduced
+                                                    (clojure.set/union found
+                                                                       (set (apply concat (for [p extended] (for [n p] (list n y)))))))))
+                      found)
+                    ))
               )]
       (apply clojure.set/union
-        (for [x (set (for [[y _] R] y))]
-          (f '() x R #{}))))))
+             (for [x (set (for [[y _] R] y))]
+               (f '() x R #{}))))))
 
 (defcheck solution-42e040d2
   (fn [pairs]
@@ -2032,9 +2033,9 @@
     [relations]
     (letfn [(step [pairs]
               (clojure.set/union pairs
-                (for [[x1 y1] pairs
-                      [x2 y2] pairs :when (= y1 x2)]
-                  [x1 y2])))]
+                                 (set (for [[x1 y1] pairs
+                                            [x2 y2] pairs :when (= y1 x2)]
+                                        [x1 y2]))))]
       (loop [prev-pairs relations]
         (let [next-pairs (step prev-pairs)]
           (if (= prev-pairs next-pairs)
@@ -2270,7 +2271,7 @@
                                       all-infer (filter #(= (first %) item2) c)
                                       new-rels (map (fn [x] [item1 (second x)] ) all-infer)
                                       ]
-                                  (recur (clojure.set/union curr new-rels) remains)
+                                  (recur (clojure.set/union curr (set new-rels)) remains)
                                   ))))] (loop [curr col]
                                           (let [updated (il curr)]
                                             (if (= updated curr)
@@ -2953,7 +2954,7 @@
                   nil) rel)))]
       (loop [cur col]
         (let [iter (reduce clojure.set/union cur
-                     (for [p cur] (close-with p cur)))]
+                           (for [p cur] (set (close-with p cur))))]
           (if (= iter cur)
             iter
             (recur iter)))))))
@@ -3225,12 +3226,13 @@
 (defcheck solution-7292064c
   (fn [s]
     (loop [t s]
-      (let [d (mapcat
+      (let [d (set
+               (mapcat
                 (fn [[k v]]
                   (map
-                    (fn [[m n]] [k n])
-                    (filter (fn [e] (= v (first e))) t)
-                    )) t)]
+                   (fn [[m n]] [k n])
+                   (filter (fn [e] (= v (first e))) t)
+                   )) t))]
         (if (clojure.set/subset? d t) t (recur (clojure.set/union d t))))
       )))
 
@@ -3321,7 +3323,7 @@
   (fn tran-clo [s]
     (let [relate? (fn [[a b] [c d]] (when (= b c) [a d]))
           relations (fn [a] (filter identity (map #(relate? a %) s)))
-          news (clojure.set/union s (mapcat #(relations %) s))]
+          news (clojure.set/union s (set (mapcat #(relations %) s)))]
       (if (= s news) s (tran-clo news)))))
 
 (defcheck solution-73800bde
@@ -3946,10 +3948,10 @@
 
 (defcheck solution-866d0ff0
   (fn transitive-clojure [binary-relation]
-    (letfn [(new-pairs [[a b] relation] (into {} (for [[x c] relation :when (= x b)] [a c])))]
+    (letfn [(new-pairs [[a b] relation] (into #{} (for [[x c] relation :when (= x b)] [a c])))]
       (loop [s binary-relation ns binary-relation]
         (let [addition (->> (map #(new-pairs % s) ns) (reduce clojure.set/union))
-              extension (clojure.set/union s addition)]
+              extension (clojure.set/union s (set addition))]
           (if (= extension s) s (recur extension addition)))))))
 
 (defcheck solution-8674ba8f
@@ -4214,16 +4216,17 @@
 (defcheck solution-91092b60
   (fn [x]
     (let [y (clojure.set/union
-              x
+             x
+             (set
               (apply
-                concat
-                (map
-                  (fn [[a b]]
-                    (map
-                      (fn [[b c]]
-                        [a c])
-                      (filter #(= b (first %)) x)))
-                  x)))]
+               concat
+               (map
+                (fn [[a b]]
+                  (map
+                   (fn [[b c]]
+                     [a c])
+                   (filter #(= b (first %)) x)))
+                x))))]
       (if (= x y)
         x
         (recur y)))))
@@ -4278,9 +4281,9 @@
 (defcheck solution-930d5136
   (fn [s]
     (let [extra (for [[a b] s [c d] s :when (= b c)] [a d])]
-      (if (clojure.set/subset? extra s)
+      (if (clojure.set/subset? (set extra) s)
         s
-        (recur (clojure.set/union s extra))
+        (recur (clojure.set/union s (set extra)))
         )
       )
     ))
@@ -4563,7 +4566,7 @@
                 relas
                 ))
             ]
-      (let [eles (distinct (apply clojure.set/union start-set))
+      (let [eles (->> start-set (mapcat identity) (distinct))
             n (count eles)
             three-cart (cart [(range n) (range n) (range n)])
             three-way (filter #(= 3 (count (distinct %))) three-cart)
@@ -4903,6 +4906,7 @@
   (fn [arg] (reduce (fn [acc e] (->> (disj acc e)
                                   (filter #(= (first %) (last e)))
                                   (map #(list (first e) (last %)))
+                                  set
                                   (clojure.set/union acc))) arg arg)))
 
 (defcheck solution-a31ddd2b
@@ -5123,7 +5127,7 @@
               (->> k
                 graph
                 (iterate (fn [reachable]
-                           (clojure.set/union reachable (mapcat graph reachable))))
+                           (clojure.set/union reachable (set (mapcat graph reachable)))))
                 (partition 2 1) ;; keep going until no change.
                 (some #(when (apply = %)
                          (first %)))))]
@@ -5397,7 +5401,7 @@
                           (filter #(= value (first %)) s))]
               trans))
           (update [s]
-            (clojure.set/union (mapcat #(update1 % s) s) s))]
+            (clojure.set/union (set (mapcat #(update1 % s) s)) s))]
     (fn trans [s]
       (if (= (update s) s)
         s
@@ -5470,6 +5474,18 @@
       (if (empty? news)
         s
         (recur (into s news))))))
+
+(defcheck solution-b205dad6
+  (fn [s]
+    (let [add-ent (fn add-ent [parent child setdict]
+                    (if (nil? child) #{}
+                                     (clojure.set/union (into #{} setdict) #{[parent child]} (add-ent parent (get setdict child) setdict))))
+          make-dict (fn make-dict [s]
+                      (if (empty? s) {}
+                                     (let [[k v] (first s)]
+                                       (apply conj {k v} (make-dict (rest s))))))
+          sdict (make-dict s)]
+      (apply clojure.set/union (map #(add-ent % (get sdict %) sdict) (keys sdict))))))
 
 (defcheck solution-b31b8ff
   (fn [xs]
@@ -5789,7 +5805,7 @@
                 (if-let [b' (m b)]
                   (recur [a b'] (conj out [a b']))
                   out)))]
-      (clojure.set/union s (filter #(not (empty? %)) (mapcat (partial expand (into {} s)) s))))))
+      (clojure.set/union s (set (filter #(not (empty? %)) (mapcat (partial expand (into {} s)) s)))))))
 
 (defcheck solution-be6cb624
   (fn [is]
@@ -6098,7 +6114,7 @@
 (defcheck solution-c84e7255
   (fn [es]
     (let [
-          ps (clojure.set/union (map first es) (map last es))
+          ps (clojure.set/union (set (map first es)) (set (map last es)))
           es1 (atom es)]
       (doseq [k ps i ps j ps]
         (if (and (@es1 [i k]) (@es1 [k j]))
@@ -6306,7 +6322,7 @@
                         nil
                         [a (nth seconds ia)])))
           nexts (filter (complement nil?) (map (partial augment s) s))
-          s-plus (clojure.set/union s nexts)]
+          s-plus (clojure.set/union s (set nexts))]
       (if (= s s-plus)
         s
         (__ s-plus)))))
@@ -6753,7 +6769,7 @@
   (fn xx[s]
     (letfn [(i[[bs s]]
               (let [n (mapcat (fn[[a b]] (mapcat (fn[[c d]] (when (and (= b c) (not (s [a d]))) [[a d]])) s)) bs)]
-                [n (clojure.set/union s n)]))]
+                [n (clojure.set/union s (set n))]))]
       (last (last (take-while (comp seq first) (iterate i [s s])))))))
 
 (defcheck solution-dc778b1
@@ -7048,8 +7064,8 @@
   reduce #(let [[r1 r2] %2]
             (clojure.set/union
               (conj %1 %2)
-              (for [[f s] %1 :when (= f r2)] [r1 s])
-              (for [[f s] %1 :when (= s r1)] [f r2])
+              (set (for [[f s] %1 :when (= f r2)] [r1 s]))
+              (set (for [[f s] %1 :when (= s r1)] [f r2]))
               )) #{})
 
 (defcheck solution-e8471203
@@ -7348,7 +7364,7 @@
 
 (defcheck solution-f29b0c23
   (fn transitive-closure [s]
-    (let [new-set  (clojure.set/union s (for [[a b] s [c d] s :when (= b c)] [a d]))]
+    (let [new-set  (clojure.set/union s (set (for [[a b] s [c d] s :when (= b c)] [a d])))]
       (if (= s new-set) s (transitive-closure new-set)))))
 
 (defcheck solution-f39eabe1
@@ -7536,7 +7552,7 @@
                 rc (rest candidates)
                 nacc (conj acc fc)
                 new_transitions (set (map #(combine fc %) (filter #(extends fc %) relset)))
-                nc (clojure.set/union rc new_transitions)]
+                nc (clojure.set/union (set rc) new_transitions)]
             (recur nc nacc)
             ))))))
 
@@ -7974,10 +7990,10 @@
               (let [new-tuples (clojure.set/union xs s)
                     xss (clojure.set/union xs #{tuple})
                     xss (if-let [ts (seq (filter #(= (second %) (first tuple)) new-tuples))]
-                          (clojure.set/union xss (map (fn [t] [(first t) (second tuple)]) ts))
+                          (clojure.set/union xss (set (map (fn [t] [(first t) (second tuple)]) ts)))
                           xss)
                     xss (if-let [ts (seq (filter #(= (first %) (second tuple)) new-tuples))]
-                          (clojure.set/union xss (map (fn [t] [(first tuple) (second t)]) ts))
+                          (clojure.set/union xss (set (map (fn [t] [(first tuple) (second t)]) ts)))
                           xss)]
 
                 xss)) #{} s)))
