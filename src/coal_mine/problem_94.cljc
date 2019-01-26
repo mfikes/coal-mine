@@ -2573,6 +2573,26 @@
                 (and (not live?) (= n 3)) \#
                 :else \space))))))))
 
+(defcheck solution-3e78e356
+  (fn [board]
+    (letfn [(neighbors [[row column]]                       ;get the neighbor positions
+              (map (fn [[r c]] [(+ r row), (+ c column)]) '([-1 -1] [-1 0] [-1 1] [0 -1] [0 1] [1 -1] [1 0] [1 1])))
+            (cleanPositions [row column posSeq]             ;remove illegal positions
+              (filter (fn [[r c]] (and (< -1 r row) (< -1 c column))) posSeq))]
+      (let [row (count board) column (count (first board))]
+        (into []                                            ;prepare the final board result
+          (for [r (range row)]                              ;iterate over rows
+            (apply str                                      ;prepare the row result
+              (for [c (range column)]                       ;iterate over columns
+                (let [localVal   (get (get board r) c)      ;get local value
+                      numOfLives (count (filter #(= \# %) (map (fn [[r c]] (get (get board r) c)) (cleanPositions row column (neighbors [r c])))))] ;number of lives around
+                  (if (= localVal \#)                       ;game rules
+                    (cond
+                      (< numOfLives 2) \space
+                      (< numOfLives 4) \#
+                      :else \space)
+                    (if (= numOfLives 3) \# \space)))))))))))
+
 (defcheck solution-3fb76afb
   (fn [b]
     (letfn [(get-in-board [board pos]
@@ -3060,6 +3080,33 @@
                                  (condi-dead rs))))
                        raw)]
       (map #(apply str %) (partition cc beres)))))
+
+(defcheck solution-467b79a2
+  (fn [strs]
+    (let [
+          m         (count strs)
+          n         (count (first strs))
+          nbs       (fn [[x y]]
+                      (for [dx [-1 0 1] dy [-1 0 1] :when (not= 0 dx dy)]
+                        [(+ x dx) (+ y dy)]))
+          conv-to   (fn [strs]
+                      (reduce (fn [res pos]
+                                (if (= \# (get-in strs pos))
+                                  (conj res pos) res))
+                        []
+                        (for [i (range m)
+                              j (range n)]
+                          [i j])))
+          conv-back (fn [poss]
+                      (let [mapp (vec (repeat m (vec (repeat n \space))))]
+                        (reduce #(assoc-in % %2 \#) mapp poss)))
+          poss      (set (conv-to strs))
+          mapp      (frequencies (mapcat nbs poss))
+          new-poss  (filter
+                      #(or (= 3 (mapp %)) (and (= 2 (mapp %)) (poss %)))
+                      (map first mapp))]
+      #_(println poss)
+      (map (partial apply str) (conv-back new-poss)))))
 
 (defcheck solution-46929fc1
   (fn gol [board]
