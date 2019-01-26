@@ -5489,6 +5489,14 @@
       {}
       coll)))
 
+(defcheck solution-e209ff12
+  (fn [f s]
+    (reduce (fn [memo item]
+              (let [k (f item)
+                    v (memo k [])]
+                (assoc memo k (conj v item)))
+              ) {} s)))
+
 (defcheck solution-e27415b
   (fn [f v]
     (reduce
