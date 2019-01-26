@@ -314,7 +314,7 @@
 
 (defcheck solution-15ef38
   (fn merge-maps [f & maps]
-    (let [allkeys (set (apply clojure.set/union (map keys maps)))]
+    (let [allkeys (set (mapcat keys maps))]
       (apply conj {}
         (for [k allkeys]
           [k (reduce f
@@ -451,7 +451,7 @@
   (fn ff [f & s]
     (reduce
       (fn [prev next]
-        (apply merge prev
+        (apply conj prev
           (map #(if (contains? prev (key %))
                   {(key %) (f (prev (key %)) (val %))}
                   %) next)))
@@ -1405,9 +1405,9 @@
           addvalues (fn [akey]
                       (let [data (remove nil? (map #(%1 akey) maps))]
                         (if (> (count data) 1) (apply f data) (first data))))]
-      (apply clojure.set/union (
-                                 map #(assoc {} %1 (addvalues %1))
-                                 (into [] all-keys))))))
+      (reduce into {} (
+                       map #(assoc {} %1 (addvalues %1))
+                       (into [] all-keys))))))
 
 (defcheck solution-2dd9bc04
   (fn mw [f & res]
@@ -2198,7 +2198,7 @@
 (defcheck solution-436d7eaf
   (fn mergef [f m1 m2 & m3]
     #_(println m1 m2)
-    (let [ks (clojure.set/union (keys m1) (keys m2)),
+    (let [ks (clojure.set/union (set (keys m1)) (set (keys m2))),
           merged (into {}
                    (for [k ks]
                      (cond (and (m1 k) (m2 k)) [k (f (m1 k) (m2 k))],
@@ -2233,7 +2233,7 @@
                        (->> (f (%1 (key %2)) (val %2))
                          (hash-map (key %2))
                          (merge %1))
-                       (merge %1 %2)) m1 m2))]
+                       (conj %1 %2)) m1 m2))]
       (reduce mymerge m ms))))
 
 (defcheck solution-4469ed91
@@ -4581,7 +4581,7 @@
 
 (defcheck solution-79cc6d34
   (fn myMergeWith [f m & ms] (reduce (fn [x y] (reduce #(if (nil? (%1 (key %2)))
-                                                          (merge %1 %2)
+                                                          (conj %1 %2)
                                                           (update-in %1 [(key %2)] f (val %2)))
                                                  x
                                                  y))
@@ -4984,7 +4984,7 @@
 (defcheck solution-81112d1e
   (fn merge-with-function [f & maps]
     (reduce (fn [ms m]
-              (apply merge ms
+              (into ms
                 (reduce (fn [es e]
                           (let [k (key e)
                                 v (val e)]
@@ -5130,7 +5130,7 @@
 (defcheck solution-85fe04b5
   (fn [f & maps]
     (letfn [(r [acc m]
-              (let [keys (clojure.set/union (keys acc) (keys m))]
+              (let [keys (clojure.set/union (set (keys acc)) (set (keys m)))]
                 (into {}
                   (for [key keys]
                     [key (if (contains? acc key)
@@ -5589,7 +5589,7 @@
                                #_(println "new-merge-with-fn" x-map x-entry)
                                (if (contains? x-map (key x-entry))
                                  (merge x-map {(key x-entry) (x (get x-map (key x-entry)) (val x-entry))})
-                                 (merge x-map x-entry)))
+                                 (conj x-map x-entry)))
            apply-f-for-entry (fn iterate-map [f x-map y-map]
                                #_(println "iterate-map" x-map y-map)
                                (if (= 0 (count y-map))
@@ -5809,7 +5809,7 @@
                     (rest input)
                     (if (get result (first x))
                       (update-in result [(first x)] #(f % (last x)))
-                      (merge result x))))))
+                      (conj result x))))))
             (rest remains)))))))
 
 (defcheck solution-9a549489
@@ -6683,7 +6683,7 @@
               (reduce (fn [a b]
                         (if (contains? a (first b))
                           (assoc a (first b) (my-key-merge f a (hash-map (first b) (second b)) (first b)))
-                          (merge a b)))
+                          (conj a b)))
                 map1 map2))]
       (reduce (fn [a1 b1] (my-map-merge f a1 b1)) maps))))
 
@@ -7012,8 +7012,8 @@
               (let [[lp & mr] (seq mr) k (first lp)]
                 (if (nil? lp) ml
                               (if (ml k)
-                                (recur (merge ml [k (f (ml k) (second lp))]) mr)
-                                (recur (merge ml lp) mr)))))]
+                                (recur (conj ml [k (f (ml k) (second lp))]) mr)
+                                (recur (conj ml lp) mr)))))]
       (loop [ml m [mr & mt] ms]
         (if (nil? mr)
           ml
@@ -7678,7 +7678,7 @@
       (reduce mr maps))))
 
 (defcheck solution-c8cb43d4
-  (fn [f & maps] (reduce (fn [m x] (reduce #(merge % (let [k (first %2)] (if (contains? m k) {k (f (get m k) (second %2))} %2))) m x)) {} maps)))
+  (fn [f & maps] (reduce (fn [m x] (reduce #(conj % (let [k (first %2)] (if (contains? m k) {k (f (get m k) (second %2))} %2))) m x)) {} maps)))
 
 (defcheck solution-c913d1ea
   (fn my-merge-with [fun & maps]
@@ -8245,7 +8245,7 @@
       (fn
         [m x]
         (if (nil? (get m (first x)))
-          (merge m x)
+          (conj m x)
           (assoc m (first x)
                    (f (get m (first x)) (last x)))))
       {} (reduce concat a))))
@@ -8403,7 +8403,7 @@
                     (for[[k v] m]
                       (let [new-val (if (contains? acc k) (f (acc k) v) v)]
                         [k new-val]))]
-                (apply merge acc kvs)))]
+                (into acc kvs)))]
 
       (reduce merge-vals maps))))
 
@@ -9677,7 +9677,7 @@
   (fn my-merge-with [f & maps]
     (letfn [(merge-item [fun m item]
               (let [k (key item) v1 (m k) v2 (last item)]
-                (if v1 (merge m {k (apply fun [v1 v2])}) (merge m item))))]
+                (if v1 (merge m {k (apply fun [v1 v2])}) (conj m item))))]
       (letfn [(merge-map [fun m1 m2]
                 (reduce (partial merge-item fun) m1 m2))]
         (reduce (partial merge-map f) {} maps)))))
