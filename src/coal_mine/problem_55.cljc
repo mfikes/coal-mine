@@ -463,6 +463,13 @@
 (defcheck solution-2c072853
   reduce #(merge-with + {%2 1} %1) {})
 
+(defcheck solution-2c72ab5
+  (fn [c]
+    (into {}
+      (map
+        #(vector (first %) (count (second %)))
+        (group-by identity c)))))
+
 (defcheck solution-2cdae556
   (fn cust-freq [coll]
     (reduce
@@ -3005,6 +3012,10 @@
     (into {}
       (map (fn [[k v]] [k (count v)])
         (group-by identity coll)))))
+
+(defcheck solution-b14df3ae
+  (fn [coll]
+    (apply array-map (mapcat identity (map (fn [[k v]] [k (count v)]) (group-by identity coll))))))
 
 (defcheck solution-b1770ed5
   (fn [xs]
