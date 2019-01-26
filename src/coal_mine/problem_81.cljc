@@ -1784,6 +1784,10 @@
 (defcheck solution-a0dec7df
   (fn [x y] (set (filter #(not (nil? (x %))) y))))
 
+(defcheck solution-a19fa537
+  (fn [setA setB] (let [ls (flatten (into (into [] setA) (into [] setB)))]
+                    (into #{} (map key (remove (comp #{1} val) (frequencies ls)))))))
+
 (defcheck solution-a228b8a
   #(reduce (fn [t v] (if (contains? %2 v) (conj t v) t)) #{} %1))
 

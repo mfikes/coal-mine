@@ -3351,6 +3351,9 @@
         myseq
         (recur (conj myseq cnt) (inc cnt))))))
 
+(defcheck solution-f0099a45
+  (fn [s t] (reductions + (conj (repeat (dec (- t s)) 1) s))))
+
 (defcheck solution-f01b3978
   (fn my-range [start end]
     (if (>= start end)

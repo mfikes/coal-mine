@@ -1992,6 +1992,9 @@
   (fn [pos coll]
     [(take pos coll) (drop pos coll)]))
 
+(defcheck solution-f1818aae
+  #(conj (vector (into [] (take %1 %2))) (into [] (drop %1 %2))))
+
 (defcheck solution-f1dbd340
   (fn __ [i l]
     [(take i l) (drop i l)]))

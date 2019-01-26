@@ -2283,6 +2283,9 @@
             [(first l)] (first l))
           )))))
 
+(defcheck solution-b1f68d26
+  partition-by identity)
+
 (defcheck solution-b21d9a15
   (fn [x]
     (let [belongs? (fn [x c] (or (empty? c) (= x (first c))))
@@ -2975,6 +2978,9 @@
                         j
                         ))]
               (recur (conj xs' (repeat (- j i) xi)) j))))))))
+
+(defcheck solution-dd98348b
+  partition-by identity)
 
 (defcheck solution-df10fd78
   (fn re [x]

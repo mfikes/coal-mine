@@ -51,6 +51,11 @@
           (recur (rest colla) (disj collb (first colla)) acc)
           (recur (rest colla) collb (conj acc (first colla))))))))
 
+(defcheck solution-140aa5fe
+  (fn symmetric-difference- [s1 s2]
+    "88. Write a function which returns the symmetric difference of two sets."
+    (clojure.set/union (apply disj s1 s2) (apply disj s2 s1))))
+
 (defcheck solution-141d3e58
   (fn my-sym-diff [s1 s2]
     (letfn [(my-diff [set1 set2] (filter #(not (contains? set2 %)) set1))]
@@ -218,7 +223,7 @@
            (clojure.set/union x y)))))
 
 (defcheck solution-1cf18e4c
-  #(set (clojure.set/union (remove % %2) (remove %2 %))))
+  #(set (into (remove % %2) (remove %2 %))))
 
 (defcheck solution-1d45ec0a
   (fn [s1 s2]
@@ -556,7 +561,8 @@
 
 (defcheck solution-3597ca90
   (fn [s1 s2]
-    (set (clojure.set/union (filter (complement #(contains? s2 %)) s1) (filter (complement #(contains? s1 %)) s2)))))
+    (clojure.set/union (set (filter (complement #(contains? s2 %)) s1))
+                       (set (filter (complement #(contains? s1 %)) s2)))))
 
 (defcheck solution-35e79ed5
   (fn [s1 s2]
@@ -1351,6 +1357,10 @@
                        (into #{} (filter #(not-contains? a %) b) ))]
       (into (difference a b) (difference b a)))))
 
+(defcheck solution-6d3c9951
+  (fn [x y]
+    (into #{} (filter #(not= (nil? (x %)) (nil? (y %))) (clojure.set/union x y)))))
+
 (defcheck solution-6d42f8bf
   #(clojure.set/union
      (clojure.set/difference %1 %2)
@@ -1413,6 +1423,10 @@
   (fn
     [set1 set2]
     (clojure.set/union (clojure.set/difference set1 set2) (clojure.set/difference set2 set1))))
+
+(defcheck solution-71696517
+  (fn [s1 s2] (set (->> (clojure.set/union s1 s2)
+                     (remove #(and (s1 %) (s2 %)))))))
 
 (defcheck solution-71e82039
   (fn [a b]
@@ -1584,6 +1598,15 @@
 (defcheck solution-7c1683c9
   (fn [x y] (set (concat (remove (set (filter x y)) x) (remove (set (filter y x)) y)))))
 
+(defcheck solution-7ca5d8df
+  #(let [all (clojure.set/union %1 %2)]
+     (reduce (fn [res i]
+               (if (and (contains? %1 i) (contains? %2 i))
+                 (disj res i)
+                 res))
+       all
+       all)))
+
 (defcheck solution-7caa3de9
   #(->> (for [x (into %1 %2)
               :when (not= (%1 x) (%2 x))] x)
@@ -1634,7 +1657,8 @@
 
 (defcheck solution-7f474a3c
   (fn [s1 s2]
-    (set (clojure.set/union (remove s2 s1) (remove s1 s2)))))
+    (clojure.set/union (set (remove s2 s1))
+                       (set (remove s1 s2)))))
 
 (defcheck solution-7fd40d01
   (fn sym-diff [seta setb]
@@ -2252,7 +2276,7 @@
           (filter (complement y) x)))))
 
 (defcheck solution-a54726b5
-  #(clojure.set/difference (into % %2) (filter % %2)))
+  #(clojure.set/difference (set (into % %2)) (set (filter % %2))))
 
 (defcheck solution-a56b1b5a
   (fn [s1 s2] (into #{} (concat (seq (filter #(not (contains? s2 %)) (seq s1))) (seq (filter #(not (contains? s1 %)) (seq s2))) ))))
@@ -2319,8 +2343,8 @@
 (defcheck solution-accec664
   (fn [s1 s2]
     (let [both (clojure.set/intersection s1 s2)]
-      (set (clojure.set/union (remove both s1)
-             (remove both s2))))))
+      (clojure.set/union (set (remove both s1))
+                         (set (remove both s2))))))
 
 (defcheck solution-acfc85f2
   (fn [x,y]
@@ -3322,8 +3346,8 @@
   (fn [s1 s2]
     (into #{}
       (clojure.set/union
-        (filter (partial (comp not contains?) s1) s2)
-        (filter (partial (comp not contains?) s2) s1)))))
+       (set (filter (partial (comp not contains?) s1) s2))
+       (set (filter (partial (comp not contains?) s2) s1))))))
 
 (defcheck solution-e5d171bd
   (fn diff-set
@@ -3587,9 +3611,9 @@
     (set (filter #(not (and (a %) (b %))) (into a b)))))
 
 (defcheck solution-f4659967
-  (fn [s1 s2] (set (clojure.set/union (filter (complement (partial contains? s1)) s2)
-                     (filter (complement (partial contains? s2)) s1)
-                     ))))
+  (fn [s1 s2] (clojure.set/union (set (filter (complement (partial contains? s1)) s2))
+                                 (set (filter (complement (partial contains? s2)) s1))
+                                 )))
 
 (defcheck solution-f482ba8b
   (fn [a b]

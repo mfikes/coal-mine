@@ -1660,6 +1660,33 @@
           (if (= merged edge-set) merged (merge-nodes merged))))]
       (= 1 (count (merge-nodes (set (map set edge-list))))))))
 
+(defcheck solution-3794ee79
+  (fn graphConnected[l]
+    (letfn [(createGraph[l]
+              (reduce
+                (fn [m [f s]]
+                  (merge-with (comp vec set concat) m {f [s]} {s [f]})) {} l))
+            (dfsPath
+              ([g node dest] (dfsPath g [] #{} node dest))
+              ([g v s node dest]
+               (cond
+                 (contains? s dest) #{v}
+                 (or (contains? s node) (empty? (g node))) #{}
+                 :else  (reduce
+                         clojure.set/union
+                         (map #(dfsPath g (conj v node) (conj s node) % dest) (g node))))))
+            (cartesianProduct
+              ([s1] (reduce
+                      (fn [s [fst sec]]
+                        (if (or (contains? s [fst sec]) (contains? s [sec fst]) (= fst sec))
+                          s
+                          (conj s [fst sec]))) #{} (cartesianProduct s1 s1)))
+              ([s1 s2] (set (apply concat (map (fn [el] (map #(vec [% el]) s1)) s2)))))]
+      (let [g (createGraph l)]
+        (every? identity (map (complement empty?)
+                           (map (fn [[f s]] (dfsPath g f s))
+                             (cartesianProduct (keys g)))))))))
+
 (defcheck solution-383cc963
   (fn [edges]
     (let [find-connections (fn [m [a b]] (conj m
@@ -3442,6 +3469,23 @@
             (and ((complement empty?) (clojure.set/intersection visited (flatseq m))) ; there's still some accessible nodes
                  (let [found (set (reduce into (for [x visited] (filter (fn [[a b]] (or (= a x) (= b x))) m))))] ; found nodes connected to visited nodes
                    (recur (flatseq found) (remove #(contains? found %) m)))))))))
+
+(defcheck solution-69b8c5c5
+  (fn graph [g]
+    (let [edges (clojure.set/union g (set (map reverse g)))
+          n1 (group-by first edges)
+          nd (fn [x] {(first x) (map second (second x))})
+          nodes (into {} (mapcat nd n1))]
+      (loop [visited {}
+             q [(first nodes)]]
+        (if (empty? q) (= nodes visited)
+                       (let [x (first q)
+                             nxt (filter #(contains? (set (val x)) (key %)) nodes)]
+                         (if (get visited (key x))
+                           (recur visited (rest q))
+                           (let [v2 (conj visited x)
+                                 q2 (concat (rest q) nxt)]
+                             (recur v2 q2)))))))))
 
 (defcheck solution-69efc9e0
   (fn connected? [edges']
@@ -7041,6 +7085,19 @@
         )
       )
     ))
+
+(defcheck solution-bb22de0f
+  (fn [p]
+    (letfn [(conn? [m c e v]
+              (cond (= c e) true
+                    (contains? v c) false
+                    (empty? (m c)) false
+                    :else (reduce #(or %1 %2) (flatten (for [n (m c)] (conn? m n e (conj v c)))))))]
+      (let [e (apply merge-with concat (map #(hash-map (first %) [(second %)]) (concat p (map reverse p))))
+            k (keys e)]
+        (if (= (count k) 1)
+          true
+          (reduce #(and %1 %2) (for [x (rest k)] (conn? e (first k) x #{}))))))))
 
 (defcheck solution-bb30f1ce
   (fn graph-conn [edges]

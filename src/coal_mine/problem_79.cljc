@@ -3596,6 +3596,18 @@
            (minpath (+ sum (nth hr (inc pos))) (inc pos) tr))))
      (ffirst sq) 0 (rest sq))))
 
+(defcheck solution-74b845f5
+  (fn [l]
+    (let [[f & l] (reverse l)]
+      (ffirst
+        (reduce
+          (fn [a b]
+            (map (fn [u P]
+                   (let [[d p] (first (sort-by first P))]
+                     [(+ u d) (conj p u)]))
+              b (partition 2 1 a)))
+          (map (fn [v] [v [v]]) f) l)))))
+
 (defcheck solution-75db5674
   (fn tmp [[f s & r]]
     (if (and f s)
@@ -3958,8 +3970,7 @@
                 (->> (partition 2 1 bot)
                   (map #(apply min %))
                   (map vector top)
-                  (map #(apply + %))
-                  (min))))
+                  (map #(apply + %)))))
       (first))))
 
 (defcheck solution-803d1305

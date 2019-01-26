@@ -94,7 +94,7 @@
     (set
       (if (empty? ls) '(#{})
                       (clojure.set/union (powerset (next ls))
-                        (map #(set (conj  % (first ls))) (powerset (next ls))))))))
+                                         (set (map #(set (conj  % (first ls))) (powerset (next ls)))))))))
 
 (defcheck solution-1402f006
   (fn [coll]
@@ -149,7 +149,7 @@
       (let [f (first s)
             r (disj s f)
             p (power r)]
-        (clojure.set/union p (map #(conj % f) p))))))
+        (clojure.set/union p (set (map #(conj % f) p)))))))
 
 (defcheck solution-14b51474
   (fn [s]
@@ -316,7 +316,7 @@
       coll)))
 
 (defcheck solution-1a4f7719
-  (fn power [xs] (if (empty? xs) #{#{}} (let [p-rest (power (rest xs))] (clojure.set/union p-rest (map #(conj % (first xs)) p-rest))))))
+  (fn power [xs] (if (empty? xs) #{#{}} (let [p-rest (power (rest xs))] (clojure.set/union p-rest (set (map #(conj % (first xs)) p-rest)))))))
 
 (defcheck solution-1a805a1e
   (fn [s]
@@ -341,6 +341,23 @@
   reduce (fn [m v]
            (into m
              (map #(conj % v) m))) #{#{}})
+
+(defcheck solution-1b974d6b
+  (fn [l]
+    (set (loop [so-far [#{}]
+                left l
+                ]
+           (if (empty? left)
+             so-far
+             (recur
+               (apply conj so-far
+                 (for [s so-far
+                       l [(first left)]]
+                   (conj s l)))
+               (rest left))
+             )
+           ))
+    ))
 
 (defcheck solution-1bb2952
   (fn ps [s] (if (empty? s) #{s}
@@ -370,7 +387,7 @@
     (let [rec-helper
           (fn rec-helper [curr remaining]
             (if (empty? remaining)
-              (set curr)
+              [(set curr)]
               (do
                 (vector
                   (rec-helper (conj curr (first remaining)) (rest remaining))
@@ -466,6 +483,17 @@
                          #(conj % (first s))
                          (p (set (rest s)))))))))
 
+(defcheck solution-203e4dc9
+  (fn iter
+    ([in]
+     (iter in #{#{}}))
+    ([in out]
+     (if (empty? in)
+       out
+       (recur (disj in (first in))
+         (apply conj out
+           (map #(conj % (first in)) out)))))))
+
 (defcheck solution-2086541
   (fn my-ps [s]
     (if (empty? s)
@@ -485,7 +513,7 @@
            r #{#{}}]
       (if (nil? (first s))
         r
-        (recur (rest s) (clojure.set/union r(map #(clojure.set/union #{(first s)} %) r)))))))
+        (recur (rest s) (clojure.set/union r (set (map #(clojure.set/union #{(first s)} %) r))))))))
 
 (defcheck solution-20f84f45
   (fn  [s]
@@ -544,7 +572,7 @@
             r     (disj s f)
             prest (p r)
             conjf (map #(conj % f) prest)]
-        (clojure.set/union prest conjf)))))
+        (clojure.set/union prest (set conjf))))))
 
 (defcheck solution-22891a2d
   (fn power-set [coll]
@@ -636,7 +664,7 @@
     (if	(empty? s)
       #{#{}}
       (let [s0 (first s), ps (power-set (rest s))]
-        (conj (clojure.set/union ps (map #(conj % s0) ps)) #{s0})))))
+        (conj (clojure.set/union ps (set (map #(conj % s0) ps))) #{s0})))))
 
 (defcheck solution-2374c832
   (letfn [(next-sets [s]
@@ -814,6 +842,17 @@
          g (fn [a b] (set (concat a (f b a)))) ]
      (reduce g #{#{}} %)))
 
+(defcheck solution-261f4054
+  (fn ps [s]
+    (loop [res #{#{}} li s]
+      (if (empty? li)
+        res
+        (recur
+          (apply conj res
+            (for [x res]
+              (clojure.set/union x (hash-set (first li)))))
+          (rest li))))))
+
 (defcheck solution-268c1c7a
   (fn f [s]
     (if-let [[x & xs] (seq s)]
@@ -843,7 +882,7 @@
 (defcheck solution-2829556e
   (fn [coll]
     (reduce (fn [r elt]
-              (clojure.set/union r (map #(conj % elt) r)))
+              (clojure.set/union r (set (map #(conj % elt) r))))
       #{#{}}
       coll)))
 
@@ -853,7 +892,7 @@
       #{ #{} }
       (let [[x & xs] (seq xs)
             p (power-set xs)]
-        (clojure.set/union p (map (partial clojure.set/union #{x}) p))))))
+        (clojure.set/union p (set (map (partial clojure.set/union #{x}) p)))))))
 
 (defcheck solution-284b7784
   (fn myPowerSet
@@ -870,8 +909,8 @@
     (reduce
       (fn [res elem]
         (clojure.set/union res
-          (map #(clojure.set/union %1 #{elem})
-            res)
+                           (set (map #(clojure.set/union (set %1) #{elem})
+                                     res))
           )
         )
       #{#{}}
@@ -938,7 +977,8 @@
     (if (empty? s) #{s}
                    (let [elem #{(first s)}
                          others (disj s (first s))]
-                     (clojure.set/union (subsets others) (map #(clojure.set/union elem %) (subsets others)))))))
+                     (clojure.set/union (subsets others)
+                                        (set (map #(clojure.set/union elem %) (subsets others))))))))
 
 (defcheck solution-2eb2ed39
   (fn ps [s]
@@ -1076,7 +1116,7 @@
     (if (empty? s)
       #{#{}}
       (let [s1 (first s) rs (disj s s1) prs (power-set rs)]
-        (clojure.set/union prs (map #(conj % s1) prs))))))
+        (clojure.set/union prs (set (map #(conj % s1) prs)))))))
 
 (defcheck solution-31f9fb31
   (fn ps [s]
@@ -1096,8 +1136,8 @@
       (map #(into #{} %)
         ((fn ps [ls]
            (if (empty? ls) '(())
-                           (clojure.set/union (ps (next ls))
-                             (map #(conj % (first ls)) (ps (next ls))))))
+               (clojure.set/union (set (ps (next ls)))
+                                  (set (map #(conj % (first ls)) (ps (next ls)))))))
          s)))))
 
 (defcheck solution-3303b396
@@ -1144,7 +1184,7 @@
       (let [pwr (power (rest s))]
         (clojure.set/union
           pwr
-          (map #(conj % (first s)) pwr))))))
+          (set (map #(conj % (first s)) pwr)))))))
 
 (defcheck solution-34c3c486
   (fn pset [s]
@@ -1352,7 +1392,9 @@
                 (if xs
                   [new-s (f new-s xs) (f s xs)]
                   new-s)))]
-      (into #{#{}} (flatten (f #{} (seq s)))))))
+      (into #{#{}} (if-let [s (seq s)]
+                     (flatten (f #{} s))
+                     [])))))
 
 (defcheck solution-3958869
   (fn [s]
@@ -1465,13 +1507,13 @@
           (rest xs)
           (clojure.set/union
             acc
-            (map #(conj % (first xs)) acc)))))))
+            (set (map #(conj % (first xs)) acc))))))))
 
 (defcheck solution-3c68ad9
   (fn powerset [ls]
     (if (empty? ls) #{#{}}
                     (clojure.set/union (powerset (next ls))
-                      (map #(conj % (first ls)) (powerset (next ls)))))))
+                                       (set (map #(conj % (first ls)) (powerset (next ls))))))))
 
 (defcheck solution-3c83ec3f
   (fn ps [s]
@@ -1493,7 +1535,7 @@
     (reduce (fn [power-set new-elem]
               (clojure.set/union
                 power-set
-                (map #(conj % new-elem) power-set)))
+                (set (map #(conj % new-elem) power-set))))
       #{#{}}
       s)))
 
@@ -1634,6 +1676,10 @@
                         (concat [s] [[hd]] (map #(conj % hd) perm-rest) perm-rest))))]
       (conj (set (map set (permute x))) #{}))))
 
+(defcheck solution-42a9f8d
+  (fn ps [s]
+    (reduce (fn [k i] (into k (cons #{i} (map #(conj % i) k)))) #{#{}} s)))
+
 (defcheck solution-42f5cd1e
   (fn [x] (set
             (reduce
@@ -1679,7 +1725,7 @@
   (fn powerset [ls]
     (if (empty? ls) #{#{}}
                     (clojure.set/union (powerset (next ls))
-                      (map #(conj % (first ls)) (powerset (next ls)))))))
+                                       (set (map #(conj % (first ls)) (powerset (next ls))))))))
 
 (defcheck solution-44182bbe
   (fn p [s]
@@ -1710,7 +1756,7 @@
   (fn gen-powerset [s]
     (if-let [f (first s)]
       (let [smaller (gen-powerset (rest s))]
-        (clojure.set/union smaller (map #(conj % f) smaller))
+        (clojure.set/union smaller (set (map #(conj % f) smaller)))
         )
       #{#{}}
       )))
@@ -1736,11 +1782,12 @@
       #{#{}}
       (let [fst (first st)
             left-power-set (power-set (rest st))]
-        (clojure.set/union left-power-set
-          (map #(conj % fst) left-power-set))))))
+        (clojure.set/union (set left-power-set)
+                           (set (map #(conj % fst) left-power-set)))))))
 
 (defcheck solution-44c8a704
-  (fn powerset [s] (set (map set ((fn p [s] (if (empty? s) '(()) (clojure.set/union (p (next s)) (map #(conj % (first s)) (p (next s)))))) s)))))
+  (fn powerset [s] (set (map set ((fn p [s] (if (empty? s) '(()) (clojure.set/union (set (p (next s)))
+                                                                                    (set (map #(conj % (first s)) (p (next s))))))) s)))))
 
 (defcheck solution-44e661c7
   #(let [s (count %)
@@ -1804,8 +1851,9 @@
       #{#{}}
       (let [ts (subsets (rest s))]
         (->> ts
-          (map #(conj % (first s)))
-          (clojure.set/union ts))))))
+             (map #(conj % (first s)))
+             set
+             (clojure.set/union ts))))))
 
 (defcheck solution-466f0b2c
   (fn [input]
@@ -1835,9 +1883,9 @@
       (let [f (-> s first hash-set)
             p (power-set (into #{} (rest s)))]
         (clojure.set/union #{f}
-          (map #(clojure.set/union % f)
-            p)
-          p)))))
+                           (set (map #(clojure.set/union % f)
+                                     p))
+                           p)))))
 
 (defcheck solution-47197587
   (fn [s]
@@ -1887,19 +1935,19 @@
 (defcheck solution-48498d9d
   (fn subsets [st]
     (set
-      (if
-       (empty? st)
-        #{#{}}
-        (let
-         [rs (subsets
-               (rest st))]
-          (clojure.set/union
-            (map
-              #(conj
-                 %
-                 (first st))
-              rs)
-            rs))))))
+     (if
+         (empty? st)
+       #{#{}}
+       (let
+           [rs (subsets
+                (rest st))]
+         (clojure.set/union
+          (set (map
+                #(conj
+                  %
+                  (first st))
+                rs))
+          rs))))))
 
 (defcheck solution-486d0ab8
   #(let [c (count %)]
@@ -1916,7 +1964,7 @@
       #{#{}}
       (let [n (next ls)
             com (combinations n)]
-        (clojure.set/union com (map #(conj % (first ls)) com))))))
+        (clojure.set/union com (set (map #(conj % (first ls)) com)))))))
 
 (defcheck solution-4890f1a1
   (fn p [s]
@@ -1969,7 +2017,7 @@
             subset (superset r)]
         (clojure.set/union
           subset
-          (map #(conj % f) subset))))))
+          (set (map #(conj % f) subset)))))))
 
 (defcheck solution-4984a149
   (fn [s]
@@ -2065,7 +2113,7 @@
                              :else (let [e (first input) t (disj input e)]
                                      (clojure.set/union
                                        (powerset t)
-                                       (into (map #(conj % e)  (powerset t)) #{}))))))
+                                       (into #{} (map #(conj % e)  (powerset t))))))))
 
 (defcheck solution-4bc12c5f
   (fn p [x]
@@ -2148,7 +2196,7 @@
             b (disj s a)
             p2 (power-set b)
             p3 (map #(conj % a) p2)]
-        (clojure.set/union p2 p3)
+        (clojure.set/union p2 (set p3))
         ))))
 
 (defcheck solution-4da52c58
@@ -2425,7 +2473,7 @@
     (if (empty? x)
       #{#{}}
       (clojure.set/union (pset (next x))
-        (map #(conj % (first x)) (pset (next x)))))))
+                         (set (map #(conj % (first x)) (pset (next x))))))))
 
 (defcheck solution-56593757
   (fn [s]
@@ -2513,7 +2561,7 @@
             rest (disj s first-elt)
             ps-rest (ps rest)
             ps-with-first (map #(conj % first-elt) ps-rest)]
-        (clojure.set/union ps-rest ps-with-first)))))
+        (clojure.set/union ps-rest (set ps-with-first))))))
 
 (defcheck solution-58ec33af
   #(set
@@ -2542,6 +2590,14 @@
 (defcheck solution-59aebc8a
   (fn [s]
     (set (reduce #(concat %1 (map (fn [i] (set (conj i %2))) %1)) #{#{}} s))))
+
+(defcheck solution-59f2743
+  (fn [s]
+    (loop [s (vec s) p #{#{}}]
+      (if (empty? s)
+        p
+        (recur (rest s)
+          (into p (map #(conj % (first s)) p)))))))
 
 (defcheck solution-5a5f275
   #(set
@@ -2592,15 +2648,15 @@
       (let [others (power-set (rest coll))]
         (clojure.set/union
           others
-          (map #(conj % (first coll)) others)
+          (set (map #(conj % (first coll)) others))
           )))))
 
 (defcheck solution-5b0999a5
   (fn powerset [a-set]
     (if (empty? a-set) #{#{}}
                        (clojure.set/union (powerset (next a-set))
-                         (map #(conj % (first a-set))
-                           (powerset (next a-set)))))))
+                                          (set (map #(conj % (first a-set))
+                                                    (powerset (next a-set))))))))
 
 (defcheck solution-5b0f80dd
   (fn power-set [s]
@@ -2645,8 +2701,8 @@
 (defcheck solution-5bed513a
   (fn my-power-set [coll]
     (letfn [(add-to-set [acc v]
-              (concat acc [v]
-                      (map #(clojure.set/union v %) acc)))]
+              (set (concat acc [v]
+                           (map #(clojure.set/union v %) acc))))]
       (set
         (clojure.set/union #{#{}}
           (reduce
@@ -2755,7 +2811,7 @@
   (fn [S]
     (reduce
       (fn [ps, i]
-        (clojure.set/union ps (map #(clojure.set/union % #{i}) ps))) #{ #{} } S)))
+        (clojure.set/union ps (set (map #(clojure.set/union % #{i}) ps)))) #{ #{} } S)))
 
 (defcheck solution-603e4d99
   (fn [ps]
@@ -2912,7 +2968,7 @@
   (fn [i]
     (reduce
       (fn [o v]
-        (clojure.set/union o (map #(conj % v) o)))
+        (clojure.set/union o (set (map #(conj % v) o))))
       #{#{}}
       i)))
 
@@ -2949,7 +3005,7 @@
   (fn ps [s]
     (if (empty? s) #{#{}}
                    (let [n (ps (next s))]
-                     (clojure.set/union n (map #(conj % (first s)) n))))))
+                     (clojure.set/union n (set (map #(conj % (first s)) n)))))))
 
 (defcheck solution-669b429
   (fn [s]
@@ -2984,7 +3040,7 @@
     [a-set]
     (loop [[x & xs] (vec a-set) res #{#{}}]
       (if x
-        (recur xs (clojure.set/union res (map #(conj % x) res)))
+        (recur xs (clojure.set/union res (set (map #(conj % x) res))))
         res))))
 
 (defcheck solution-680e12be
@@ -3042,7 +3098,7 @@
     ((fn dfs [l r]
        (cond
          (empty? l) #{r}
-         :else (apply merge (dfs (rest l) r) (dfs (rest l) (merge r (first l))))))
+         :else (apply conj (dfs (rest l) r) (dfs (rest l) (conj r (first l))))))
      coll #{})))
 
 (defcheck solution-6c39f412
@@ -3160,7 +3216,7 @@
       (if (empty? coll)
         #{#{}}
         (let [pset (powerset xs)]
-          (clojure.set/union pset (map #(into #{x} %) pset)))))))
+          (clojure.set/union pset (set (map #(into #{x} %) pset))))))))
 
 (defcheck solution-715ac7b0
   (fn power-set [full-set]
@@ -3405,7 +3461,7 @@
     (reduce (fn [acc v]
               (clojure.set/union
                 acc
-                (map #(conj % v) acc)))
+                (set (map #(conj % v) acc))))
       #{#{}}
       s)))
 
@@ -3708,8 +3764,8 @@
   (fn [s]
     (reduce (fn [result next]
               (clojure.set/union result
-                (map #(conj % next)
-                  result)))
+                                 (set (map #(conj % next)
+                                           result))))
       #{#{}}
       s)))
 
@@ -3763,7 +3819,7 @@
   (fn powerset [s]
     (if (empty? s) '#{#{}}
                    (let [sp (powerset (next s))]
-                     (clojure.set/union sp (map #(set (conj % (first s))) sp))))))
+                     (clojure.set/union sp (set (map #(set (conj % (first s))) sp)))))))
 
 (defcheck solution-80ad1926
   (fn power [x]
@@ -3772,7 +3828,7 @@
             others (power (disj x head))]
         (clojure.set/union
           others
-          (map #(conj % head) others)))
+          (set (map #(conj % head) others))))
       #{#{}})
     ))
 
@@ -3955,7 +4011,7 @@
     (if (empty? items)
       #{#{}}
       (clojure.set/union (powerset (next items))
-        (map #(conj % (first items)) (powerset (next items)))))))
+                         (set (map #(conj % (first items)) (powerset (next items))))))))
 
 (defcheck solution-897154a8
   (fn [s]
@@ -4049,7 +4105,7 @@
 (defcheck solution-8e3b0a60
   (fn powerset [coll]
     (reduce (fn [res next]
-              (clojure.set/union res (map #(conj % next) res)))
+              (clojure.set/union res (set (map #(conj % next) res))))
       #{#{}}
       coll)))
 
@@ -4188,7 +4244,7 @@
             subset (power-set tail)]
         (clojure.set/union
           subset
-          (map #(clojure.set/union #{head} %) subset))))))
+          (set (map #(clojure.set/union #{head} %) subset)))))))
 
 (defcheck solution-9539218a
   (fn [s]
@@ -4320,7 +4376,7 @@
   (fn mps [ls] (set
                  (if (empty? ls) '(#{})
                                  (clojure.set/union (mps (next ls))
-                                   (map #(conj % (first ls)) (mps (next ls))))))))
+                                                    (set (map #(conj % (first ls)) (mps (next ls)))))))))
 
 (defcheck solution-986bf7c2
   (fn pick
@@ -4357,7 +4413,7 @@
     (if (seq x)
       (let [s (powerset (rest x)) ]
         (clojure.set/union s
-          (map (fn [p] (conj p (first x))) s)))
+                           (set (map (fn [p] (conj p (first x))) s))))
       #{#{}})))
 
 (defcheck solution-999b63d7
@@ -4384,7 +4440,7 @@
   (fn powerset [ls]
     (if (empty? ls) #{#{}}
                     (set (map set (clojure.set/union (powerset (next ls))
-                                    (map #(conj % (first ls)) (powerset (next ls)))))))))
+                                                     (set (map #(conj % (first ls)) (powerset (next ls))))))))))
 
 (defcheck solution-9a5084ca
   (fn [s]
@@ -4440,7 +4496,7 @@
 
 (defcheck solution-9b6d4168
   (partial reduce
-    (fn [s x] (clojure.set/union s (map #(conj % x) s)))
+           (fn [s x] (clojure.set/union s (set (map #(conj % x) s))))
     #{#{}}))
 
 (defcheck solution-9ba5c8fd
@@ -4657,7 +4713,7 @@
       #{#{}}
       (clojure.set/union
         (powerset (next ls))
-        (map #(conj % (first ls)) (powerset (next ls)))))))
+        (set (map #(conj % (first ls)) (powerset (next ls))))))))
 
 (defcheck solution-a2fcb3be
   reduce (fn [c s] (into c (map #(conj % s) c))) #{#{}})
@@ -4788,13 +4844,13 @@
     ([lst] (p85 #{#{}} lst))
     ([s lst]
      (if (empty? lst) s
-                      (p85 (reduce conj s (for [ss s] (conj ss (first lst)))) (next lst))))))
+         (p85 (reduce conj s (for [ss s] (conj ss (first lst)))) (next lst))))))
 
 (defcheck solution-a79c16a4
   (fn [x]
     (reduce
       (fn addelem [old elem]
-        (apply clojure.set/union old (conj #{} (map #(conj % elem) old))))
+        (apply clojure.set/union old (conj #{} (set (map #(conj % elem) old)))))
       #{#{}}
       (map identity x)
       )
@@ -4816,7 +4872,7 @@
         #{#{}}
         (union
           (powerset (next s))
-          (map #(conj % (first s)) (powerset (next s))))))))
+          (set (map #(conj % (first s)) (powerset (next s)))))))))
 
 (defcheck solution-a8e7bb46
   (fn [s]
@@ -4889,7 +4945,7 @@
     (if (empty? s)
       #{#{}}
       (let [x (first s) ps1 (power-set (rest s))]
-        (clojure.set/union ps1 (map #(conj % x) ps1))))))
+        (clojure.set/union ps1 (set (map #(conj % x) ps1)))))))
 
 (defcheck solution-acde742a
   (fn [s]
@@ -4950,7 +5006,7 @@
       (let [pset (power-set (rest coll))]
         (clojure.set/union
           pset
-          (map #(conj % (first coll)) pset)
+          (set (map #(conj % (first coll)) pset))
           )
         )
       )
@@ -5012,7 +5068,7 @@
 (defcheck solution-b1c47604
   (fn i [m]
     (if (empty? m) #{(set m)}
-                   (clojure.set/union (i (rest m)) (map #(conj % (first m)) (i (rest m)))))))
+        (clojure.set/union (i (rest m)) (set (map #(conj % (first m)) (i (rest m))))))))
 
 (defcheck solution-b203685
   (fn [coll]
@@ -5124,7 +5180,7 @@
   (fn p [c]
     (if (empty? c) #{#{}}
                    (clojure.set/union (p (next c))
-                     (map #(conj % (first c)) (p (rest c)))))))
+                                      (set (map #(conj % (first c)) (p (rest c))))))))
 
 (defcheck solution-b4319f68
   (fn [s]
@@ -5179,7 +5235,7 @@
   (fn power [s]
     (if (empty? s) #{#{}}
                    (let [r (power (rest s))]
-                     (clojure.set/union r (map #(conj % (first s)) r))))))
+                     (clojure.set/union r (set (map #(conj % (first s)) r)))))))
 
 (defcheck solution-b5b624c0
   (fn [s]
@@ -5203,7 +5259,7 @@
   (fn ps[s]
     (if (seq s)
       (let [r (ps (rest s))]
-        (clojure.set/union r (map #(conj % (first s)) r)))
+        (clojure.set/union r (set (map #(conj % (first s)) r))))
       #{#{}})))
 
 (defcheck solution-b677e379
@@ -5331,7 +5387,7 @@
   (fn powerset [ls]
     (if (empty? ls) #{#{}}
                     (clojure.set/union (powerset (next ls))
-                      (map #(conj % (first ls)) (powerset (next ls)))))))
+                                       (set (map #(conj % (first ls)) (powerset (next ls))))))))
 
 (defcheck solution-bc165824
   #(reduce (fn [s l] (into s (for [t s] (conj t l)))) #{#{}} %))
@@ -5418,6 +5474,10 @@
       #{#{}}
       s)))
 
+(defcheck solution-be4b9b07
+  (fn ps [s]
+    (reduce (fn [k i] (into k (map #(conj % i) k))) #{#{}} s)))
+
 (defcheck solution-be9191fe
   (fn ps [s]
     (if (empty? s) #{#{}}
@@ -5425,7 +5485,7 @@
                      (let [ns (ps (next s))]
                        (clojure.set/union
                          ns
-                         (map #(conj % (first s)) ns)))))))
+                         (set (map #(conj % (first s)) ns))))))))
 
 (defcheck solution-be96c8b6
   (fn [s]
@@ -5511,7 +5571,8 @@
                     pxs (lazy-seq (pwr-set (delete-min-set xs)))]
                 (if (empty? xs)
                   #{#{}}
-                  (clojure.set/union (map #(conj % (min-set xs)) pxs) pxs))))))
+                  (clojure.set/union (set (map #(conj % (min-set xs)) pxs))
+                                     (set pxs)))))))
 
 (defcheck solution-c0e9b69c
   (fn pp
@@ -5555,7 +5616,7 @@
       (let [f    (first s)
             r    (set (rest s))
             memo (pset r)]
-        (clojure.set/union memo (map #(conj % f) memo))
+        (clojure.set/union memo (set (map #(conj % f) memo)))
         )
       )
     ))
@@ -5565,7 +5626,7 @@
     (if-let [[head & tail] (seq ls)]
       (clojure.set/union
         (powerset tail)
-        (map #(conj % head) (powerset tail)))
+        (set (map #(conj % head) (powerset tail))))
       #{#{}})))
 
 (defcheck solution-c36b8436
@@ -5611,7 +5672,7 @@
       (let [p (pset (set (rest s)))]
         (clojure.set/union
           p
-          (map #(conj % (first s)) p))))))
+          (set (map #(conj % (first s)) p)))))))
 
 (defcheck solution-c43ae14c
   (fn [s]
@@ -5740,7 +5801,7 @@
     ))
 
 (defcheck solution-c9007283
-  (fn peu [x] (let [y (apply list x)] (set (if (empty? y) #{#{}} (let [z (apply list (peu (rest y)))] (clojure.set/union z (map #(clojure.set/union % #{(first y)}) z))) )))))
+  (fn peu [x] (let [y (apply list x)] (set (if (empty? y) #{#{}} (let [z (apply list (peu (rest y)))] (clojure.set/union (set z) (set (map #(clojure.set/union (set %) #{(first y)}) z)))) )))))
 
 (defcheck solution-c993385
   (fn [c]
@@ -5752,7 +5813,7 @@
                   (= 2 len) #{#{} (set s) (conj #{} (first s)) (conj #{} (last s))}
                   :else (let [n (first s) sub-sets (build (rest s))]
                           (clojure.set/union sub-sets
-                            (map #(conj % n) sub-sets))))))]
+                                             (set (map #(conj % n) sub-sets)))))))]
       (build c))))
 
 (defcheck solution-ca3b4d0f
@@ -5795,8 +5856,8 @@
   (fn ps [ls]
     (if (empty? ls) #{#{}}
                     (clojure.set/union
-                      (ps (next ls))
-                      (map #(conj % (first ls)) (ps (next ls)))))))
+                     (set (ps (next ls)))
+                     (set (map #(conj % (first ls)) (ps (next ls))))))))
 
 (defcheck solution-cbdfe4e3
   (fn power-set [s]
@@ -6308,9 +6369,10 @@
     (into #{} (loop [x x y #{#{}}]
                 (cond (empty? x) y
                       :else (recur (rest x)
-                              (clojure.set/union (for [set-iter y]
-                                                   (conj set-iter (first x))
-                                                   ) y)
+                                   (clojure.set/union (set (for [set-iter y]
+                                                             (conj set-iter (first x))
+                                                             ))
+                                                      y)
                               )
                       )
                 ))
@@ -6446,7 +6508,7 @@
     (if (empty? s)
       #{#{}}
       (let [sub (power-set (rest s))]
-        (clojure.set/union sub (map #(conj % (first s)) sub))))))
+        (clojure.set/union sub (set (map #(conj % (first s)) sub)))))))
 
 (defcheck solution-dfa09180
   (fn pow [s]
@@ -6582,7 +6644,7 @@
     (if (empty? s)
       #{#{}}
       (let [g (f (next s))]
-        (clojure.set/union g (map #(conj % (first s)) g))))))
+        (clojure.set/union g (set (map #(conj % (first s)) g)))))))
 
 (defcheck solution-e1d2ef4a
   (fn power-set [coll]
@@ -6714,7 +6776,7 @@
       (if (empty? src)
         res
         (recur (clojure.set/union res
-                 (map #(conj % (first src)) res))
+                                  (set (map #(conj % (first src)) res)))
           (next src))))))
 
 (defcheck solution-e4c31b55
@@ -7066,7 +7128,7 @@
       #{#{}}
       (let [P (pow (next X))]
         (clojure.set/union P
-          (map #(conj % (first X)) P))))))
+                           (set (map #(conj % (first X)) P)))))))
 
 (defcheck solution-ea53c4b3
   (fn power-set [xs]
@@ -7202,7 +7264,7 @@
     (reduce (fn [sets e]
               (clojure.set/union
                 sets
-                (map #(conj % e) sets))) #{#{}} s)))
+                (set (map #(conj % e) sets)))) #{#{}} s)))
 
 (defcheck solution-ee5eb2a3
   (fn [s]
@@ -7239,7 +7301,7 @@
                 (if i
                   [(powerset is' (clojure.set/difference xs #{i}))
                    (powerset is' (clojure.set/union xs #{i}))]
-                  xs)))]
+                  [xs])))]
       (-> x-rel
         (powerset x-rel)
         (flatten)
@@ -7252,7 +7314,7 @@
       #{#{}}
       (let
        [r (p (rest s))]
-        (clojure.set/union r (map #(conj % (first s)) r))))))
+        (clojure.set/union r (set (map #(conj % (first s)) r)))))))
 
 (defcheck solution-f055efc
   (fn ! [st]
@@ -7328,9 +7390,9 @@
                    (let [T (clojure.set/difference S #{(first S)})]
                      (set (clojure.set/union
                             (PS T)
-                            (map #(clojure.set/union #{(first S)}
-                                    %)
-                              (PS T))))))))
+                            (set (map #(clojure.set/union #{(first S)}
+                                                          %)
+                                      (PS T)))))))))
 
 (defcheck solution-f2480ab2
   (fn power-set [s]
@@ -7342,7 +7404,7 @@
       #{#{}})))
 
 (defcheck solution-f2691a2d
-  (fn powerset [s] (if (empty? s) #{#{}} (clojure.set/union (powerset (disj s (first s))) (map #(conj % (first s)) (powerset (disj s (first s))))))))
+  (fn powerset [s] (if (empty? s) #{#{}} (clojure.set/union (powerset (disj s (first s))) (set (map #(conj % (first s)) (powerset (disj s (first s)))))))))
 
 (defcheck solution-f277eb4f
   (fn [coll]
@@ -7355,7 +7417,7 @@
     (if-let [[x & xs] (seq xs)]
       (let [ps (power-set xs)]
         (clojure.set/union ps
-          (map #(conj % x) ps)))
+                           (set (map #(conj % x) ps))))
       #{#{}})))
 
 (defcheck solution-f2f3ea5c
@@ -7404,7 +7466,7 @@
       (if (empty? (first prev-combs)) acc
                                       (let [next-combs (set (reduce #(clojure.set/union %1 %2)
                                                               (for [one-set prev-combs]
-                                                                (for [elem one-set] (disj one-set elem)))))
+                                                                (set (for [elem one-set] (disj one-set elem))))))
                                             next-acc (clojure.set/union acc next-combs)]
                                         (recur next-acc next-combs))))))
 
@@ -7425,7 +7487,7 @@
       (if (empty? s) #{s}
                      (let [e (first s)
                            t (clojure.set/difference s #{e})]
-                       (clojure.set/union (p t) (f e (p t))))))))
+                       (clojure.set/union (p t) (set (f e (p t)))))))))
 
 (defcheck solution-f3ad708
   (fn power-set [s]
@@ -7496,8 +7558,8 @@
   (fn [s]
     (reduce (fn [agg x]
               (clojure.set/union agg
-                (map #(conj % x)
-                  agg)))
+                                 (set (map #(conj % x)
+                                           agg))))
       #{#{}}
       s)))
 
@@ -7507,7 +7569,7 @@
      (self s #{#{}}))
     ([s res]
      (if (empty? s) res
-                    (self (rest s) (clojure.set/union res (map #(conj % (first s)) res)) )))))
+         (self (rest s) (clojure.set/union res (set (map #(conj % (first s)) res))) )))))
 
 (defcheck solution-f68aff14
   (fn f
@@ -7527,7 +7589,7 @@
 (defcheck solution-f6a6814a
   (fn __ [x]
     (reduce
-      (fn [acc i] (clojure.set/union acc (map (fn [r] (conj r i)) acc)))
+     (fn [acc i] (clojure.set/union acc (set (map (fn [r] (conj r i)) acc))))
       #{#{}}
       x)))
 
@@ -7616,7 +7678,7 @@
                1) ) ))))
 
 (defcheck solution-f8a4dc72
-  reduce (fn [s a] (clojure.set/union s (map #(conj % a) s))) #{#{}})
+  reduce (fn [s a] (clojure.set/union s (set (map #(conj % a) s)))) #{#{}})
 
 (defcheck solution-f915fac8
   (fn [a]
