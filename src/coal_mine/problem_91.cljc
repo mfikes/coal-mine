@@ -3470,6 +3470,23 @@
                  (let [found (set (reduce into (for [x visited] (filter (fn [[a b]] (or (= a x) (= b x))) m))))] ; found nodes connected to visited nodes
                    (recur (flatseq found) (remove #(contains? found %) m)))))))))
 
+(defcheck solution-69b8c5c5
+  (fn graph [g]
+    (let [edges (clojure.set/union g (set (map reverse g)))
+          n1 (group-by first edges)
+          nd (fn [x] {(first x) (map second (second x))})
+          nodes (into {} (mapcat nd n1))]
+      (loop [visited {}
+             q [(first nodes)]]
+        (if (empty? q) (= nodes visited)
+                       (let [x (first q)
+                             nxt (filter #(contains? (set (val x)) (key %)) nodes)]
+                         (if (get visited (key x))
+                           (recur visited (rest q))
+                           (let [v2 (conj visited x)
+                                 q2 (concat (rest q) nxt)]
+                             (recur v2 q2)))))))))
+
 (defcheck solution-69efc9e0
   (fn connected? [edges']
     (let [edges (set (remove (partial apply =) edges'))
