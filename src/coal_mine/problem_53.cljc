@@ -9383,11 +9383,10 @@
                               true
                               (apply = (map - l (range)))))]
     (fn [l]
-      (first (for [len (range (count l) -1 -1)
-                   :when (not (= len 1))
-                   the-seq (partition len 1 l)
-                   :when (increasing? the-seq)]
-               the-seq)))))
+      (vec (first (for [len (range (count l) 1 -1)
+                        the-seq (partition len 1 l)
+                        :when (increasing? the-seq)]
+                    the-seq))))))
 
 (defcheck solution-d454f5f0
   #(->> %
