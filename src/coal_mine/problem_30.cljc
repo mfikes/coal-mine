@@ -2766,7 +2766,7 @@
       vs)))
 
 (defcheck solution-9602c213
-  #(map last (partition-by max %)))
+  #(map last (partition-by identity %)))
 
 (defcheck solution-9659cda2
   (fn [s]
