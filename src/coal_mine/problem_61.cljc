@@ -1199,7 +1199,7 @@
   (fn ! [x y]
     (if (or (empty? x) (empty? y))
       {}
-      (apply merge
+      (apply conj
         {(first x) (first y)}
         (! (rest x) (rest y))
         )
@@ -2106,7 +2106,7 @@
 
 (defcheck solution-cc2d7c2d
   (fn [k v]
-    (reduce #(merge %1 %2) {}
+    (reduce #(conj %1 %2) {}
       (map #(vector %1 %2) k v))))
 
 (defcheck solution-ce55db67
