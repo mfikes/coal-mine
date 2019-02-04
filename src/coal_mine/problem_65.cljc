@@ -154,7 +154,7 @@
 
 (defcheck solution-1506b17d
   #(let [s (conj % [1 2])]
-     (if (= 0 (count (flatten s)))
+     (if (= 1 (count (flatten [s])))
        (if (associative? s)
          :map
          :set)
@@ -184,7 +184,7 @@
   #({\{ :map \[ :vector \# :set} (first (str %)) :list))
 
 (defcheck solution-158fb61b
-  #(if (pos? (count (flatten (into % {:tic :toc}))))
+  #(if (< 1 (count (flatten [(into % {:tic :toc})])))
      (if (= :toc (first (into % [:tic :toc]))) :list :vector)
      (if ((into % {:tic :toc}) :tic) :map :set)))
 
@@ -287,7 +287,7 @@
 
 (defcheck solution-18b12223
   #(cond
-     (= % (merge % %)) :map
+     (= % (conj % %)) :map
      (= (conj % 1) (-> % (conj 1) (conj 1))) :set
      (= \Z (-> % (conj \A) (conj \Z) (last))) :vector
      1 :list))
@@ -758,7 +758,7 @@
         :else :list))))
 
 (defcheck solution-265152db
-  (fn [x] (if (= :b (get (merge x {:a :b}) :a)) :map
+  (fn [x] (if (= :b (get (conj x {:a :b}) :a)) :map
                                                 (if (= (count (conj (conj x :sentinal) :sentinal)) (inc (count x))) :set
                                                                                                                     (if (= (first (conj (conj x :sentinal-1) :sentinal-2)) :sentinal-2) :list :vector)
                                                                                                                     )
@@ -820,7 +820,7 @@
     (cond
       (= (conj coll {}) coll) :map
       (= (first (conj coll {:c 3})) (first (conj (conj coll {:c 3}) {:d 4})))
-      (if (= (+ (count '(11 12 11)) (count coll)) (count (apply merge coll '(11 12 11))))
+      (if (= (+ (count '(11 12 11)) (count coll)) (count (apply conj coll '(11 12 11))))
         :vector
         :set)
       :else :list)))
@@ -1038,10 +1038,11 @@
           )))
 
 (defcheck solution-3146d602
-  (fn [coll] ({5 :map 1 :set 7 :vector 3 :list}  (+ (if (associative? coll)
-                                                      5
-                                                      1)
-                                                    (count (flatten (conj (empty coll) [5 5])))))))
+  (fn [coll] ({7 :map 3 :set 9 :vector 5 :list}
+              (+ (if (associative? coll)
+                   5
+                   1)
+                 (count (flatten (seq (conj (empty coll) [5 5] [5 5]))))))))
 
 (defcheck solution-31635487
   (fn [col]
@@ -1153,7 +1154,7 @@
 
 (defcheck solution-344fbb4b
   #(let [c (conj (empty %) [1 2])]
-     (if (empty? (flatten c))
+     (if (= 1 (count (flatten [c])))
        (if (nil? (get c 1)) :set :map)
        (if (= 1 (first (conj (empty c) 1 2))) :vector :list))))
 
@@ -2068,7 +2069,7 @@
     (letfn [(count-diff [coll1 coll2] (- (count coll1) (count coll2)))
             (conj-diff [coll f] (count-diff coll (f coll)))]
       (if (= 0 (conj-diff (conj coll [1 1]) #(conj % [1 1])))
-        (if (contains? (merge coll {}) {})
+        (if (contains? (conj coll {}) {})
           :set
           :map)
         (let [v (gensym)]
@@ -2077,7 +2078,7 @@
             :list))))))
 
 (defcheck solution-577ae5dd
-  #(if (= % (merge % %)) :map
+  #(if (= % (conj % %)) :map
                          (let [extended (conj % :first :second)]
                            (cond
                              (= extended (into extended extended)) :set
@@ -2296,8 +2297,8 @@
 
 (defcheck solution-5e1b5660
   #(cond
-     (= % (merge % %)) :map
-     (= (conj % nil) (clojure.set/union (conj % nil) (conj % nil))) :set
+     (= % (conj % %)) :map
+     (= (conj % nil) (clojure.set/union (set (conj % nil)) (set (conj % nil)))) :set
      (= :again (first (conj % :test :again))) :list
      :else :vector
      ))
@@ -2922,13 +2923,10 @@
 
 (defcheck solution-72b647f
   #(let [x (conj % [-1 -2])]
-     (if (zero? (count (flatten x)))
-       (if (= -2 (x -1))
-         :map
-         :set)
-       (if (= -2 (last (conj (conj % -1) -2)))
-         :vector
-         :list))))
+     (cond (= -2 (get x -1)) :map
+           (= [-1 -2] (get x [-1 -2])) :set
+           (= [-1 -2] (get x (dec (count x)))) :vector
+           :else :list)))
 
 (defcheck solution-72c0763b
   (fn test_type [c]
@@ -3136,15 +3134,12 @@
                 i (into s [[100 200] {:200 300}])
                 j (not (nil?(get i 1)))
                 k (- (count i) (count s))
-                l (flatten i)
-                m (- (count l) (count s))
+                m (= 200 (get i 100))
                 n (= s (set s))
-                ](
-                   cond
-                   (< m 1) (if n :set :map )
-                   :else (if j :vector :list)
-                   )
-                 )))
+                ](cond m :map
+                       n :set
+                       j :vector
+                       :else :list))))
 
 (defcheck solution-7a066578
   #(let [s (empty %)]
@@ -3300,7 +3295,7 @@
 
 (defcheck solution-805a94f7
   #(let [s (conj % {:foo :bar} {:baz :bat})] ; test data
-     (if (empty? (flatten s)) ; "flatten" on non seqs => ()
+     (if (= 1 (count (flatten [s]))) ; "flatten" on non seqs => ()
        (if (= (s :foo) :bar)
          :map
          :set)
@@ -3332,10 +3327,10 @@
     (cond
       (= (conj x {}) x) :map
       (empty? x) (cond
-                   (= (clojure.set/union x #{}) #{}) :set
+                   (=  x #{}) :set
                    (= (conj (conj x 0) 1) [0 1]) :vector
                    :else :list)
-      (= (clojure.set/union x x) x) :set
+      (= (set x) x) :set
       (= (first (conj x x)) x) :list
       :else :vector)))
 
@@ -3393,12 +3388,12 @@
 
 (defcheck solution-8344fd99
   (fn f [x]
-    (cond
-      (= x (set x)) :set
-      (empty? (flatten (into (empty x) [[:a :b]]))) :map
-      true (case (first (conj (empty x) 1 2))
-             1 :vector
-             2 :list))))
+    (if (= x (set x)) :set
+        (let [o (conj (empty x) [1 2] [3 4])]
+          (cond
+            (= 2 (get o 1)) :map
+            (= [1 2] (first o)) :vector
+            :else :list)))))
 
 (defcheck solution-8374e7ff
   (fn [cand]
@@ -3427,7 +3422,7 @@
 
 (defcheck solution-84a16153
   (fn checktype [o]
-    (if (= o (merge o {}))
+    (if (= o (conj o {}))
       :map
       (let [test (into o [:a])]
         (cond
@@ -3498,7 +3493,7 @@
 (defcheck solution-8a8fa3ec
   (fn [x]
     (let [y (conj x [:a 1])]
-      (if (= 0 (count (flatten y)))
+      (if (= 1 (count (flatten [y])))
         (if (= 1 (y :a))
           :map
           :set)
@@ -3734,7 +3729,7 @@
 (defcheck solution-90a7df36
   (fn [coll]
     (if (associative? coll)
-      (if (= 1 (count (flatten (assoc (empty coll) 0 0))))
+      (if (= 1 (count (flatten (seq (assoc (empty coll) 0 0)))))
         :vector
         :map)
       (if (= 1 (count (conj (conj (empty coll) 0) 0)))
@@ -3971,11 +3966,12 @@
 
 (defcheck solution-950d438c
   (fn test-seq [coll]
-    (cond (and (seq (flatten (conj coll [:x 0])))
-               (= :x (first (conj (conj coll :y) :x)))) :list
-          (contains? (conj coll [:xxxxx 0]) :xxxxx) :map
-          (contains? (conj coll :x) :x) :set
-          :else :vector)))
+    (cond
+      (= 0 (get (conj coll [:xxxxx 0]) :xxxxx)) :map
+      (and (< 1 (count (flatten [(conj coll [:x 0])])))
+           (= :x (first (conj (conj coll :y) :x)))) :list
+      (contains? (conj coll :x) :x) :set
+      :else :vector)))
 
 (defcheck solution-952c0a62
   (fn f65 [c] (if (associative? c)
@@ -4623,10 +4619,11 @@
 
 (defcheck solution-a8b55791
   (fn [x]
-    (let [y (conj x [1 2] [3 4])]
-      (if (= 0 (count (flatten y)))
-        (if (get y [1 2]) :set :map)
-        (if (= (first y) [3 4]) :list :vector)))))
+    (let [y (conj x [:c 2] [:c 2] [:d 4])
+          d (- (count y) (count x))]
+      (if (= 2 d)
+        (if (get y :c) :map :set)
+        (if (= (first y) [:d 4]) :list :vector)))))
 
 (defcheck solution-a8f26cf3
   #(let [what (conj % [::foo "bar"])]
@@ -4844,7 +4841,7 @@
       (if (= (conj x 1 2) (concat '(2 1) x)) ; true if list
         :list
         :vector)
-      (if (contains? (merge x {:foo 'bar}) :foo) ; true if map
+      (if (contains? (conj x {:foo 'bar}) :foo) ; true if map
         :map
         :set))))
 
@@ -4999,10 +4996,10 @@
     (cond
       (= (conj t {}) t) :map
       (empty? t) (cond
-                   (= (clojure.set/union t #{}) #{}) :set
+                   (= (empty t) #{}) :set
                    (= (conj (conj t 0) 1) [0 1]) :vector
                    :else :list)
-      (= (clojure.set/union t t) t) :set
+      (= (clojure.set/union (set t) (set t)) t) :set
       (= (first (conj t t)) t) :list
       :else :vector)))
 
@@ -5108,7 +5105,7 @@
 (defcheck solution-b862314e
   (fn [coll]
     (let [cc (conj coll [:a-random-sym :b-random-sym])]
-      (if (empty? (flatten cc))
+      (if (= 1 (count (flatten [cc])))
         (if (cc [:a-random-sym :b-random-sym])
           :set
           :map)
@@ -5435,10 +5432,10 @@
   (fn black-box-testing [s]
     (cond
       (= (conj s {}) s) :map
-      (empty? s) (if (= (clojure.set/union s #{}) #{})
+      (empty? s) (if (= s #{})
                    :set
                    (first (conj s :vector :list)))
-      (= (clojure.set/union s s) s) :set
+      (= (clojure.set/union (set s) (set s)) s) :set
       (= (first (conj s s)) s) :list
       :else :vector)))
 
@@ -5531,7 +5528,7 @@
 (defcheck solution-c619043
   (fn [xs]
     (cond
-      (and (associative? xs) (zero? (count (merge (empty xs) {} {})))) :map
+      (and (associative? xs) (zero? (count (conj (empty xs) {} {})))) :map
       (= 1 (count (conj (conj (empty xs) :test) :test))) :set
       (= (first (conj (conj xs :test1) :test)) :test) :list
       :else :vector)))
@@ -5638,10 +5635,11 @@
 
 (defcheck solution-c9f0c02d
   (fn [s]
-    (if (or (= {} s) (= 2 (-> s first flatten count)))
+    (if (or (= {} s) (let [fst (first s)]
+                       (if (counted? fst) (= 2 (count fst)))))
       :map
       (if (>= (-> s count inc)
-            (-> s (conj :s) (conj :s) count))
+              (-> s (conj :s) (conj :s) count))
         :set
         (if (= :s (-> s (conj :f) (conj :s) first))
           :list
@@ -5883,7 +5881,7 @@
 (defcheck solution-d08aae12
   (fn type_ [coll]
     (cond
-      (empty? (flatten (conj coll [:c :b])))
+      (= 1 (count (flatten [(conj coll [:c :b])])))
       (cond
         ((conj coll [:c :b]) [:c :b]) :set
         :else :map)
@@ -6088,7 +6086,7 @@
 
 (defcheck solution-d5847b1e
   (fn [coll]
-    (if (empty? (flatten (conj coll [:xyz :xyz])))
+    (if (not= (conj coll [:a :b]) (seq (conj coll [:a :b])))
       (if (associative? coll) :map :set)
       (if (= :xyz (first (conj coll :abc :xyz))) :list :vector))))
 
@@ -6110,7 +6108,7 @@
     (let [e (empty seq)
           ea (conj e [:a 42])]
 
-      (if (zero? (count (flatten ea)))
+      (if (= 1 (count (flatten [ea])))
         (if (nil? (:a ea))
           :set
           :map)
@@ -6658,7 +6656,7 @@
           coll' (conj (conj coll x)y)
           ]
       (cond
-        (= 0 (count (flatten coll')))
+        (= 1 (count (flatten [coll'])))
         (cond
           (= (count coll') (+ (count coll) 2)) :set
           :else :map
@@ -6805,11 +6803,11 @@
 (defcheck solution-e90db162
   (fn [s]
     (cond (= (conj s {}) s) :map
-          (empty? s) (cond (= (clojure.set/union s #{}) #{}) :set
+          (empty? s) (cond (= s #{}) :set
                            (= (conj (conj s 0) 1) '(1 0)) :list
                            :else :vector)
           (= (rest (conj s 1)) s) :list
-          (= (clojure.set/union s s) s) :set
+          (= (clojure.set/union (set s) (set s)) s) :set
           :else :vector
           )
     ))
@@ -6830,10 +6828,10 @@
 
 (defcheck solution-e9c6ec8b
   (fn[coll]
-    (let [obj #?(:clj (Object.) :cljs #js {})]
+    (let [obj #?(:clj (Object.) :cljs (js-obj))]
       (let [x (conj coll [1 2])]
         (cond
-          (empty? (flatten x)) (if (associative? x) :map :set)
+          (not= (conj x [:a :b]) (seq (conj x [:a :b]))) (if (associative? x) :map :set)
           (= (first (conj x obj)) obj) :list
           :else :vector
           )
@@ -7145,7 +7143,7 @@
     (let [c (conj (empty coll) {1 2 3 4} {5 6})]
       (cond
         (= 3 (count c)) :map
-        (empty? (flatten c)) :set
+        (= 1 (count (flatten [c]))) :set
         (= {5 6} (first c)) :list
         :else :vector))))
 
@@ -7154,10 +7152,10 @@
     (cond
       (= (conj s {}) s) :map
       (empty? s) (cond
-                   (= (clojure.set/union s #{}) #{}) :set
+                   (= s #{}) :set
                    (= (conj (conj s 0) 1) [0 1]) :vector
                    :else :list)
-      (= (clojure.set/union s s) s) :set
+      (= (clojure.set/union (set s) (set s)) s) :set
       (= (first (conj s s)) s) :list
       :else :vector)))
 
@@ -7214,7 +7212,7 @@
               (test-vec [given-coll]
                 (= test-pair-2 (last (conj given-coll test-pair test-pair-2))))
               (test-map [given-coll]
-                (= given-coll (merge given-coll given-coll)))
+                (= given-coll (conj given-coll given-coll)))
               (test-set [given-coll]
                 (not-nil? (get (conj given-coll test-pair) test-pair)))]
         (cond ;; map and set branch first because map may also
@@ -7402,7 +7400,7 @@
 (defcheck solution-fe0fba7c
   (fn typ [c]
     (let [nc (conj c [:test 123])]
-      (if (= () (flatten nc))
+      (if (not= nc (seq nc))
         (if (= 123 (nc :test)) :map :set)
         (if (= (cons 1 nc) (conj nc 1)) :list :vector)))))
 

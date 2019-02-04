@@ -290,7 +290,9 @@
     (let [punctuations (into #{} ",.!")]
       (sort #(compare (clojure.string/upper-case %1)
                (clojure.string/upper-case %2))
-        (clojure.string/split (apply str (map #(if (clojure.set/subset? (str %) punctuations) "" %)
+            (clojure.string/split (apply str (map
+                                              #(if (clojure.set/subset?
+                                                    (set (str %)) punctuations) "" %)
                                            s))
           #" ")))))
 
