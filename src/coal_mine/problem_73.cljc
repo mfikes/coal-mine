@@ -933,7 +933,7 @@
           b [2 1 0]
           s [:x :o]
           d (fn [x y] (map #(get (_ %) %2) x y))]
-      (first (keep min
+      (first (keep identity
                (concat
                 (for [c s
                       f [(fn [i] (map #(% i) _))
@@ -3720,7 +3720,7 @@
           diag-ll (-> vert get-diag-l first)
           diag-r (-> vert get-diag-r first)
           comb-set (->
-                     (apply merge
+                     (apply conj
                        (into #{} vert)
                        (into #{} hori))
                      (conj diag-r diag-ll))]
@@ -5244,7 +5244,7 @@
       ; Check if all elements of the collection are the same
       same (fn [coll] (when (apply = coll) (first coll)))
       ; Check if all elements of any of the collections within this collection are the same
-      same2d (fn [mtx] (some #(when (comp not nil? %) %) (map same mtx)))
+      same2d (fn [mtx] (some same mtx))
       ; Transpose a matrix (borrowed from RosettaCode)
       transpose (fn [mtx] (vec (apply map vector mtx)))
       ; Extract the two main diagonals of the matrix

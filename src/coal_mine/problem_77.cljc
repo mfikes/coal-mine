@@ -1747,7 +1747,7 @@
 
 (defcheck solution-4c76a166
   (fn [strings];anagrams have the same histogram
-    (reduce merge #{};prepare the result
+    (reduce conj #{};prepare the result
       (map set (remove #(= 1 (count %));remove the words without any anagrams
                  (vals (group-by frequencies strings)))))))
 
@@ -2018,8 +2018,8 @@
                  (conj output #{word})
                  (= (set word) (set (first (first input))))
                  (conj
-                   (clojure.set/union (rest input) output)
-                   (conj (first input) word))
+                  (clojure.set/union (set (rest input)) output)
+                  (conj (first input) word))
                  :else
                  (recur
                    (rest input)
