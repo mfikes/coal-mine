@@ -1154,6 +1154,7 @@
                (= (first s1) (first s2)) (insOrDel (rest s1) (rest s2))
                :else (or (= (seq s1) (rest s2)) (= (seq s2) (rest s1)))))
            (createWordGraph[l]
+             ;; HIER
              (apply merge (map
                             (fn [el]
                               {el (vec (filter #(or (oneLetterDiff el %) (insOrDel el %)) l))})
@@ -7483,7 +7484,7 @@
 (defcheck solution-84af1484
   (fn ham [s]
     (let [connected (fn [g]
-                      (let [edges (clojure.set/union g (map reverse g))
+                      (let [edges (clojure.set/union (set g) (set (map reverse g)))
                             n1 (group-by first edges)
                             nd (fn [x] {(first x) (map second (second x))})
                             nodes (into {} (mapcat nd n1))]
@@ -7494,7 +7495,7 @@
                                                nxt (filter #(contains? (set (val x)) (key %)) nodes)]
                                            (if (get visited (key x))
                                              (recur visited (rest q))
-                                             (let [v2 (merge visited x)
+                                             (let [v2 (conj visited x)
                                                    q2 (concat (rest q) nxt)]
                                                (recur v2 q2))))))))
           prod (fn [s]
@@ -10668,7 +10669,7 @@
 
             (max-chain [words]
               (let [chain (build-chain words)
-                    left (clojure.set/difference words chain)]
+                    left (clojure.set/difference (set words) (set chain))]
                 (loop [left left
                        chain chain]
                   (if (not left)
@@ -12137,7 +12138,7 @@
                            (str (subs s 0 i) c (subs s (inc i)))))
               (insrts [s] (for [i (range (inc (count s))) c letters]
                             (str (subs s 0 i) c (subs s i))))
-              (diffs [s] (clojure.set/union (dels s) (subts s) (insrts s)))]
+              (diffs [s] (clojure.set/union (set (dels s)) (set (subts s)) (set (insrts s))))]
         (let [m (map (fn [x] [x  (set (filter (disj s x) (diffs x)))]) s)
               m (into {} m)]
           (letfn [(dfs [x seen]
@@ -13103,27 +13104,27 @@
 
 (defcheck solution-dc7354ff
   (fn chain[s] (
-                 letfn [(ch2 [w1 w2] (
-                                       if (= (count w1) (count w2))
-                                       (= 1 (count (filter #(false? %) (map-indexed #(= %2 (nth w1 %1)) w2))))
-                                       (and (or (= (dec (count w1)) (count w2)) (= (inc (count w1)) (count w2)))
-                                            (< (count (clojure.set/difference (set w1) (set w2))) 2)
-                                            (< (count (clojure.set/difference (set w2) (set w1))) 2)
-                                            )
+                letfn [(ch2 [w1 w2] (
+                                     if (= (count w1) (count w2))
+                                     (= 1 (count (filter #(false? %) (map-indexed #(= %2 (nth w1 %1)) w2))))
+                                     (and (or (= (dec (count w1)) (count w2)) (= (inc (count w1)) (count w2)))
+                                          (< (count (clojure.set/difference (set w1) (set w2))) 2)
+                                          (< (count (clojure.set/difference (set w2) (set w1))) 2)
+                                          )
 
-                                       ))
+                                     ))
 
-                        (comb[w sx] ( reduce #( if (ch2 w %2) (clojure.set/union %1 #{%2}) %1) #{} sx ))
+                       (comb[w sx] ( reduce #( if (ch2 w %2) (clojure.set/union %1 #{%2}) %1) #{} sx ))
 
 
-                        (dpx[sx acc] (
-                                       if (empty? sx) (count acc)
-                                                      (map #( dpx (comb % (clojure.set/difference s acc)) (conj acc %)) sx)
-                                                      ))
-                        ]
+                       (dpx[sx acc] (
+                                     if (empty? sx) (count acc)
+                                     (map #( dpx (comb % (clojure.set/difference s (set acc))) (conj acc %)) sx)
+                                     ))
+                       ]
 
-                 (= (apply max (flatten (dpx s []))) (count s))
-                 )))
+                (= (apply max (flatten (dpx s []))) (count s))
+                )))
 
 (defcheck solution-dc78bbbe
   (fn [words]
@@ -13809,7 +13810,7 @@
                                       (map #(hash-set % word)))]
                       (recur (next input)
                         (conj collected word)
-                        (clojure.set/union output new-pairs)))))
+                        (clojure.set/union output (set new-pairs))))))
           clusters (loop [input words, output #{}]
                      (if (empty? input)
                        output
