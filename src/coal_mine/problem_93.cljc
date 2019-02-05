@@ -714,7 +714,7 @@
             (recur res (concat f r))))))))
 
 (defcheck solution-2fff7a9d
-  (fn [c] (filter #(= (flatten %) %) (tree-seq coll? identity c))))
+  (fn [c] (filter (every-pred coll? #(= (flatten %) %)) (tree-seq coll? identity c))))
 
 (defcheck solution-3068bdcc
   (fn partially-flatten [s]
@@ -942,7 +942,7 @@
 
 (defcheck solution-3c16b214
   (comp
-    (partial filter #(= (flatten %) %))
+   (partial filter (every-pred coll? #(= (flatten %) %)))
     (partial tree-seq coll? identity)))
 
 (defcheck solution-3c1d1741
@@ -1237,7 +1237,7 @@
       (flat x))))
 
 (defcheck solution-4897fc85
-  (fn [x] (filter #(= % (flatten %)) (tree-seq sequential? seq x))))
+  (fn [x] (filter (every-pred coll? #(= % (flatten %))) (tree-seq sequential? seq x))))
 
 (defcheck solution-49513b87
   (fn mflatseq
@@ -2190,7 +2190,7 @@
 (defcheck solution-69125f9
   (fn [s]
     (filter
-      #(= % (flatten %))
+     #(= % (when (coll? %) (flatten %)))
       (tree-seq coll? seq s))))
 
 (defcheck solution-69166c76
@@ -2721,7 +2721,7 @@
 
 (defcheck solution-7d3c97f5
   (fn [aa]
-    (filter (fn [x] (= x (flatten x))) (tree-seq sequential? identity aa))))
+    (filter (fn [x] (= x (when (coll? x) (flatten x)))) (tree-seq sequential? identity aa))))
 
 (defcheck solution-7d4fbeeb
   (fn s [c] (if (some coll? c) (mapcat s c) [c])))
