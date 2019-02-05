@@ -1154,7 +1154,6 @@
                (= (first s1) (first s2)) (insOrDel (rest s1) (rest s2))
                :else (or (= (seq s1) (rest s2)) (= (seq s2) (rest s1)))))
            (createWordGraph[l]
-             ;; HIER
              (apply merge (map
                             (fn [el]
                               {el (vec (filter #(or (oneLetterDiff el %) (insOrDel el %)) l))})
@@ -1163,11 +1162,11 @@
              (if (or (contains? s node) (empty? (g node)))
                #{v}
                (reduce
-                 #(apply (partial merge %1) %2)
+                 #(apply (partial conj %1) %2)
                  (map #(dfsNodes g (conj v node) (conj s node) %) (g node)))))
            (hamiltonianPaths[g]
              (reduce
-               #(apply (partial merge %1) %2)
+               #(apply (partial conj %1) %2)
                (map
                  (fn [node]
                    (set (filter
