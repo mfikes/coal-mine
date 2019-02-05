@@ -1088,7 +1088,7 @@
                              nodes (set (keys connections))]
                          (every? #(= nodes (connections %)) nodes))))
                   (re [e] (set (for [[a b] e] [b a])))
-                  (di [e] (remove even? (map second (frequencies (map first (clojure.set/union e (re e)))))))]
+                  (di [e] (remove even? (map second (frequencies (map first (clojure.set/union (set e) (re e)))))))]
             (and (c g) (or (= 1 (count g)) (= 0 (count (di g))))))))
 
 (defcheck solution-272b090a
@@ -1647,7 +1647,7 @@
                       (let [next
                             (into (empty res)
                               (clojure.set/union res
-                                (mapcat neighbors res)))]
+                                                 (set (mapcat neighbors res))))]
                         (if (= res next)
                           res
                           (recur next)))))]
@@ -3431,7 +3431,7 @@
           (reduce
             (fn [s edge]
               (let [eset (set edge)
-                    isets (filter #(not (empty? (clojure.set/intersection % eset))) s)]
+                    isets (set (filter #(not (empty? (clojure.set/intersection % eset))) s))]
                 (clojure.set/union
                   (clojure.set/difference s isets)
                   (hash-set (apply clojure.set/union eset isets)))))
@@ -3691,7 +3691,7 @@
 
 (defcheck solution-59e0c1ca
   (fn gt [g]
-    (let [e (set (reduce clojure.set/union g))
+    (let [e (set (reduce into #{} g))
           c (count e)
           s (frequencies (reduce concat g))
           ones (filter #(= 1 %) (vals s))
@@ -4945,7 +4945,7 @@ having odd degrees, and the rest of edges with even-degree"
                                                                   (contains? (set main) (second %))) remaining)]
                                        (if (empty? good-edge) false
                                                               (let [one-edge (first good-edge)
-                                                                    new-main (clojure.set/union main (set one-edge))
+                                                                    new-main (clojure.set/union (set main) (set one-edge))
                                                                     new-remaining (remove #{one-edge} remaining)]
                                                                 (connected-private new-main new-remaining)
                                                                 )))))
@@ -5201,7 +5201,7 @@ having odd degrees, and the rest of edges with even-degree"
                                                        (rest q))
                                                      (recur (conj visited n)
                                                        (clojure.set/union v connected-with-n)
-                                                       (clojure.set/union (rest q) connected-with-n))))))]
+                                                       (clojure.set/union (set (rest q)) connected-with-n))))))]
                          (connected-iter? #{} #{begin} #{begin})))
           graph (build-graph g)
           powers (find-powers g)
@@ -5506,7 +5506,7 @@ having odd degrees, and the rest of edges with even-degree"
             (loop [reached #{(first all-vs)}, remaining (set (rest all-vs))]
               (if (empty? remaining)
                 true
-                (let [next-gen (filter #(some (partial connected? %) reached) remaining)]
+                (let [next-gen (set (filter #(some (partial connected? %) reached) remaining))]
                   (if (empty? next-gen)
                     false
                     (recur (clojure.set/union reached next-gen) (clojure.set/difference remaining next-gen))))))))))))
@@ -5587,7 +5587,7 @@ having odd degrees, and the rest of edges with even-degree"
   (fn tour [g]
     (let [odd (count (remove even? (map val (frequencies (flatten g)))))
           graph (fn [g]
-                  (let [edges (clojure.set/union g (map reverse g))
+                  (let [edges (clojure.set/union (set g) (set (map reverse g)))
                         n1 (group-by first edges)
                         nd (fn [x] {(first x) (map second (second x))})
                         nodes (into {} (mapcat nd n1))]
@@ -5598,7 +5598,7 @@ having odd degrees, and the rest of edges with even-degree"
                                            nxt (filter #(contains? (set (val x)) (key %)) nodes)]
                                        (if (get visited (key x))
                                          (recur visited (rest q))
-                                         (let [v2 (merge visited x)
+                                         (let [v2 (conj visited x)
                                                q2 (concat (rest q) nxt)]
                                            (recur v2 q2))))))))]
       (and (or (zero? odd) (= 2 odd)) (graph g)))))
@@ -8543,17 +8543,17 @@ having odd degrees, and the rest of edges with even-degree"
               (if (or (contains? s [(last v) node]) (contains? s [node (last v)]))
                 #{v}
                 (reduce
-                  #(apply (partial merge %1) %2)
+                  #(apply (partial conj %1) %2)
                   (map #(edges g (conj v node) (conj s [(last v) node]) %) (g node)))))]
       (let [g (createGraph l)]
         (not (empty? (reduce
-                       #(apply (partial merge %1) %2)
-                       (map
-                         (fn [node]
-                           (set (filter
-                                  #(= (+ 2 (count l)) (count %))
-                                  (edges g [:dummy] #{} node))))
-                         (keys g)))))))))
+                      into #{}
+                      (map
+                       (fn [node]
+                         (set (filter
+                               #(= (+ 2 (count l)) (count %))
+                               (edges g [:dummy] #{} node))))
+                       (keys g)))))))))
 
 (defcheck solution-d0c128af
   (fn contains-eulerian-path? [g]
@@ -8660,10 +8660,10 @@ having odd degrees, and the rest of edges with even-degree"
               (if-not (empty? reachable)
                 (apply clojure.set/union
                   (for [e reachable]
-                    (let [visited' (conj visited e)]
-                      (map #(into % visited')
-                        (paths-walker visited'
-                          (reachable-from e visited'))))))
+                    (set (let [visited' (conj visited e)]
+                           (map #(into % visited')
+                                (paths-walker visited'
+                                              (reachable-from e visited')))))))
                 (list visited)))
             (all-paths [] (set (paths-walker #{} edge-list)))]
       (not (empty? (filter #(= (count %) (count edge-list)) (all-paths)))))))
@@ -8885,7 +8885,7 @@ having odd degrees, and the rest of edges with even-degree"
 
 (defcheck solution-da7788e9
   (fn [s]
-    (let [vertices (set (apply clojure.set/union s))
+    (let [vertices (reduce into #{} s)
           extend (fn [[v edges]]
                    (letfn [(remove-first [x s]
                              "Remove first occurrence of x in s"
