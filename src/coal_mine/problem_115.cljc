@@ -402,8 +402,8 @@
 (defcheck solution-1a20c917
   (fn [n]
     (let [s (str n)
-          l (subs s 0 (/ (count s) 2))
-          r (subs s (/ (inc (count s)) 2))
+          l (subs s 0 (int (/ (count s) 2)))
+          r (subs s (int (/ (inc (count s)) 2)))
           f (fn [s]
               (map #(#?(:clj Integer/parseInt :cljs js/parseInt) (str %)) (seq s)))]
       (= (apply + (f l))
@@ -537,7 +537,7 @@
   (fn number-balanced?
     [n]
     (let [s (str n)
-          ls-halve (/ (count s) 2)
+          ls-halve (int (/ (count s) 2))
           l (subs s 0 ls-halve)
           r (subs (clojure.string/reverse s) 0 ls-halve)]
       (apply = (map (comp #(apply + %) #(map int %)) (list l r))))))
@@ -2127,7 +2127,7 @@
   (fn [i]
     (let [input (str i)
           first-half (subs input 0 (/ (count input) 2))
-          second-half (subs (clojure.string/reverse input) 0 (/ (count input) 2))
+          second-half (subs (clojure.string/reverse input) 0 (int (/ (count input) 2)))
           sum-half (fn [f] (reduce + (map #(parse-char %) f)))
           ]
       (= (sum-half first-half) (sum-half second-half))
@@ -2666,14 +2666,14 @@
     (let [s (str n)
           ds #(reduce + (map int %))
           half (/ (count s) 2)]
-      (= (ds (subs s 0 half)) (ds (subs s (+ half 0.5)))))))
+      (= (ds (subs s 0 (int half))) (ds (subs s (int (+ half 0.5))))))))
 
 (defcheck solution-5ba1e627
   (fn x [n]
     (let [s (str n)
           middle (/ (count s) 2)
-          prefix (subs s 0 (Math/ceil middle))
-          suffix (subs s (Math/floor middle))
+          prefix (subs s 0 (int (Math/ceil middle)))
+          suffix (subs s (int (Math/floor middle)))
           sum-chars (fn [s] (reduce #(+ %1 (int %2)) 0 s))]
       (= (sum-chars prefix) (sum-chars suffix)))))
 
@@ -2777,7 +2777,7 @@
             h (/ l 2)
             s subs]
         (if (odd? l)
-          (B (str (s c 0 h) (s c (+ 1 h))))
+          (B (str (s c 0 (int h)) (s c (int (+ 1 h)))))
           (apply = (map sort (split-at h c))))))
     (str %)))
 
@@ -2949,7 +2949,7 @@
                 l (/ (count (str x)) 2)
                 f (partial reduce #(+ % (int %2)) 0)]
             (=  (f (subs s 0 l))
-              (f (subs (clojure.string/reverse s) 0 l))))))
+                (f (subs (clojure.string/reverse s) 0 (int l)))))))
 
 (defcheck solution-630a8086
   (fn [n]
@@ -3751,7 +3751,7 @@
           sum (fn [s]
                 (apply + (map #(#?(:clj Integer/parseInt :cljs js/parseInt) (str %))
                            (seq s))))]
-      (= (sum (subs (clojure.string/reverse n-string) 0 avg-count))
+      (= (sum (subs (clojure.string/reverse n-string) 0 (int avg-count)))
         (sum (subs n-string 0 avg-count))))))
 
 (defcheck solution-7d4d028b
@@ -5410,7 +5410,7 @@
           len (count s)
           half (quot len 2)
           step (if (> (mod len 2) 0) (inc half) half)
-          [p1 p2] (partition half step s)
+          [p1 p2] (when (pos? half) (partition half step s))
           n1 (map #(- (parse-char %) (parse-char \0)) p1)
           n2 (map #(- (parse-char %) (parse-char \0)) p2)]
       (= (apply + n1) (apply + n2)))))
@@ -6118,8 +6118,8 @@
   #(let[numStr (str %)
         digiLen (count numStr)
         halfLen (/ digiLen 2)
-        lower (subs numStr 0 halfLen)
-        upper (subs numStr (if (integer? halfLen) halfLen (inc halfLen))  digiLen)
+        lower (subs numStr 0 (int halfLen))
+        upper (subs numStr (int (if (integer? halfLen) halfLen (inc halfLen))) digiLen)
         sum (fn[s] (reduce + (map (fn[c] (- (int c) 48)) (seq s))))]
      (= (sum lower) (sum upper))))
 
@@ -6763,8 +6763,8 @@
 (defcheck solution-d1fca3a
   #(let [a (str %)
          ca (/ (count a) 2)
-         b1 (reduce + 0 (map int (subs a 0 (+ ca 0.5))))
-         b2 (reduce + 0 (map int (subs a ca)))]
+         b1 (reduce + 0 (map int (subs a 0 (int (+ ca 0.5)))))
+         b2 (reduce + 0 (map int (subs a (int ca))))]
      (= b1 b2)))
 
 (defcheck solution-d2a448b
@@ -6905,7 +6905,8 @@
           the-seq (digit-seq n)
           cnt (fn [a-seq]
                 (reduce (fn [acc _] (inc acc)) 0 a-seq))]
-      (let [ptseq (partition (quot (cnt the-seq) 2) 1 the-seq)]
+      (let [half (quot (cnt the-seq) 2)
+            ptseq (when (pos? half) (partition half 1 the-seq))]
         (if (= (apply + (first ptseq)) (apply + (last ptseq)))
           true
           false)))))
@@ -8013,7 +8014,7 @@
   #(let [f (comp sort subs)
          s (str %)
          l (count s)]
-     (= (f s 0 (/ l 2))
+     (= (f s 0 (int (/ l 2)))
        (f s (/ (if (odd? l) (+ l 1) l) 2) l))))
 
 (defcheck solution-f8526ab2
