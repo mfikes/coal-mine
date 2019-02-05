@@ -4461,7 +4461,7 @@
       (if (= n x)
         (vec val)
         (recur
-          (inc n) (flatten (merge [1] (map (partial reduce +) (partition 2 1 val)) [1])))))))
+         (inc n) (flatten (reduce into [1] [(map (partial reduce +) (partition 2 1 val)) [1]])))))))
 
 (defcheck solution-99a6d4bd
   (fn [n]
