@@ -4843,7 +4843,7 @@
                           (sort cand)
                           (if (cand n)
                             (if (cand i)
-                              (recur (inc i) (clojure.set/difference cand (rest (range i (inc n) i))))
+                              (recur (inc i) (clojure.set/difference cand (set (rest (range i (inc n) i)))))
                               (recur (inc i) cand))
                             nil))))
           nx        (fn [prev start] (first (filter #(not-any? zero? (map (partial mod %) prev)) (iterate inc start))))
