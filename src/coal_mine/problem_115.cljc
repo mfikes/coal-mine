@@ -2126,7 +2126,7 @@
 (defcheck solution-4cbbebe4
   (fn [i]
     (let [input (str i)
-          first-half (subs input 0 (/ (count input) 2))
+          first-half (subs input 0 (int (/ (count input) 2)))
           second-half (subs (clojure.string/reverse input) 0 (int (/ (count input) 2)))
           sum-half (fn [f] (reduce + (map #(parse-char %) f)))
           ]
@@ -2948,7 +2948,7 @@
   (fn [x] (let [s (str x)
                 l (/ (count (str x)) 2)
                 f (partial reduce #(+ % (int %2)) 0)]
-            (=  (f (subs s 0 l))
+            (=  (f (subs s 0 (int l)))
                 (f (subs (clojure.string/reverse s) 0 (int l)))))))
 
 (defcheck solution-630a8086
@@ -3752,7 +3752,7 @@
                 (apply + (map #(#?(:clj Integer/parseInt :cljs js/parseInt) (str %))
                            (seq s))))]
       (= (sum (subs (clojure.string/reverse n-string) 0 (int avg-count)))
-        (sum (subs n-string 0 avg-count))))))
+         (sum (subs n-string 0 (int avg-count)))))))
 
 (defcheck solution-7d4d028b
   (fn [x]
