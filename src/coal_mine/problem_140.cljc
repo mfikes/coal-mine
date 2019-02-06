@@ -26,7 +26,9 @@
                         (combinationPair n (rest items)))))
             (solution? [circuit solutions]
               (= circuit
-                (set (reduce (fn [result solution] (clojure.set/union result (matches circuit solution)))
+                 (set (reduce (fn [result solution] (clojure.set/union result
+                                                                       (set
+                                                                        (matches circuit solution))))
                        #{}
                        solutions))))
             (matches [circuit solution]
@@ -61,7 +63,7 @@
                                 (if (or wrongMatch
                                         (empty? matches))
                                   result
-                                  [(clojure.set/union (first result) matches)
+                                  [(clojure.set/union (first result) (set matches))
                                    (conj (second result) elem)]))))))
                 [#{} #{}]
                 (generateAll circuit)))]
@@ -944,7 +946,7 @@
       (->> (iterate simplifications ss)
         (take-while (partial not= #{}))
         reverse
-        (reduce (fn [x y] (clojure.set/union x (remove #(generates? #{%} x) y))))
+        (reduce (fn [x y] (clojure.set/union x (set (remove #(generates? #{%} x) y)))))
         ((fn [s] (remove #(generates? ss (disj s %)) s)))
         set))))
 
