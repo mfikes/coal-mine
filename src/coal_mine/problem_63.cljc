@@ -4134,14 +4134,12 @@
 
 (defcheck solution-aef5c373
   (fn [gfn coll]
-    (let [m (transient {})]
-      (loop [es coll]
-        (cond
-          (empty? es) (persistent! m)
-          :default
-          (let [k (gfn (first es))]
-            (assoc! m k (conj (get m k []) (first es)))
-            (recur (rest es))))))))
+    (loop [m (transient {}) es coll]
+      (cond
+        (empty? es) (persistent! m)
+        :default
+        (let [k (gfn (first es))]
+          (recur (assoc! m k (conj (get m k []) (first es))) (rest es)))))))
 
 (defcheck solution-aef93fcf
   (fn [f s]
