@@ -783,7 +783,7 @@
   `(deftimedtest ~name 32
      (clojure.test/is (= "I" (~@forms 1)))
      (clojure.test/is (= "XXX" (~@forms 30)))
-     (clojure.test/is (= "IV" (__ 4)))
+     (clojure.test/is (= "IV" (~@forms 4)))
      (clojure.test/is (= "CXL" (~@forms 140)))
      (clojure.test/is (= "DCCCXXVII" (~@forms 827)))
      (clojure.test/is (= "MMMCMXCIX" (~@forms 3999)))
