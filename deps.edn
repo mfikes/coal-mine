@@ -1,4 +1,4 @@
-{:deps {org.clojure/clojurescript {:mvn/version "1.10.439"}}
+{:deps {org.clojure/clojurescript {:mvn/version "1.10.520"}}
  :aliases {:clj {:jvm-opts ["-XX:CompressedClassSpaceSize=3g"]}
            :cljs {:jvm-opts ["-Xmx6g"]
                   :main-opts ["-m" "cljs.main"]} 
