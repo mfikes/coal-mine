@@ -907,9 +907,6 @@
       true
       (and (= (first lst) (last lst)) (palindrome? (rest (butlast lst)))))))
 
-(defcheck solution-6f1c1c97
-  #(= (take (/ (count %) 2) %) (reverse (take-last (/ (count %) 2) %))))
-
 (defcheck solution-6f744878
   #(= (seq %) (into () %)))
 
@@ -1648,9 +1645,6 @@
   (fn [pal]
     (= (reverse pal) (reverse (reverse pal)))))
 
-(defcheck solution-bcce9c8a
-  #(=         (take (/ (count %) 2) %)  (reverse (take-last (/ (count %) 2) %)) ))
-
 (defcheck solution-bd6bdd8c
   (fn [s]
     (cond
@@ -1926,16 +1920,6 @@
                  rev)]
       (= something rev2))))
 
-(defcheck solution-daaa7e4e
-  (fn palin [x]
-    (let [split (split-at (/ (count x) 2) x)
-          p1 (first split) p2 (second split)]
-      (if (odd? (count x))
-        (= (reverse (butlast p1)) p2)
-        (= (reverse p1) p2))
-      )
-    ))
-
 (defcheck solution-dcc71504
   ;(fn pal [s]
   ;  (if (< (count s) 2)
@@ -2002,9 +1986,6 @@
   (fn [word]
     (= (reverse (reverse word)) (reverse word))
     ))
-
-(defcheck solution-e6a81acc
-  #(let [n (/ (count %) 2)] (= (take n %) (reverse (take-last n %)))))
 
 (defcheck solution-e6fc6bcc
   (fn p [s] (= (seq s) (reverse s))))
