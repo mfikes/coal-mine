@@ -1,6 +1,6 @@
 (ns coal-mine.test-runner-3
   (:require
-   [cljs.core.specs.alpha]
+   #?(:cljs [cljs.core.specs.alpha])
    [clojure.test]
    coal-mine.problem-85
    coal-mine.problem-86
@@ -35,4 +35,4 @@
 (defn -main []
   (run-tests))
 
-(set! *main-cli-fn* -main)
+#?(:cljs (set! *main-cli-fn* -main))
