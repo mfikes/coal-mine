@@ -11,9 +11,6 @@
 (defn integer [s]
   (parse-int s))
 
-(defn parse-double [s]
-  #?(:clj (Double/parseDouble s) :cljs (js/parseFloat s)))
-
 (defcheck solution-101110dc
   (fn [s] (->> s
             (re-seq #"\d+")
