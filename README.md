@@ -13,24 +13,24 @@ useful for testing compiler performance.
 To run all tests via Clojure:
 
 ```
-clj -Aclj -m coal-mine.test-runner
+clj -Mclj -m coal-mine.test-runner
 ```
 
 or, to break things into smaller runs
 
 
 ```
-clj -Aclj -m coal-mine.test-runner-1
-clj -Aclj -m coal-mine.test-runner-2
-clj -Aclj -m coal-mine.test-runner-3
-clj -Aclj -m coal-mine.test-runner-4
-clj -Aclj -m coal-mine.test-runner-5
+clj -Mclj -m coal-mine.test-runner-1
+clj -Mclj -m coal-mine.test-runner-2
+clj -Mclj -m coal-mine.test-runner-3
+clj -Mclj -m coal-mine.test-runner-4
+clj -Mclj -m coal-mine.test-runner-5
 ```
 
 or via ClojureScript
 
 ```
-clj -Acljs -m coal-mine.test-runner
+clj -Mcljs -m coal-mine.test-runner
 ```
 
 or via Planck
@@ -42,7 +42,7 @@ plk -m coal-mine.test-runner
 Alternatively, 
 
 ```
-clj -Anode
+clj -Mnode
 ``` 
 
 will run the all the tests via ClojureScript on Node, split for 
