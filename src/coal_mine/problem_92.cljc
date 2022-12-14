@@ -2810,16 +2810,6 @@
                  \D 500
                  \M 1000} %))))
 
-(defcheck solution-54f3701f
-  #(let [l->n {"CD" 400, "C" 100, "D" 500, "I" 1,
-               "CM" 900, "XC" 90, "L" 50, "M" 1000,
-               "IV" 4, "IX" 9, "XL" 40, "V" 5, "X" 10}]
-     (loop [s (seq %) result 0]
-       (if (empty? s) result
-                      (if-let [n (l->n (apply str (nthnext s (- (count s) 2))))]
-                        (recur (butlast (butlast s)) (+ result n))
-                        (recur (butlast s) (+ result (l->n (str (last s))))))))))
-
 (defcheck solution-554b4385
   #(reduce
      (fn [n d]
