@@ -71,7 +71,7 @@
     (build source (symbol main))))
 
 (defn build-part [part]
-  (let [source (.getFile (io/resource (str "coal_mine/test_runner_" part ".cljs")))
+  (let [source (.getFile (io/resource (str "coal_mine/test_runner_" part ".cljc")))
         main   (symbol (str "coal-mine.test-runner-" part))]
     (build source (symbol main))))
 
