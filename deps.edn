@@ -1,4 +1,4 @@
-{:deps {org.clojure/clojurescript {:mvn/version "1.10.520"}}
+{:deps {org.clojure/clojurescript {:git/url "https://github.com/clojure/clojurescript" :sha "219951678b16575ec29bb9b88047356cf1437aec"}}
  :aliases {:clj {:jvm-opts ["-XX:CompressedClassSpaceSize=3g"]}
            :cljs {:jvm-opts ["-Xmx6g"]
                   :main-opts ["-m" "cljs.main"]} 
